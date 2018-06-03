@@ -7,7 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5796C1F520C1C3C1002711F1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5796C1F420C1C3C1002711F1 /* main.cpp */; };
+		5796C22420C1C499002711F1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5796C1FD20C1C498002711F1 /* main.cpp */; };
+		5796C22520C1C499002711F1 /* Misc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5796C20920C1C499002711F1 /* Misc.cpp */; };
+		5796C22620C1C499002711F1 /* Oel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5796C21620C1C499002711F1 /* Oel.cpp */; };
+		5796C22720C1C499002711F1 /* Errors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5796C21820C1C499002711F1 /* Errors.cpp */; };
+		5796C24920C2B6AF002711F1 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 5796C24820C2B6AF002711F1 /* Makefile */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +28,44 @@
 
 /* Begin PBXFileReference section */
 		5796C1F120C1C3C1002711F1 /* CellSim_2012 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CellSim_2012; sourceTree = BUILT_PRODUCTS_DIR; };
-		5796C1F420C1C3C1002711F1 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		5796C1FC20C1C498002711F1 /* Simulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Simulation.h; path = src/Simulation.h; sourceTree = "<group>"; };
+		5796C1FD20C1C498002711F1 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = "<group>"; };
+		5796C1FF20C1C498002711F1 /* Edge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Edge.h; path = src/Edge.h; sourceTree = "<group>"; };
+		5796C20120C1C498002711F1 /* FusionCandidates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FusionCandidates.h; path = src/FusionCandidates.h; sourceTree = "<group>"; };
+		5796C20420C1C498002711F1 /* Cell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Cell.h; path = src/Cell.h; sourceTree = "<group>"; };
+		5796C20820C1C499002711F1 /* Oel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Oel.h; sourceTree = "<group>"; };
+		5796C20920C1C499002711F1 /* Misc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Misc.cpp; sourceTree = "<group>"; };
+		5796C20A20C1C499002711F1 /* Misc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Misc.h; sourceTree = "<group>"; };
+		5796C20D20C1C499002711F1 /* Errors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Errors.h; sourceTree = "<group>"; };
+		5796C20F20C1C499002711F1 /* Par.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Par.h; sourceTree = "<group>"; };
+		5796C21220C1C499002711F1 /* Gillespie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gillespie.h; sourceTree = "<group>"; };
+		5796C21320C1C499002711F1 /* RandCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RandCore.h; sourceTree = "<group>"; };
+		5796C21520C1C499002711F1 /* RandBoost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RandBoost.h; sourceTree = "<group>"; };
+		5796C21620C1C499002711F1 /* Oel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Oel.cpp; sourceTree = "<group>"; };
+		5796C21820C1C499002711F1 /* Errors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Errors.cpp; sourceTree = "<group>"; };
+		5796C21E20C1C499002711F1 /* Network.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Network.h; path = src/Network.h; sourceTree = "<group>"; };
+		5796C22120C1C499002711F1 /* Segment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Segment.h; path = src/Segment.h; sourceTree = "<group>"; };
+		5796C22920C1C4F2002711F1 /* ConfigMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ConfigMain.h; path = src/ConfigMain.h; sourceTree = "<group>"; };
+		5796C22A20C1C4F2002711F1 /* ConfigMito.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ConfigMito.h; path = src/ConfigMito.h; sourceTree = "<group>"; };
+		5796C22C20C1C958002711F1 /* Structure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Structure.h; path = src/Structure.h; sourceTree = "<group>"; };
+		5796C22D20C1C958002711F1 /* AbilityForFusion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AbilityForFusion.h; path = src/AbilityForFusion.h; sourceTree = "<group>"; };
+		5796C22E20C1C958002711F1 /* AbilityForFission.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AbilityForFission.h; path = src/AbilityForFission.h; sourceTree = "<group>"; };
+		5796C22F20C1C958002711F1 /* Netw_IO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Netw_IO.h; path = src/Netw_IO.h; sourceTree = "<group>"; };
+		5796C23020C1C958002711F1 /* NetworkCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NetworkCore.h; path = src/NetworkCore.h; sourceTree = "<group>"; };
+		5796C23220C1CA16002711F1 /* CoreTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoreTransformer.h; path = src/CoreTransformer.h; sourceTree = "<group>"; };
+		5796C23D20C1E36E002711F1 /* Reaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Reaction.h; path = CellSim_2012/src/Reactions/Reaction.h; sourceTree = SOURCE_ROOT; };
+		5796C23E20C1F299002711F1 /* Fusion12.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Fusion12.h; path = CellSim_2012/src/Reactions/Fusion12.h; sourceTree = SOURCE_ROOT; };
+		5796C23F20C1F299002711F1 /* Fusion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Fusion.h; path = CellSim_2012/src/Reactions/Fusion.h; sourceTree = SOURCE_ROOT; };
+		5796C24120C1F299002711F1 /* Fusion1L.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Fusion1L.h; path = CellSim_2012/src/Reactions/Fusion1L.h; sourceTree = SOURCE_ROOT; };
+		5796C24220C1F299002711F1 /* Fission.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Fission.h; path = CellSim_2012/src/Reactions/Fission.h; sourceTree = SOURCE_ROOT; };
+		5796C24320C1F299002711F1 /* Fusion11.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Fusion11.h; path = CellSim_2012/src/Reactions/Fusion11.h; sourceTree = SOURCE_ROOT; };
+		5796C24420C1FBE6002711F1 /* NtwFusion12.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NtwFusion12.h; path = CellSim_2012/src/Reactions/NtwFusion12.h; sourceTree = SOURCE_ROOT; };
+		5796C24520C1FBE6002711F1 /* NtwFission.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NtwFission.h; path = CellSim_2012/src/Reactions/NtwFission.h; sourceTree = SOURCE_ROOT; };
+		5796C24620C1FBE6002711F1 /* NtwFusion1L.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NtwFusion1L.h; path = CellSim_2012/src/Reactions/NtwFusion1L.h; sourceTree = SOURCE_ROOT; };
+		5796C24720C1FBE6002711F1 /* NtwFusion11.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NtwFusion11.h; path = CellSim_2012/src/Reactions/NtwFusion11.h; sourceTree = SOURCE_ROOT; };
+		5796C24820C2B6AF002711F1 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; name = Makefile; path = CellSim_2012/manual_make/Makefile; sourceTree = "<group>"; };
+		5796C24A20C2B6BE002711F1 /* configMain_sample.tcl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = configMain_sample.tcl; path = CellSim_2012/runs/configMain_sample.tcl; sourceTree = "<group>"; };
+		5796C24B20C2B6BE002711F1 /* configMito_sample.tcl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = configMito_sample.tcl; path = CellSim_2012/runs/configMito_sample.tcl; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +82,9 @@
 		5796C1E820C1C3C1002711F1 = {
 			isa = PBXGroup;
 			children = (
+				5796C24820C2B6AF002711F1 /* Makefile */,
+				5796C24A20C2B6BE002711F1 /* configMain_sample.tcl */,
+				5796C24B20C2B6BE002711F1 /* configMito_sample.tcl */,
 				5796C1F320C1C3C1002711F1 /* CellSim_2012 */,
 				5796C1F220C1C3C1002711F1 /* Products */,
 			);
@@ -57,9 +101,60 @@
 		5796C1F320C1C3C1002711F1 /* CellSim_2012 */ = {
 			isa = PBXGroup;
 			children = (
-				5796C1F420C1C3C1002711F1 /* main.cpp */,
+				5796C1FD20C1C498002711F1 /* main.cpp */,
+				5796C20420C1C498002711F1 /* Cell.h */,
+				5796C22920C1C4F2002711F1 /* ConfigMain.h */,
+				5796C22A20C1C4F2002711F1 /* ConfigMito.h */,
+				5796C21E20C1C499002711F1 /* Network.h */,
+				5796C23020C1C958002711F1 /* NetworkCore.h */,
+				5796C22F20C1C958002711F1 /* Netw_IO.h */,
+				5796C22E20C1C958002711F1 /* AbilityForFission.h */,
+				5796C23220C1CA16002711F1 /* CoreTransformer.h */,
+				5796C22D20C1C958002711F1 /* AbilityForFusion.h */,
+				5796C22C20C1C958002711F1 /* Structure.h */,
+				5796C22120C1C499002711F1 /* Segment.h */,
+				5796C1FF20C1C498002711F1 /* Edge.h */,
+				5796C20120C1C498002711F1 /* FusionCandidates.h */,
+				5796C1FC20C1C498002711F1 /* Simulation.h */,
+				5796C23820C1CD8F002711F1 /* Reactions */,
+				5796C20620C1C499002711F1 /* utils */,
 			);
 			path = CellSim_2012;
+			sourceTree = "<group>";
+		};
+		5796C20620C1C499002711F1 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				5796C20A20C1C499002711F1 /* Misc.h */,
+				5796C20920C1C499002711F1 /* Misc.cpp */,
+				5796C20F20C1C499002711F1 /* Par.h */,
+				5796C21220C1C499002711F1 /* Gillespie.h */,
+				5796C21320C1C499002711F1 /* RandCore.h */,
+				5796C21520C1C499002711F1 /* RandBoost.h */,
+				5796C20820C1C499002711F1 /* Oel.h */,
+				5796C21620C1C499002711F1 /* Oel.cpp */,
+				5796C20D20C1C499002711F1 /* Errors.h */,
+				5796C21820C1C499002711F1 /* Errors.cpp */,
+			);
+			name = utils;
+			path = src/utils;
+			sourceTree = "<group>";
+		};
+		5796C23820C1CD8F002711F1 /* Reactions */ = {
+			isa = PBXGroup;
+			children = (
+				5796C24520C1FBE6002711F1 /* NtwFission.h */,
+				5796C24720C1FBE6002711F1 /* NtwFusion11.h */,
+				5796C24420C1FBE6002711F1 /* NtwFusion12.h */,
+				5796C24620C1FBE6002711F1 /* NtwFusion1L.h */,
+				5796C23D20C1E36E002711F1 /* Reaction.h */,
+				5796C24220C1F299002711F1 /* Fission.h */,
+				5796C23F20C1F299002711F1 /* Fusion.h */,
+				5796C24320C1F299002711F1 /* Fusion11.h */,
+				5796C23E20C1F299002711F1 /* Fusion12.h */,
+				5796C24120C1F299002711F1 /* Fusion1L.h */,
+			);
+			path = Reactions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -118,7 +213,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5796C1F520C1C3C1002711F1 /* main.cpp in Sources */,
+				5796C24920C2B6AF002711F1 /* Makefile in Sources */,
+				5796C22720C1C499002711F1 /* Errors.cpp in Sources */,
+				5796C22620C1C499002711F1 /* Oel.cpp in Sources */,
+				5796C22420C1C499002711F1 /* main.cpp in Sources */,
+				5796C22520C1C499002711F1 /* Misc.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,6 +275,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /Users/vs/Mitofraps/boost_1_60_0;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -228,6 +328,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /Users/vs/Mitofraps/boost_1_60_0;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;

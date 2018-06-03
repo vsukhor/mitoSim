@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workspace
    version = "1.0">
+   <Group
+      location = "group:/Users/vs/Mitofraps/CellSim_2012/CellSim_2012/Reactions"
+      name = "Reactions">
+      <FileRef
+         location = "group:Fusion1L.h">
+      </FileRef>
+      <FileRef
+         location = "group:Fusion12.h">
+      </FileRef>
+      <FileRef
+         location = "group:Fusion11.h">
+      </FileRef>
+      <FileRef
+         location = "group:Fission.h">
+      </FileRef>
+   </Group>
    <FileRef
       location = "self:CellSim_2012.xcodeproj">
    </FileRef>
