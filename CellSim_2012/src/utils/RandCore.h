@@ -1,3 +1,22 @@
+/* ==============================================================================
+   Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann.
+   All Rights Reserved.
+   Developed at Helmholtz Center for Infection Research, Braunschweig, Germany.
+   Please see Readme file for further information
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+============================================================================== */
 
 #ifndef RandCore_h
 #define RandCore_h
@@ -15,7 +34,7 @@ namespace Utils {
 template<typename realT> 
 class RandCore {
 
-	// Assure that the template parameter is a floating type
+	// Ensure that the template parameter is a floating type
 	static_assert(std::is_floating_point<realT>::value,
 				  "class RandCore can only be instantiated with floating point types");
 
@@ -42,11 +61,9 @@ private:
 
 	uint	seed;
 	Oel&	oel;
-
-
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename realT> 
 RandCore<realT>::
@@ -112,4 +129,4 @@ readin_seed(const std::string& seedFname,
 }
 
 }
-#endif /* Rand_h */
+#endif /* RandCore_h */

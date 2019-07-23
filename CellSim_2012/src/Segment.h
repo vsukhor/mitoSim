@@ -1,3 +1,23 @@
+/* ==============================================================================
+   Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann.
+   All Rights Reserved.
+   Developed at Helmholtz Center for Infection Research, Braunschweig, Germany.
+   Please see Readme file for further information
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+============================================================================== */
+
 #ifndef Segment_h
 #define Segment_h
 
@@ -5,118 +25,191 @@
 
 namespace MitoD {
 
-template<int ContentT>
-class Segment {
+/**
+ * The Network Segment class.
+ * Segment is a sequence of edges linked linearly (without branches).
+ * Segment ends may form branching sites, where it is connected to other segments.
+ * A segment not connected to other segments or
+ * a complete collection of segments connected to each other form
+ * a disconnected network component (aka 'cluster').
+ * The class handles the tasks and properties specific to a single segment
+ * and its relation to other network components.
+ */
+template<szt>
+class Segment {};
+
+template<>
+class Segment<3> {
 
 public:
-	static const int ConT {ContentT};
 
-	typedef Edge<ContentT> ThisEdge;
-	typedef Segment<ContentT> thisT;
+	static const szt maxDeg {3};	/**< max node degree */
+
+	typedef Edge<maxDeg> ThisEdge;
+	typedef Segment<maxDeg> thisT;
 
 
-	Oel&							oel;
-	std::vector<ThisEdge>			g;				// edges
-	szt								cl {0};			// cluster index
-	std::array<szt,3>				nn {{0}};		// number of neibours
-	std::array<std::vector<szt>,3>	neib;			// niebors
-	std::array<std::vector<szt>,3>	neen;			// neibour ends
-	static const szt				maxnn {3};
+	Oel&								oel;		/**< logging facility */
+	std::vector<ThisEdge>				g;			/**< the edges */
+	szt									cl {};		/**< cluster index */
+	std::array<szt,maxDeg>				nn {{}};	/**< number of neighbours */
+	std::array<std::vector<szt>,maxDeg>	neig;		/**< neighbours */
+	std::array<std::vector<szt>,maxDeg>	neen;		/**< neighbour ends */
 
-	Segment(Oel&);
-	Segment(
+	
+	/** Constructor
+	 * @param oel logging facility object
+	 */
+	explicit Segment(Oel& oel);
+
+	/** Constructor
+	 * @param segmass segment mass
+	 * @param cl index of subnetwork to which the sebment belongs
+	 * @param mtmass total mass of the network
+	 * @param ei index of the last edge in this segment
+	 * @param oel logging facility object
+	 */
+	explicit Segment(
 		  const szt segmass,
 		  const szt cl,
 		  szt& mtmass, 
 		  szt& ei, 
 		  Oel& oel );
-		  
-	ThisEdge* increment_length( const long a, const ThisEdge p );					// inserts a particle imediately after g[a] making it g[a+1]
+
+	/** Reflects the vector containing the segment edges */
 	void reflect_g();
 
-	szt set_gCl( const szt newcl, const szt initind );
-	szt setCl( const szt newcl, const szt initind );
+	/** Change disconnected network component-related indexes of the segment edges,
+			keeping the segment index unoltered
+	 * @param newcl new disconnected component index
+	 * @param initind starting edge index in the current disconnected network component
+	 */
+	szt set_gCl(const szt newcl, const szt initind);
 
-	constexpr szt end2a( const szt& e ) const;
-	szt endInd( const szt& e ) const;
-	constexpr szt hasOneFreeEnd() const;			// return the end index if true
-	szt singleNeibInd( const szt& e ) const;
-	std::vector<szt> doubleNeibInds( const szt& e ) const;
-	bool hasSuchNeib( const szt& e, const szt& n ) const;
-	constexpr bool isPureLoop() const;
-	constexpr bool isLoop( const szt& i ) const;
+	/** Change disconnected network component-related indexes of the segment edges, and the the segment itself
+	 * @param newcl new disconnected component index
+	 * @param initind starting edge index in the current disconnected network component
+	 * @return the last edge index in the current disconnected network component
+	 */
+	szt setCl(const szt newcl, const szt initind);
 
-	szt nnodes( const szt& deg ) const;
+	/** Converts the segment end index of the boundary edge to internal position in the segment
+	 * @param e segment end index
+	 * @return internal position
+	 * @return the last edge index in the current disconnected network component
+	 */
+	constexpr szt end2a(const szt& e) const;
+
+	/** Determine if the segment has one free end
+ 	 * @return the end index if true
+	 */
+	constexpr szt has_one_free_end() const;
+
+	/** Neigbour indexe at a segment end
+	 * @param e segment end
+ 	 * @return the neighbour index
+	 */
+	szt single_neig_index(const szt& e) const;
+
+	/** Neigbour indexes at a segment end
+	 * @param e segment end
+ 	 * @return the neighbour indexes
+	 */
+	std::vector<szt> double_neig_indexes(const szt& e) const;
+
+	/** Report if the segment is looped onto itself */
+	constexpr bool isCycle() const;
+
+	/** Report the number of nodes of a given degree.
+	 * @param deg node degree
+	 * @return the number of nodes
+	 */
+	szt num_nodes(const szt& deg) const;
+
+	/** Report the segment length measured in edges.
+	 * @return the segment length measured in edges
+	 */
 	szt length() const noexcept { return g.size(); }
 
-	ulong set_end_fin( const szt a );
-	ulong set_bulk_fin( const szt a );
+	ulong set_end_fin(const szt a);
+	ulong set_bulk_fin(const szt a);
 
-	void print( const szt w, const std::string& tag, const szt at = huge<szt> ) const;
-	void print( std::ostream& os, const szt w, const std::string& tag, const szt at = huge<szt> ) const;
-	void write( std::ofstream& ) const;
+	void print( const szt w, const std::string& tag, const szt at=huge<szt> ) const;
+	void print( std::ostream& os, const szt w, const std::string& tag, const szt at=huge<szt> ) const;
+	void write(std::ofstream&) const;
+
+private:
+
+	/**
+	* Inserts an edge imediately after g[a] making it g[a+1].
+	* @return the pointer to the newly inserted edge.
+	* @param a position of the edge preceding the newly inserted one relative to the segment end 1
+	* @param p edge to be inserted
+	*/
+	ThisEdge* increment_length( const long a, ThisEdge p );	// inserts a particle after g[a] making it g[a+1]
+
+	/** Initialises the neig vectors at both ends. */
+	void init_ends();
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-template<int ContentT> const int Segment<ContentT>::ConT;
-template<int ContentT> const szt Segment<ContentT>::maxnn;
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-template<int ContentT>
-Segment<ContentT>::
+Segment<3>::
 Segment( Oel& oel )
-	: oel(oel)
+	: oel {oel}
 {
-	neib[1].resize(maxnn+1);
-	neib[2].resize(maxnn+1);
-	
-	neen[1].resize(maxnn+1);
-	neen[2].resize(maxnn+1);
+	init_ends();
 }
 
-template<int ContentT>
-Segment<ContentT>::
+Segment<3>::
 Segment(
 	  const szt segmass,
 	  const szt cl,
-	  szt& mtmass, 
-	  szt& ei, 
-	  Oel& oel
+	  szt& mtmass, 		// var ref
+	  szt& ei, 			// var ref
+	  Oel& oel			// var ref
 	)
-	: oel(oel),
-	  cl(cl)
+	: oel {oel}
+	, cl {cl}
 {
-	neib[1].resize(maxnn+1);	neib[2].resize(maxnn+1);
-	neen[1].resize(maxnn+1);	neen[2].resize(maxnn+1);
+	init_ends();
 
 	for (szt a=0; a<segmass; a++)
 		increment_length(long(a-1), {ei++, a, cl});
 
 	mtmass += segmass;
-
-	for (auto& o : g) o.clini = cl;
 }
 
-template<int ContentT>
-typename Segment<ContentT>::ThisEdge* Segment<ContentT>::
-increment_length( const long a, const Segment<ContentT>::ThisEdge p ) 	// inserts a particle imediately after g[a] making it g[a+1]
+inline
+void Segment<3>::
+init_ends()
 {
-	g.insert(g.begin()+a+1, p);
+	neig[1].resize(maxDeg);
+	neig[2].resize(maxDeg);
+
+	neen[1].resize(maxDeg);
+	neen[2].resize(maxDeg);
+}
+
+inline // inserts a particle imediately after g[a] making it g[a+1]
+typename Segment<3>::ThisEdge* Segment<3>::
+increment_length( const long a, Segment<3>::ThisEdge p )
+{
+	g.insert(g.begin()+a+1, std::move(p));
 	return &g[a+1];
 }
 
-template<int ContentT> inline
-void Segment<ContentT>::
+inline
+void Segment<3>::
 reflect_g()
 {
-	const std::vector<ThisEdge> temp = g;
-	for (szt i=0; i<g.size(); i++) { 
-		g[i] = temp[g.size()-i-1];
-		g[i].reflect();
-	}
+	std::reverse(g.begin(), g.end());
+	for (auto& o : g)
+		o.reflect();
 }
 
-template<int ContentT> inline
-szt Segment<ContentT>::
+inline
+szt Segment<3>::
 set_gCl( const szt newcl, const szt initind )
 {
 	for (szt i=0; i<g.size(); i++) {
@@ -127,120 +220,86 @@ set_gCl( const szt newcl, const szt initind )
 	return initind + (szt)g.size();
 }
 
-template<int ContentT> inline
-szt Segment<ContentT>::
+inline
+szt Segment<3>::
 setCl( const szt newcl, const szt initind )
 {
 	cl = newcl;
 	return set_gCl(newcl, initind);
 }
 
-template<int ContentT> constexpr
-szt Segment<ContentT>::
+constexpr
+szt Segment<3>::
 end2a( const szt& e ) const 
 {
 	return (e == 1) ? 0 : (szt)g.size()-1;
 }
 
-template<int ContentT> inline
-szt Segment<ContentT>::
-endInd( const szt& e ) const
-{
-	return (e == 1) ? g.front().ind
-					: g.back().ind;
-}
-
-template<int ContentT> constexpr
-szt Segment<ContentT>::
-hasOneFreeEnd() const 			// return the end index if true
+constexpr
+szt Segment<3>::
+has_one_free_end() const 		// return the end index if true
 {
 	if (	!nn[1] &&  nn[2])  	return 1;
 	else if (nn[1] && !nn[2])	return 2;
 	else						return 0;
 }
 
-template<int ContentT> inline
-szt Segment<ContentT>::
-singleNeibInd( const szt& e ) const 
+inline
+szt Segment<3>::
+single_neig_index( const szt& e ) const
 {
 	for (szt i=1; i<=nn[e]; i++) 
-		if (neib[e][i])
+		if (neig[e][i])
 			return i;
 			
 	return huge<szt>;
 }
 
-template<int ContentT> inline
-std::vector<szt> Segment<ContentT>::
-doubleNeibInds( const szt& e ) const
+inline
+std::vector<szt> Segment<3>::
+double_neig_indexes( const szt& e ) const
 {
-	XASSERT(nn[e] == 2, "Error in Mito::doubleNeibInds: nn[e] != 2 in cluster "+STR(cl));
+	XASSERT(nn[e] == 2, "Error in Mito::double_neig_indexes: nn[e] != 2 in cluster "+STR(cl)+"\n");
 
-	std::vector<szt> neibInds(nn[e]);
-	szt j = 0;
+	std::vector<szt> neigInds(nn[e]);
+	szt j {};
 	for (szt i=1; i<=nn[e]; i++)
-		if (neib[e][i])
-			neibInds[j++] = i;
+		if (neig[e][i])
+			neigInds[j++] = i;
 	
-	return neibInds;
+	return neigInds;
 }
 
-template<int ContentT> inline
-bool Segment<ContentT>::
-hasSuchNeib( const szt& e, const szt& n ) const
-{
-	for (szt i=1; i<=nn[e]; i++)
-		if (neib[e][i] == n)
-			return true;
-	
-	return false;
-}
-
-template<int ContentT> constexpr
-bool Segment<ContentT>::
-isPureLoop() const 
+constexpr
+bool Segment<3>::
+isCycle() const
 {
 	return nn[1] == 1 && 
 		   nn[2] == 1 && 
-		   neib[1][singleNeibInd(1)] == neib[2][singleNeibInd(2)];
+		   neig[1][single_neig_index(1)] == neig[2][single_neig_index(2)];
 }
 
-template<int ContentT> constexpr
-bool Segment<ContentT>::
-isLoop( const szt& i ) const 
-{
-	return isPureLoop() || 
-		   hasSuchNeib(1, i) ||
-		   hasSuchNeib(2, i);
-}
-
-template<int ContentT>
-szt Segment<ContentT>::
-nnodes( const szt& deg ) const				// deg = 1, 2, 3, 4
+szt Segment<3>::
+num_nodes( const szt& deg ) const				// deg = 1, 2, 3
 {														
-	if (deg == 1) {															// count nodes of degree 1
+	if (deg == 1) {														// count nodes of degree 1
 		if (      nn[1] &&  nn[2]) 	return 0;
 		else if (!nn[1] && !nn[2]) 	return 2;
 		else					 	return 1;
 	}
 	else if (deg == 2)
-		return nn[1] && nn[2] && isPureLoop() ? g.size() : g.size() - 1;	// count nodes of degree 2
-	else if (deg == 3) {													//	if (deg == 3 ) count nodes of degree 3
+		return nn[1] && nn[2] && isCycle() ? g.size() : g.size() - 1;	// count nodes of degree 2
+	else if (deg == 3) {												// count nodes of degree 3
 		if (     nn[1] == 2 && nn[2] == 2) return 2;
 		else if (nn[1] == 2 || nn[2] == 2) return 1;
 		else if (nn[1] != 2 && nn[2] != 2) return 0;
 	}
-	else if (deg == 4) {													//	if (deg == 3 ) count nodes of degree 3
-		if (     nn[1] == 3 && nn[2] == 3) return 2;
-		else if (nn[1] == 3 || nn[2] == 3) return 1;
-		else if (nn[1] != 3 && nn[2] != 3) return 0;
-	}
-	else oel.exit("Error in Mito::nnodes. Not implemented deg", deg);
+	else oel.exit("Error in Mito::num_nodes(). Not implemented deg", deg);
 	return huge<szt>;
 }
 
-template<int ContentT> inline
-ulong Segment<ContentT>::
+inline
+ulong Segment<3>::
 set_end_fin( const szt e )
 {
 	auto& f {g[end2a(e)].fin};
@@ -250,8 +309,8 @@ set_end_fin( const szt e )
 }
 
 
-template<int ContentT> inline
-ulong Segment<ContentT>::
+inline
+ulong Segment<3>::
 set_bulk_fin( const szt a )
 {
 	g[a].fin[1] = g[a+1].fin[0] = 1;
@@ -259,8 +318,7 @@ set_bulk_fin( const szt a )
 	return g[a].fin[1];
 }
 
-template<int ContentT>
-void Segment<ContentT>::
+void Segment<3>::
 print( const szt w,
 	   const std::string& tag, 
 	   const szt at ) const
@@ -269,8 +327,7 @@ print( const szt w,
 	print(oel.sl, w, tag, at);
 }
 
-template<int ContentT>
-void Segment<ContentT>::
+void Segment<3>::
 print( std::ostream& os, 
 	   const szt w,
 	   const std::string& tag, 
@@ -280,11 +337,11 @@ print( std::ostream& os,
 	if (at == huge<szt>) os << "(of ";
 	else os << "(at " << at << " of ";
 	os << g.size() << ") [ ";	
-	for (szt i=1; i<=nn[1]; i++) os << neib[1][i] << " ";	
+	for (szt i=1; i<=nn[1]; i++) os << neig[1][i] << " ";
 	os << "] { ";		
 	for (szt i=1; i<=nn[1]; i++) os << neen[1][i] << " ";	
 	os << "} [ ";
-	for (szt i=1; i<=nn[2]; i++) os << neib[2][i] << " ";	
+	for (szt i=1; i<=nn[2]; i++) os << neig[2][i] << " ";
 	os << "] { ";	
 	for (szt i=1; i<=nn[2]; i++) os << neen[2][i] << " ";	
 	os << "} " << cl;	
@@ -298,8 +355,7 @@ print( std::ostream& os,
 	os << std::endl;
 }
 
-template<int ContentT>
-void Segment<ContentT>::
+void Segment<3>::
 write( std::ofstream& ofs ) const
 {
 	szt len = (szt)g.size();
@@ -309,21 +365,20 @@ write( std::ofstream& ofs ) const
 	ofs.write((char*) &nn[1], sizeof(szt));
 	
 	for (szt j=1; j<=nn[1]; j++) {
-		ofs.write((char*) &neib[1][j], sizeof(szt));
+		ofs.write((char*) &neig[1][j], sizeof(szt));
 		ofs.write((char*) &neen[1][j], sizeof(szt));
 	}
 	
 	ofs.write((char*) &nn[2], sizeof(int));
 	
 	for (szt j=1; j<=nn[2]; j++) {
-		ofs.write((char*) &neib[2][j], sizeof(szt));
+		ofs.write((char*) &neig[2][j], sizeof(szt));
 		ofs.write((char*) &neen[2][j], sizeof(szt));
 	}
-//	ofs.write( (char*) &dpsi, sizeof(real));
 	for (szt j=0; j<len; j++)
 		g[j].write(ofs);
 }
 
 }
 
-#endif /* Spaceless_Empty_Segment_h */
+#endif /* Segment_h */

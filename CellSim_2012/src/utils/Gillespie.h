@@ -1,3 +1,23 @@
+/* ==============================================================================
+   Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann.
+   All Rights Reserved.
+   Developed at Helmholtz Center for Infection Research, Braunschweig, Germany.
+   Please see Readme file for further information
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+============================================================================== */
+
 #ifndef Gillespie_h
 #define Gillespie_h
 
@@ -29,12 +49,12 @@ private:
 	vup<Reaction>			rc;
 	std::vector<realT>		a;
 	szt						rind {huge<szt>};
-	realT					tau_ {zero<realT>};
+	realT					tau_ {};
 	RandFactory&			rnd;
-	szt						nreact {0};
+	szt						nreact {};
 	std::vector<szt>		rtype;
 	std::vector<realT>		csums;
-	realT					asum {zero<realT>};
+	realT					asum {};
 	std::vector<realT>		auxf;
 	std::vector<szt>		auxi;
 	std::vector<szt>		rinds;
@@ -44,6 +64,8 @@ private:
 	constexpr Reaction* currRc() const noexcept;
 
 };
+
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename Reaction> 
 Gillespie<Reaction>::
@@ -124,7 +146,7 @@ make() noexcept
 {
 	set_rind();
 	set_tau();
-	currRc()->make();
+	(*currRc())();
 }
 
 template<typename Reaction> constexpr
@@ -168,7 +190,9 @@ printScores( std::ostream& ofs ) const
 		rc[i]->set_score();
 	ofs << " scores: "; 
 	for (szt i=0; i<nreact; i++)
-		ofs << rc[i]->srt << " " << rc[i]->event_count() << " " << rc[i]->get_score() << " ";
+		ofs << rc[i]->srt << " "
+			<< rc[i]->get_eventCount() << " "
+			<< rc[i]->get_score() << " ";
 }
 
 }

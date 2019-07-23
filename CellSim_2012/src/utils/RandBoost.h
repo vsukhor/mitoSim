@@ -1,3 +1,23 @@
+/* ==============================================================================
+   Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann.
+   All Rights Reserved.
+   Developed at Helmholtz Center for Infection Research, Braunschweig, Germany.
+   Please see Readme file for further information
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+============================================================================== */
+
 #ifndef RandBoost_h
 #define RandBoost_h
 
@@ -43,7 +63,7 @@ private:
 	void prepare_uniform_real01();
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename realT>
 RandBoost<realT>::
@@ -104,7 +124,7 @@ template<typename realT> constexpr
 int RandBoost<realT>::
 uniform0(int max)
 {			
-	XASSERT(max > 0, "RandBoost<realT>::uniform0 requires max > 0");
+	XASSERT(max > 0, "RandBoost<realT>::uniform0 requires max > 0\n");
 
 	auto ir {static_cast<int>(r01u()*max)};
 	
@@ -119,7 +139,7 @@ template<typename realT> constexpr
 uint RandBoost<realT>::
 uniform0(uint max)
 {			
-	XASSERT(max > 0, "RandBoost<realT>::uniform0 requires max > 0");
+	XASSERT(max > 0, "RandBoost<realT>::uniform0 requires max > 0\n");
 
 	auto ir {static_cast<uint>(r01u()*max)};
 	
@@ -134,7 +154,7 @@ template<typename realT> constexpr
 szt RandBoost<realT>::
 uniform0(szt max)
 {			
-	XASSERT(max > 0, "RandBoost<realT>::uniform0 requires max > 0");
+	XASSERT(max > 0, "RandBoost<realT>::uniform0 requires max > 0\n");
 
 	auto ir {static_cast<szt>(r01u()*max)};
 	
@@ -154,7 +174,7 @@ uniform1(intT max)
 	static_assert(std::is_integral<intT>::value,
 				  "class Geometric can only be instantiated with integer types");
 	
-	XASSERT(max > 0, "RandBoost<realT>::uniform1 requires max > 0");
+	XASSERT(max > 0, "RandBoost<realT>::uniform1 requires max > 0\n");
 	
 	return uniform0(max) + 1;
 }
@@ -163,7 +183,7 @@ template<typename realT> constexpr
 realT RandBoost<realT>::
 uniform0(realT max)
 {			
-	XASSERT(max > realT(0.), "RandBoost<realT>::uniform0 requires max > 0");
+	XASSERT(max > realT(0.), "RandBoost<realT>::uniform0 requires max > 0\n");
 
 	auto ir {r01u() * max};
 	

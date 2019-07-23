@@ -1,3 +1,22 @@
+/* ==============================================================================
+   Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann.
+   All Rights Reserved.
+   Developed at Helmholtz Center for Infection Research, Braunschweig, Germany.
+   Please see Readme file for further information
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+============================================================================== */
 
 #ifndef NtwFusion12_h
 #define NtwFusion12_h
@@ -8,6 +27,9 @@ namespace MitoD {
 
 template<typename> class Fusion12;
 
+/**
+ * Network-specific reaction slot for fusion of a degree 1 node with a degree 2 node.
+ */
 template<typename Ntw>
 class NtwFusion12 {
 
@@ -15,13 +37,16 @@ public:
 
 	friend Fusion12<Ntw>;
 
-	explicit NtwFusion12(Ntw&);
+	explicit NtwFusion12(Ntw&);		/**< Constructor */
 
+	/** sets this reaction propensity for the whole network */
 	szt set_prop() noexcept;
 
 private:
 
-	Ntw&									host;
+	Ntw& host;	/**< ref: the host network for this reaction */
+	
+	// Convenience references to some of the host members
 	RandFactory&							rnd;
 	const typename Ntw::Reticulum&			mt;
 	const std::vector<szt>&					mt11;
@@ -29,12 +54,16 @@ private:
 	const std::vector<szt>&					mt22;
 	const std::vector<szt>&					mt33;
 	const szt&								minLoopLength;
-	bool									verbose {false};
 
-	FusionCandidatesXX	cnd;
+	bool verbose {};	/**< verbosity of the short logs */
 
+	FusionCandidatesXX	cnd;	/**< node pairs suitable for this type of fusion */
+
+	/** populates the vector of node pairs suitable for this type of fusion */
 	void populate() noexcept;
-	std::array<szt,2> fire() noexcept;
+
+	/** executes the reaction event */
+	auto operator()() noexcept;
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -115,8 +144,8 @@ populate() noexcept
 }
 
 template<typename Ntw>
-std::array<szt,2> NtwFusion12<Ntw>::
-fire() noexcept
+auto NtwFusion12<Ntw>::
+operator()() noexcept
 {
 	const auto r {rnd.uniform0(cnd.size())};
 

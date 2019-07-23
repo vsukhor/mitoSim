@@ -1,8 +1,34 @@
+/* ==============================================================================
+   Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann.
+   All Rights Reserved.
+   Developed at Helmholtz Center for Infection Research, Braunschweig, Germany.
+   Please see Readme file for further information
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+============================================================================== */
+
 #ifndef Structure_h
 #define Structure_h
 
 namespace MitoD {
 
+/**
+ * The Structure class.
+ * Encapsulates the major structure-related proterties, such a  collection of the Segments,
+ * but is unaware of any dynamics.
+ * Forms base for clases adding the network reconfiguration dynamics.
+ */
 template<typename Mt>
 class Structure {
 
@@ -10,62 +36,92 @@ public:
 
 	typedef std::vector<Mt> Reticulum;
 
-	vec3<szt>					clagl;
-	vec3<szt>					clagl_ini;
+	vec3<szt>					clagl;		/**< edge adjacency_lists per cluster */
 
-	std::vector<szt>			glm, gla;
-	vec2<szt>					glc;
+	std::vector<szt>			glm;		/**< mapping of the edge indexes to segment indexes */
+	std::vector<szt>			gla;		/**< mapping of the edge indexes to element index inside segments */
 
-	std::array<szt,Mt::maxnn>	nn {{0}};		// node numbers
-	Reticulum					mt;
-	szt							mtnum {0};		// actual number of mitos
-	szt							clnum {0};		// actual number of clusters
-	szt							mtmass {0};
+	Reticulum					mt;			/**< the segments */
 
-	vec2<szt>					clmt;			// mito indices segregated into clusters: clmt - total;
-	std::vector<szt>			cls;			// cluster sizes in edges
-	vec2<bool>					clvisited;
+	std::array<szt,Mt::maxDeg>	nn {{}};	/**< total number of nodes by node degree */
 
-	std::vector<szt>				mt11;		std::vector<szt>		mtc11;
-	std::vector<szt>				mt22;		std::vector<szt>		mtc22;
-	std::vector<szt>				mt33;		vec2<szt>				mtc33;
-	std::vector<std::array<szt,2>>	mt13;		vec2<std::array<szt,2>>	mtc13;
+	szt							mtnum {};	/**< actual number of segments */
+	szt							clnum {};	/**< actual number of clusters */
+	szt							mtmass {};	/**< current number of edges */
 
-	Oel&						oel;
-	const szt					minLoopLength {2};	// minimal length of a mito that can bend into a loop;
-	bool						verbose;
+	vec2<szt>					clmt;		/**< segment indices segregated into clusters: clmt - total */
+	std::vector<szt>			cls;		/**< cluster sizes measured in edges */
 
-	explicit Structure(const MitoD::ConfigMain&, Oel&);
+	// segment indices of the corresponding end degrees
+	std::vector<szt>				mt11;	/**< indexes of disconnected segments not looped onto itself */
+	std::vector<szt>				mtc11;	/**< indexes of disconnected segments not looped onto itself */
 
+	std::vector<szt>				mt22;	/**< indexes of disconnected looped segments */
+	std::vector<szt>				mtc22;	/**< indexes of disconnected looped segments */
+
+	std::vector<szt>				mt33;	/**< indexes of segments between nodes of degree 3 and 3: all together */
+	vec2<szt>						mtc33;	/**< indexes of segments between nodes of degree 3 and 3: sorted into clusters */
+	
+	std::vector<std::array<szt,2>>	mt13;	/**< {index,end} pairs for segments between nodes of degree 1 and 3: all together */
+	vec2<std::array<szt,2>>			mtc13;	/**< {index,end} pairs for segments between nodes of degree 1 and 3: sorted into clusters */
+
+	Oel&		oel;				/**< logging facility */
+	const szt	minLoopLength {2};	/**< minimal length of a segment that can bend into a cycle */
+	bool		verbose {};			/**< verbosity of the short logs */
+
+	/** Constructor.
+	 * @param cfg configuration object
+	 * @param oel logging facility object
+	 */
+	explicit Structure(const Config& cfg, Oel& oel);
+
+	/** Updates internal data */
 	void basic_update() noexcept;
-	void update_adjacency() noexcept;
-	void update_structure() noexcept;
-	void update_structure_ind( const szt ind ) noexcept;
 
+	/** Updates internal data */
+	void update_adjacency() noexcept;
+
+	/** Updates internal vectors */
+	void update_structure() noexcept;
+
+	/** Initializes or updates glm and gla vectors */
 	void make_indma() noexcept;
 
+	/** Initializes or updates adjacency list.
+	 * @param ic disconnected network component index
+	 * @param a the adjacency list
+	 */
 	void make_adjacency_list_edges( const szt ic, vec2<szt>& a ) noexcept;
 
+	/** Populates 'mt??', 'mtc??', 'nn' and 'clmt' vectors */
 	void populate_cluster_vectors() noexcept;
 
-	szt count_nnodes(const szt) const noexcept;
+	/** Updates 'nn' for the specific node degree */
 	void update_nn(const szt) noexcept;
+
+	/** Updates 'nn' for all node degrese */
 	void update_nn() noexcept;
-	szt find_mtmass() const noexcept;
+
+	/** Prints the network components */
 	void print_mitos(const std::string&) const;
+
+	/** Prints the network components */
 	void print(std::ostream&) const;
+
+private:
+
+	vec2<bool> clvisited;	/** temporary auxiliary field */
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename Mt>
 Structure<Mt>::
-Structure( const MitoD::ConfigMain& cfgMain,
+Structure( const MitoD::Config& cfg,
 		   Oel& oel
 	)
 	: oel {oel}
-	, verbose {cfgMain.verbose}
-//	, check {*this}
+	, verbose {cfg.verbose}
 {}
 
 template<typename Mt> inline
@@ -76,8 +132,8 @@ update_adjacency() noexcept
 		clagl.resize(clnum);
 		clvisited.resize(clnum);
 	}
-	for (szt ic=0; ic<clnum; ic++)
-		make_adjacency_list_edges(ic, clagl[ic]);
+	for (szt c=0; c<clnum; c++)
+		make_adjacency_list_edges(c, clagl[c]);
 }
 
 template<typename Mt> inline
@@ -98,28 +154,12 @@ update_structure() noexcept
 
 template<typename Mt> inline
 void Structure<Mt>::
-update_structure_ind( const szt ind ) noexcept
-{
-	if (clagl.size() < clnum) {
-		clagl.resize(clnum);
-		clvisited.resize(clnum);
-	}
-	const auto ic = mt[glm[ind]].cl;
-	make_adjacency_list_edges(ic, clagl[ic]);
-}
-
-template<typename Mt> inline
-void Structure<Mt>::
 make_indma() noexcept
 {
 	cls.resize(clnum);
 	std::fill(cls.begin(), cls.end(), 0);			// cluster size, # of edges
 	for (szt j=1; j<=mtnum; j++)
 		cls[mt[j].cl] += mt[j].g.size();	
-
-	glc.resize(clnum);
-	for (szt j=0; j<clnum; j++)
-		glc[j].resize(cls[j]);
 
 	glm.resize(mtmass);
 	gla.resize(mtmass);
@@ -128,48 +168,47 @@ make_indma() noexcept
 			const auto& g {mt[j].g[k]};
 			glm[g.ind] = j;
 			gla[g.ind] = k;
-			glc[g.cl][g.indcl] = g.ind;
-		}	
+		}
 }
 template<typename Mt>
 void Structure<Mt>::
-make_adjacency_list_edges( const szt ic, vec2<szt>& a ) noexcept
+make_adjacency_list_edges( const szt c, vec2<szt>& a ) noexcept
 {
-	clvisited[ic].resize(cls[ic]);
+	clvisited[c].resize(cls[c]);
 
-	a.resize(cls[ic]);
-	for (auto& o : a)	o.clear();
+	a.resize(cls[c]);
+	for (auto& o : a) o.clear();
 
-	for (const auto& j : clmt[ic])
+	for (const auto& j : clmt[c])
 		for (szt k=0; k<mt[j].g.size(); k++) {
-			const auto ind = mt[j].g[k].indcl;
+			const auto ind {mt[j].g[k].indcl};
 			if (k == 0) {
-				for (szt ie=1; ie<=mt[j].nn[1]; ie++) {				// connection backwards: only other mitos might be found
-					const auto w2 = mt[j].neib[1][ie];
-					const auto a2 = mt[w2].end2a(mt[j].neen[1][ie]);
+				for (szt e=1; e<=mt[j].nn[1]; e++) {		// connection backwards: only other segments might be found
+					const auto w2 {mt[j].neig[1][e]};
+					const auto a2 {mt[w2].end2a(mt[j].neen[1][e])};
 					a[ind].push_back( mt[w2].g[a2].indcl );
 				}
-				if (mt[j].g.size() == 1)								// connection forwards: to other mito
-					for (szt ie=1; ie<=mt[j].nn[2]; ie++) {
-						const auto w2 = mt[j].neib[2][ie];
-						const auto a2 = mt[w2].end2a(mt[j].neen[2][ie]);
+				if (mt[j].g.size() == 1)					// connection forwards: to other segment
+					for (szt e=1; e<=mt[j].nn[2]; e++) {
+						const auto w2 {mt[j].neig[2][e]};
+						const auto a2 {mt[w2].end2a(mt[j].neen[2][e])};
 						a[ind].push_back(mt[w2].g[a2].indcl);
 					}
-				else {													// connection forwards: to the same mito
+				else {										// connection forwards: to the same segment
 					a[ind].push_back( mt[j].g[k+1].indcl );
 				}
 			}
-			else if (k == mt[j].g.size()-1) {							// but not  a1 == 0  =>  mt[m1].g.size() > 1
-				a[ind].push_back(mt[j].g[k-1].indcl);					// connection backwards: to the same mito
-				for (szt ie=1; ie<=mt[j].nn[2]; ie++) {				// connection forwards: to other mito
-					const auto w2 = mt[j].neib[2][ie];
-					const auto a2 = mt[w2].end2a( mt[j].neen[2][ie]);
+			else if (k == mt[j].g.size()-1) {				// but not  a1 == 0  =>  mt[m1].g.size() > 1
+				a[ind].push_back(mt[j].g[k-1].indcl);		// connection backwards: to the same segment
+				for (szt e=1; e<=mt[j].nn[2]; e++) {		// connection forwards: to other segment
+					const auto w2 {mt[j].neig[2][e]};
+					const auto a2 {mt[w2].end2a(mt[j].neen[2][e])};
 					a[ind].push_back(mt[w2].g[a2].indcl);
 				}
 			}
-			else {														// edge in the bulk: a1 != 1 && a1 != mt[m1].g.size()
-				a[ind].push_back(mt[j].g[k-1].indcl);					// connection backwards: to the same mito
-				a[ind].push_back(mt[j].g[k+1].indcl);					// connection forwards: to the same mito
+			else {											// edge in the bulk: a1 != 1 && a1 != mt[m1].g.size()
+				a[ind].push_back(mt[j].g[k-1].indcl);		// connection backwards: to the same segment
+				a[ind].push_back(mt[j].g[k+1].indcl);		// connection forwards: to the same segment
 			}
 		}
 }
@@ -182,21 +221,22 @@ populate_cluster_vectors() noexcept
 	mt22.clear();	mtc22.resize(clnum);		std::fill(mtc22.begin(),  mtc22.end(),  huge<szt>);
 	mt33.clear();	mtc33.resize(clnum);		for (auto& o : mtc33) o.clear();
 	mt13.clear();	mtc13.resize(clnum);		for (auto& o : mtc13) o.clear();
+
 	nn = {{zero<szt>}};
 	clmt.resize(clnum);		for (auto& o : clmt) o.clear();		// # of segments
 	
 	for (szt j=1; j<=mtnum; j++) {
 		const auto& m {mt[j]};
 		clmt[m.cl].push_back(j);						// mitochondrial indexes clusterwise
-		nn[1] += m.nnodes(2);
+		nn[1] += m.num_nodes(2);
 
-		const auto e {m.hasOneFreeEnd()};
+		const auto e {m.has_one_free_end()};
 		if (e) {
 			const szt oe {e == 1 ? static_cast<szt>(2) : static_cast<szt>(1)};
 			nn[0]++;
 			if (m.nn[oe] == 2) {
 				const std::array<szt,2> je {j, e};
-				mtc13[m.cl].emplace_back(je);			// mito index, free end index
+				mtc13[m.cl].emplace_back(je);			// segment index, free end index
 				mt13.emplace_back(je);
 				nn[2]++;
 			}
@@ -206,7 +246,7 @@ populate_cluster_vectors() noexcept
 			mt11.push_back(j);							// it is a separate segment since it has two free ends
 			nn[0] += 2;
 		}
-		else if (m.isPureLoop()) {
+		else if (m.isCycle()) {
 			mtc22[m.cl] = j;
 			mt22.push_back(j);							// it is a separate segment since it has two free ends
 		}
@@ -216,34 +256,25 @@ populate_cluster_vectors() noexcept
 			nn[2] += 2;
 		}
 		else {
-			; XASSERT(true, "Error in populate_cluster_vectors: failed classification for "+STR(j));
+			; XASSERT(false, "Error in populate_cluster_vectors: failed classification for "+STR(j)+"\n");
 		}
 	}
-	if (false) {
-		if (verbose) { std::cout << "mt11 "; for (const auto o : mt11) std::cout << o << " "; std::cout << std::endl; }
-		if (verbose) { std::cout << "mt22 "; for (const auto o : mt22) std::cout << o << " "; std::cout << std::endl; }
-		if (verbose) { std::cout << "mt33 "; for (const auto o : mt33) std::cout << o << " "; std::cout << std::endl; }
-		if (verbose) { std::cout << "mt13 "; for (const auto& o : mt13) std::cout << o[0] << " "; std::cout << std::endl; }
-	}
 	nn[2] /= 3;
-}
-
-template<typename Mt>
-szt Structure<Mt>::
-count_nnodes( const szt deg ) const noexcept
-{
-	szt k {0};
-	for (szt i=1; i<=mtnum; i++)
-		k += mt[i].nnodes(deg);
-	if (deg == 3) return k/3;
-	else		       return k;
 }
 
 template<typename Mt>
 void Structure<Mt>::
 update_nn( const szt deg ) noexcept
 {
-	nn[deg-1] = count_nnodes(deg);
+	auto count_nodes = [&](const szt deg) noexcept	{
+		szt k {};
+		for (szt i=1; i<=mtnum; i++)
+			k += mt[i].num_nodes(deg);
+		if (deg == 3) return k/3;
+		else		  return k;
+	};
+
+	nn[deg-1] = count_nodes(deg);
 }
 
 template<typename Mt>
@@ -263,17 +294,6 @@ print_mitos( const std::string& tag ) const
 		mt[j].print(j, tag, -1);
 	oel.print("");
 }
-template<typename Mt>
-szt Structure<Mt>::
-find_mtmass() const noexcept
-{
-	szt mass {0};
-	for (szt j=1; j<=mtnum; j++)
-		mass += mt[j].length();
-
-	return mass;
-}
-
 template<typename Mt>
 void Structure<Mt>::
 print( std::ostream& ofs ) const

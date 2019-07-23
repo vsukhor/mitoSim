@@ -1,3 +1,23 @@
+/* ==============================================================================
+   Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann.
+   All Rights Reserved.
+   Developed at Helmholtz Center for Infection Research, Braunschweig, Germany.
+   Please see Readme file for further information
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+============================================================================== */
+
 #ifndef FUSION_h
 #define FUSION_h
 
@@ -9,13 +29,29 @@
 
 namespace MitoD {
 
+/**
+ * Base class for fusion reaction classes.
+ */
 template<typename Ntw>
-class Fusion : public Reaction {
+class Fusion
+	: public Reaction {
 
 	friend Gillespie<Reaction>;
 
 public:
 
+	/** Constructor.
+	 * @param oel logging facility object
+	 * @param ind reaction id
+	 * @param netw the network
+	 * @param rate rate constant
+	 * @param it iteration counter
+	 * @param time current time
+	 * @param verbose bool if work in verbose mode
+	 * @param nodeDegree1 degree of the 1st node
+	 * @param nodeDegree2 degree of the 2nd node
+	 * @param srt reaction name literal
+	 */
 	Fusion( Oel& oel,
 			const szt ind,
 			Ntw& netw,
@@ -27,7 +63,7 @@ public:
 			const uint nodeDegree2,
 			const std::string& srt
 		)
-		: Reaction(oel, ind, rate, it, time, verbose, "fusion", srt)
+		: Reaction {oel, ind, rate, it, time, verbose, "fusion", srt}
 		, netw {netw}
 		, rnd {netw.rnd}
 		, deg1(nodeDegree1)
@@ -35,17 +71,25 @@ public:
 	{}
 
 	static constexpr auto is_active( const std::unique_ptr<Reaction>& r );
+
+	/**
+	* Populates the vector of reactions that need a score update after *this has fired
+	* and initializes the propensities and effective rate
+	*/
 	void initialize_dependencies( const vup<Reaction>& rc ) noexcept override;
 
+	/** Prints the parameters*/
 	void print(const bool) const override;
 
 protected:
 
 	using Reaction::oel;
 
-	Ntw&		 netw;
-	RandFactory& rnd;
-	std::array<szt,2>		 cc;
+	// Convenience references
+	Ntw&		 		netw;		/**< ref: the host network for this reaction */
+	RandFactory& 		rnd;		/**< ref: random number factory */
+
+	std::array<szt,2>	cc;			/**< indices of the clusters */
 
 	void update_netw_stats() override;
 
@@ -54,14 +98,14 @@ private:
 	using Reaction::set_score;
 	using Reaction::it;
 
-	std::vector<Reaction*>  dependents;	// reactions that need a score update after *this has fired
-	uint					deg1, deg2;	// E: 2; real: 3
+	std::vector<Reaction*>  dependents;	/**< reactions that need a score update after *this has fired */
+	uint					deg1, deg2;	/**< input node degrees */
 
-//	szt w_from_score( const real* const score ) const noexcept;
+	/** Sets this reaction propensity for the whole network */
 	virtual void set_prop() noexcept = 0;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename Ntw> constexpr
 auto Fusion<Ntw>::

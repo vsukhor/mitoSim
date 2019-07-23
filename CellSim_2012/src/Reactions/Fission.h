@@ -1,3 +1,22 @@
+/* ==============================================================================
+   Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann.
+   All Rights Reserved.
+   Developed at Helmholtz Center for Infection Research, Braunschweig, Germany.
+   Please see Readme file for further information
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+============================================================================== */
 
 #ifndef Fission_h
 #define Fission_h
@@ -14,13 +33,26 @@ using namespace Utils;
 template<typename>
 class Fusion;
 
+/**
+ * Fission reaction class.
+ */
 template<typename Ntw>
-class Fission: public Reaction
-{
+class Fission
+	: public Reaction {
+
 	friend Gillespie<Reaction>;
 
 public:
 
+	/** Constructor.
+	 * @param oel logging facility object
+	 * @param ind reaction id
+	 * @param netw the network
+	 * @param rate rate constant
+	 * @param it iteration counter
+	 * @param time current time
+	 * @param verbose bool if work in verbose mode
+	 */
 	Fission( Oel& oel,
 			 const szt ind,
 			 Ntw& netw,
@@ -29,23 +61,37 @@ public:
 			 const real& time,	// const ref
 			 const bool& verbose
 		)
-		: Reaction(oel, ind, rate, it, time, verbose, "fission", "fiss")
+		: Reaction {oel, ind, rate, it, time, verbose, "fission", name}
 		, netw {netw}
 		, rnd {netw.rnd}
 	{
 		netw.fis.verbose = verbose;
 	}
 
+	/** Sets the Gillespie score for this reaction */
 	void set_score() noexcept override;
+
+	/** Returns the Gillespie score for this reaction */
 	real get_score() const noexcept override { return *score; };
+
+	/** Updates propensity for two network components indexed in the parameters */
 	void update_prop(szt,szt) noexcept override;
 
-	void make() noexcept override;
-	szt event_count() const noexcept override { return eventCount; }
+	/** Executes the raction event */
+	void operator()() noexcept override;
 
 	static constexpr auto is_active(const std::unique_ptr<Reaction>&) noexcept;
+
+	/**
+	* Populates the vector of reactions that need a score update after *this has fired
+	* and initializes the propensities and effective rate
+	*/
 	void initialize_dependencies(const vup<Reaction>&) noexcept override;
 
+	/** Returns the number of times this reaction was fired */
+	szt get_eventCount() const noexcept override { return eventCount; }
+
+	/** Prints the parameters*/
 	void print(const bool) const override;
 
 private:
@@ -55,26 +101,34 @@ private:
 	using Reaction::oel;
 	using Reaction::verbose;
 
-	Ntw&					netw;
-	RandFactory&			rnd;
-	std::array<szt,2>					cc;
-	real*					score {nullptr};
-	szt						eventCount {0};
-	std::vector<Reaction*>	dependents;	// reactions that need a score update after *this has fired
+	// Convenience references
+	Ntw&					netw;	/**< ref: the network */
+	RandFactory&			rnd;	/**< ref: random number factory */
 
+	std::array<szt,2>		cc;
+	real*					score {};		/**< current rate as seen by the Gillespie reactor */
+	szt						eventCount {};	/**< number of times this reaction was fired */
+	std::vector<Reaction*>	dependents;		/**< reactions that need a score update after *this has fired */
+	static const std::string name;			/**< reaction name constant */
+
+	/** sets this reaction propensity for the whole network */
 	void set_prop() noexcept;
+
+	/** attaches this score to the Gillespie mechanism */
 	void attach_score_pointer(real*a) noexcept override { score = a; };
+
 	void update_netw_stats() override;
 
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+template<typename Ntw> const std::string Fission<Ntw>::name {"fiss"};
 
 template<typename Ntw> constexpr
 auto Fission<Ntw>::
 is_active( const std::unique_ptr<Reaction>& r ) noexcept
 {
-	return  r->srt == "fiss";
+	return r->srt == name;
 };
 
 template<typename Ntw>
@@ -96,7 +150,7 @@ template<typename Ntw> inline
 void Fission<Ntw>::
 set_score() noexcept
 {
-	*score = rate * netw.fis.propTotal();
+	*score = rate * netw.fis.get_prTotal();
 }
 
 template<typename Ntw> inline
@@ -119,38 +173,6 @@ template<typename Ntw>
 void Fission<Ntw>::
 update_netw_stats()
 {
-//	basic_update();						 was called from fiss
-	
-//	if (cc[0] != cc[1] && !( cc[0] == netw.clnum-1 || cc[1] == netw.clnum-1 ) ) 
-//		Globals::eexit<string>( 1, 1, 1, logfile, "Error Fission::update_netw_stats: failed assumption for cluster-specific updates " );
-//	if (cc[0] > cc[1] ) {
-//		const auto tmp = cc[0];
-//		cc[0] = cc[1];
-//		cc[1] = tmp;
-//	}
-	
-/*	for(auto& o : netw.clsi)						// clsi
-		if(o.size() < netw.clnum)
-			o.resize(netw.clnum);
-	netw.populate_clsi(cc[0]);
-	if (cc[0] != cc[1])
-		netw.populate_clsi(cc[1]);
-
-	if (netw.clcr.size() < netw.clnum) {			// clcr, clcrj
-		netw.clcr.resize(netw.clnum);
-		netw.clcrj.resize( netw.clnum);
-	}
-
-	netw.populate_clcr(cc[0]);
-	if (cc[0] != cc[1])
-		netw.populate_clcr( cc[1]);
-*/
-//	if (netw.fis.prop.size() < netw.clnum)			// fissVec
-//		netw.fis.prop.resize(netw.clnum);
-
-//	netw.update_OxPh();
-//	netw.update_clq();
-		
 	for(auto& o : dependents) {
 		o->update_prop(cc[0], cc[1]);
 		o->set_score();
@@ -159,14 +181,13 @@ update_netw_stats()
 
 template<typename Ntw>
 void Fission<Ntw>::
-make() noexcept
+operator()() noexcept
 {
-	if (verbose)
-		print(true);
+	if (verbose) print(true);
 
 	eventCount++;
 
-	cc = netw.fis.fire();
+	cc = netw.fis();
 
 	update_netw_stats();
 }

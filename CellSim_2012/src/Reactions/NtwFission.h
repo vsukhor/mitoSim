@@ -1,3 +1,22 @@
+/* ==============================================================================
+   Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann.
+   All Rights Reserved.
+   Developed at Helmholtz Center for Infection Research, Braunschweig, Germany.
+   Please see Readme file for further information
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+============================================================================== */
 
 #ifndef NtwFission_h
 #define NtwFission_h
@@ -6,6 +25,9 @@ namespace MitoD {
 
 template<typename> class Fission;
 
+/**
+ * Base class for network-specific fission reaction slots.
+ */
 template<typename Ntw>
 class NtwFission {
 
@@ -13,27 +35,50 @@ public:
 
 	friend Fission<Ntw>;
 
-	explicit NtwFission(Ntw&);
+	explicit NtwFission(Ntw&);		/**< Constructor */
 
+	/** sets this reaction propensity for the whole network */
 	ulong set_prop()  noexcept;
-	void update_prop(const szt) noexcept;
-	constexpr ulong propTotal() const noexcept { return prTotal; }
-	std::array<szt,2> fire() noexcept;
+
+	/**
+	 * Updates this reaction propensity for the whole network.
+	 * This is done after updating it for the cluster indexed.
+	  * @param c cluster index that triggers the update
+	*/
+	void update_prop(const szt c) noexcept;
+
+	/** prTotal getter */
+	constexpr ulong get_prTotal() const noexcept { return prTotal; }
 
 private:
 
-	Ntw&						host;
-	typename Ntw::Reticulum&	mt;
-	const szt&					clnum;
-	bool						verbose {false};
+	Ntw& host;		/**< ref: the host network for this reaction */
 
-	std::vector<ulong>	pr;
-	ulong				prTotal {0UL};
+	// Convenience references to some of the host members
+	typename Ntw::Reticulum&	mt;		/**< ref: the segments */
+	const szt&					clnum;	/**< ref: current number fo clusters */
 
-	void set_prop(const szt)  noexcept;
-	void updateVecSmall() noexcept;
+	bool verbose {}; /**< verbosity of the short logs */
 
-	bool find_random_node(szt&, szt&) const noexcept;
+	// Propensities
+	std::vector<ulong>	pr;				/**< propensities per cluster */
+	ulong				prTotal {};		/**< total propensity */
+
+	/**
+	 * Sets this reaction propensity for the indexed cluster.
+	 * Does not update the whole network propensity.
+	 * @param c index of the cluster that is updateed
+	 */
+	void set_prop(const szt c) noexcept;
+
+	/** Executes the reaction event */
+	auto operator()() noexcept;
+
+	/** Find sa random node from those suitable for this reaction.
+	 * @param w index of random segment
+	 * @param a random position inside the segment 
+	 */
+	bool find_random_node(szt& w, szt& a) const noexcept;
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -87,8 +132,8 @@ update_prop( const szt c ) noexcept		// incremental clnum changes are assumed
 }
 
 template<typename Ntw>
-std::array<szt,2> NtwFission<Ntw>::
-fire() noexcept
+auto NtwFission<Ntw>::
+operator()() noexcept
 {
 	szt w {huge<szt>};
 	szt a {huge<szt>};

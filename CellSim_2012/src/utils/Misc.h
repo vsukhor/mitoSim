@@ -1,3 +1,23 @@
+/* ==============================================================================
+   Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann.
+   All Rights Reserved.
+   Developed at Helmholtz Center for Infection Research, Braunschweig, Germany.
+   Please see Readme file for further information
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+============================================================================== */
+
 #ifndef Utils_h
 #define Utils_h
 
@@ -13,8 +33,6 @@
 #include <sys/stat.h>
 
 namespace Utils {
-
-#define __LINUX__
 
 extern const std::string SLASH;
 
@@ -51,9 +69,9 @@ template<typename T> constexpr const T huge<T,std::enable_if_t<std::is_fundament
 template<typename T1, typename T2>
 inline vec2<T1> array_like( const vec2<T2>& as )
 {
-	vec2<T1> me( as.size() );
+	vec2<T1> me(as.size());
 	for (szt i=0; i<as.size(); i++)
-		me[i].resize( as[i].size() );
+		me[i].resize(as[i].size());
 	return me;
 }
 
@@ -63,16 +81,43 @@ szt find( const std::vector<T>& b,
 		  std::vector<szt>& j )	noexcept
 {	j.clear();
 	for (szt i=0; i<b.size(); i++) 
-		if (b[i] != T(0) ) 
-			j.push_back( i );
+		if (b[i] != T{} ) 
+			j.push_back(i);
 	return j.size();
 }
 
 std::string padZeros3( szt n );
 
 bool file_exists( const std::string& name );
-bool fileExists( const std::string& name );
-std::string get_current_time();
+
+struct StopWatch {
+
+	struct Instance {
+
+		std::chrono::time_point<std::chrono::system_clock> h;
+		std::time_t c;
+		std::string str;
+
+		void operator()() {
+			h = std::chrono::system_clock::now();
+			c = std::chrono::system_clock::to_time_t(h);
+			str = std::string(ctime(&c));
+		}
+	};
+
+	Instance start;
+	Instance stop;
+
+	std::string duration() {
+		diff = stop.h - start.h;
+		return STR(diff.count());
+	}
+
+private:
+
+	std::chrono::duration<double> diff;
+
+};
 
 }
 

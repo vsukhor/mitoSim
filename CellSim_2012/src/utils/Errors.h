@@ -1,10 +1,22 @@
-//
-//  Recycler.h
-//  MosaicSC
-//
-//  Created by vs on 03.01.18.
-//  Copyright © 2018 vs. All rights reserved.
-//
+/* ==============================================================================
+   Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann.
+   All Rights Reserved.
+   Developed at Helmholtz Center for Infection Research, Braunschweig, Germany.
+   Please see Readme file for further information
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+============================================================================== */
 
 #ifndef Errors_h
 #define Errors_h
@@ -71,7 +83,7 @@ template<typename Q, bool isDiscrete, typename Enabler = void>
 class ParOutOfRangeException: public std::exception
 {};
 
-// specialization for fundamental scalars discrete xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+// specialization for fundamental scalars discrete xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 template<typename Q>
 class ParOutOfRangeException<Q, true,		// discrete case
@@ -102,7 +114,7 @@ private:
 
 		auto print = [](const std::vector<Q>& a) {
 			std::string w {"{ "};
-			for(const auto& o : a)
+			for(const auto o : a)
 				w += std::to_string(o)+" ";
 			return w+"}";
 		};
@@ -114,7 +126,7 @@ private:
 
 };
 
-// specialization for fundamental scalars continous xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+// specialization for fundamental scalars continous xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 template<typename Q>
 class ParOutOfRangeException<Q, false,		// continuous case
@@ -146,61 +158,6 @@ private:
 			   "' = "+std::to_string(p)+" :"+"\n\tthe value provided "+
 			   " is outside the acceptable range "+
 			   "[ "+std::to_string(r[0])+", "+std::to_string(r[1])+" ]";
-	}
-};
-/*
-// specialization for vectors continous xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-template<typename T>
-class ParOutOfRangeException<std::vector<T>, false,
-	std::enable_if_t<std::is_fundamental<T>::value>> : public std::exception {
-
-	typedef std::vector<T> Q;
-
-public:
-
-	ParOutOfRangeException(const std::string& name, const Q& p, const std::vector<Q>& r, Oel& oel)
-	{
-		XASSERT((r.size() == p.size() && std::all_of(r.begin(), r.end(), [](const Q& a){return a.size()==2;})), "Incorrect r size in ParOutOfRangeException");
-
-		auto print = [](const Q& a) {
-			std::string w{"{ "};
-			for(const auto& o : a)
-				w += "["+std::to_string(o[0])+" "+std::to_string(o[1])+"] ";
-			return w+"}";
-		};
-		const std::string s = "Error in conf specification for parameter '"+name+
-							  "' = "+print(p)+" :"+"\n\tthe value provided "+
-							  " is outside the acceptable range "+
-							  +print(r);
-		oel.printstr( s, 1 );
-	}
-};
-*/
-// specialization for arrays continous xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-template<typename T, std::size_t W>
-class ParOutOfRangeException<std::array<T,W>, false,
-	std::enable_if_t<std::is_fundamental<T>::value>> : public std::exception {
-
-	typedef std::array<T,W> Q;
-
-public:
-
-	ParOutOfRangeException(const std::string& name, const Q& p, const std::vector<Q>& r, Oel& oel)
-	{
-		XASSERT((r.size() == 2 && std::all_of(r.begin(), r.end(), [&p](const Q& a){return a.size()==p.size();})), "Incorrect r size in ParOutOfRangeException");
-
-		auto print = [](const Q& a) {
-			std::string w{"{ "};
-			for(const auto& o : a)
-				w += "["+std::to_string(o[0])+" "+std::to_string(o[1])+"] ";
-			return w+"}";
-		};
-		const std::string s = "Error in conf specification for parameter '"+name+
-							  "' = "+print(p)+" :"+"\n\tthe value provided "+
-							  " is outside the acceptable range "+print(r);
-		oel.print<true>(s);
 	}
 };
 

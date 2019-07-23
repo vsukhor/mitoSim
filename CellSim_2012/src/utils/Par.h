@@ -1,3 +1,23 @@
+/* ==============================================================================
+   Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann.
+   All Rights Reserved.
+   Developed at Helmholtz Center for Infection Research, Braunschweig, Germany.
+   Please see Readme file for further information
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+============================================================================== */
+
 #ifndef Par_h
 #define Par_h
 
@@ -25,19 +45,21 @@ protected:
 		: name_(name) 
 	{}
 	
-	virtual void print( Oel& ) = 0;
-	virtual void initialize( std::string ) = 0;
+	virtual void print(Oel&) = 0;
+	virtual void initialize(std::string) = 0;
 	std::string name() const noexcept;
 
 public:
-	void load( std::ifstream& );
-	void load( const std::string& fname );
+	void load(std::ifstream&);
+	void load(const std::string&);
 };
 
-// if the line contains a valid parname-value combination, returns true and the value, otherwise retruns false
+// if the line contains a valid parname-value combination,
+// returns true and the value, otherwise retruns false
 template<typename Q>
-bool ParBase<Q>::detect_name( std::ifstream& config, 
-							  std::string& value ) const
+bool ParBase<Q>::
+detect_name( std::ifstream& config,
+			 std::string& value ) const
 {	
 	const std::string emp {" "};
 	const std::string tab {"\t"};
@@ -48,9 +70,9 @@ bool ParBase<Q>::detect_name( std::ifstream& config,
 	ulong commentpos = line.find_first_of('#');
 	if (commentpos != std::string::npos)
 		line.erase(commentpos);
-	
 	if (!line.length())
 		return false;
+
 	while (!line.substr(line.length()-1, 1).compare(emp) ||
 		   !line.substr(line.length()-1, 1).compare(tab))
 		line.erase(line.length()-1);
@@ -59,20 +81,20 @@ bool ParBase<Q>::detect_name( std::ifstream& config,
 	
 	int parnameend = -1;
 	if (     line.find_first_of( emp ) == std::string::npos &&
-			 line.find_first_of( tab ) != std::string::npos) parnameend = (int)line.find_first_of(tab);
+			 line.find_first_of( tab ) != std::string::npos) parnameend = static_cast<int>(line.find_first_of(tab));
 	else if (line.find_first_of( emp ) != std::string::npos &&
-			 line.find_first_of( tab ) == std::string::npos) parnameend = (int)line.find_first_of(emp);
+			 line.find_first_of( tab ) == std::string::npos) parnameend = static_cast<int>(line.find_first_of(emp));
 	else if (line.find_first_of( emp ) != std::string::npos &&
-			 line.find_first_of( tab ) != std::string::npos) parnameend = std::min( (int)line.find_first_of(emp),
-																					 (int)line.find_first_of(tab) );
+			 line.find_first_of( tab ) != std::string::npos) parnameend = std::min(static_cast<int>(line.find_first_of(emp)),
+																				   static_cast<int>(line.find_first_of(tab)));
 	const auto parname = line.substr(0, (size_t)parnameend);
 	
 	if (parname != name_)
 		return false; 
 	
 	value = line.substr(line.find_last_of("=")+1);
-	while( !value.substr(0, 1).compare(emp) ||
-		   !value.substr(0, 1).compare(tab) )
+	while (!value.substr(0, 1).compare(emp) ||
+		   !value.substr(0, 1).compare(tab))
 		value.erase(value.begin());
 	return true;
 }
@@ -126,8 +148,9 @@ class Par : public ParBase<Q>
 
 template<typename T, bool isDiscrete>
 class Par<T,isDiscrete, typename std::enable_if_t<std::is_fundamental<T>::value ||
-												  std::is_same<T,std::string>::value>> : public ParBase<T>
-{
+												  std::is_same<T,std::string>::value>>
+	: public ParBase<T> {
+	
 	typedef T Q;
 	using ParBase<T>::name;
 	using ParBase<T>::isLoaded_;
@@ -167,7 +190,7 @@ public:
 				throw ParOutOfRangeException<T,isDiscrete>(name(), p_, r, oel);
 		}
 		else {
-			XASSERT(r.size()==2, "size of r must be 2 for continuous parameters");
+			XASSERT(r.size()==2, "size of r must be 2 for continuous parameters\n");
 			if (p_<r[0] || p_>r[1])
 				throw ParOutOfRangeException<T,isDiscrete>(name(), p_, r, oel);
 		}
@@ -182,7 +205,7 @@ public:
 				throw ParOutOfRangeException<T,isDiscrete>(name(), p_, r);
 		}
 		else {
-			XASSERT(r.size()==2, "size of r must be 2 for continuous parameters");
+			XASSERT(r.size()==2, "size of r must be 2 for continuous parameters\n");
 			if (p_<r[0] || p_>r[1])
 				throw ParOutOfRangeException<T,isDiscrete>(name(), p_, r);
 		}
@@ -263,7 +286,7 @@ public:
 	{
 		if (!r.size()) return;		// use this case to omit string checkups
 
-		XASSERT(!isDiscrete || r.size()==2, "size of r must be 2 for continuous parameters");
+		XASSERT(!isDiscrete || r.size()==2, "size of r must be 2 for continuous parameters\n");
 		if (isDiscrete) {
 			if (std::find(r.begin(), r.end(), p_) == r.end())
 				throw ParOutOfRangeException<Q,isDiscrete>(name(), p_, r, oel);
@@ -356,11 +379,6 @@ public:
 
 	void check_range( const std::vector<Q>& r, Oel& oel )
 	{
-//		if (isDiscrete) {
-//			if (std::find(r.begin(), r.end(), p_) == r.end())
-//				throw ParOutOfRangeException<Q,isDiscrete>(name(), p_, r, oel);
-//		}
-//		else {
 	for (szt i=0; i<W; i++)
 			if (p_[i]<r[0][i] || p_[i]>r[1][i])
 				throw ParOutOfRangeException<T,false>(name(), p_[i], {r[0][i], r[1][i]}, oel);
@@ -391,7 +409,7 @@ private:
 	{
 		const std::string emp {" "};
 		const std::string tab {"\t"};
-		szt i(0);
+		szt i {};
 		while (value.length()) {
 			if (i == W)
 				throw MyException("Improper Config::" + name() + " initialization: Excessive data size");

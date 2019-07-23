@@ -1,53 +1,76 @@
+/* ==============================================================================
+   Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann.
+   All Rights Reserved.
+   Developed at Helmholtz Center for Infection Research, Braunschweig, Germany.
+   Please see Readme file for further information
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+============================================================================== */
+
 #ifndef Edge_h
 #define Edge_h
 
 namespace MitoD {
 
+/**
+ * The Network Edge class.
+ * Edge is a minimal structural unit of the network.
+ * The class handles the tasks and properties specific to a single edge and its relation to other network components.
+ */
 template<int ContentT>
 class Edge {
 
 public:
 
-	static const int ConT {ContentT};
-	static real		  length;
+	szt					ind {huge<szt>};	/**< index network-wide: starts from 0 */
+	szt					indcl {huge<szt>};	/**< index cluster-wide: starts from 0 */
+	szt					cl {huge<szt>};		/**< current cluster index */
+	std::array<ulong,2>	fin {{}};			/**< contribution to fission propensity at each end */
 
-	szt	ind {huge<szt>};		// index: starts from 0
-	szt	indcl {huge<szt>};		// index: starts from 0
-	szt	cl {huge<szt>};			// current cl
-	szt	nnb_ini {0};			// # of neib edges at some time point
-	szt	type {huge<szt>};
+	Edge(const Edge&) = delete;
+	Edge(Edge&&) = default;
+	Edge& operator=(const Edge&) = delete;
+	Edge& operator=(Edge&&) = default;
+	~Edge() = default;
 
-	std::array<ulong,2>	fin {0};
-	std::array<bool,2>	cin {false};
-	real				t_prev {huge<real>};	// time the last motion by pulling took place
-	szt					clini {huge<szt>};
+	/** Constructor
+	 * @param ind index network-wide
+	 * @param indcl index cluster-wide
+	 * @param cl current cluster index
+	 */
+	Edge(const szt ind,
+		 const szt indcl,
+		 const szt cl);
 
-	Edge() {}
-	Edge(szt,szt,szt);
-
+	/** Swap the edge ends */
 	void reflect();
-	void shiftContent(Edge&) {}						// shifts the edge content to t
-	void shiftContent(real,Edge&) {}				// shifts fraction q of the edge content to t
-	void shiftContent(std::vector<Edge*>&) {}		// shifts the edge content to a set of particles t
-	bool spreadContent(Edge&) { return false; };	// returns true if some content is still left to spread
 
-	void check(szt) const;
-
+	/** Write the edge to a file */
 	void write(std::ofstream&) const;
-	void print(const szt, const bool) const;
+
+	/** Print the edge */
 	void print(std::ostream&, const szt, const bool) const;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-template<int ContentT> real Edge<ContentT>::length {zero<real>};
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<int ContentT>
 Edge<ContentT>::
 Edge(
-	szt ind,
-	szt indcl,
-	szt cl
+	const szt ind,
+	const szt indcl,
+	const szt cl
 	)
 	: ind {ind}
 	, indcl {indcl}
@@ -59,17 +82,6 @@ void Edge<ContentT>::
 reflect()
 {
 	std::swap(fin[0], fin[1]);
-	std::swap(cin[0], cin[1]);
-}
-
-template<int ContentT>
-void Edge<ContentT>::
-check( szt mtmass ) const
-{
-	if (ind >= mtmass) {
-		print(huge<szt>, true);
-		std::cout << "check_particles(): Edge.pm is out of range; ind, mtmass" << ind << mtmass << std::endl;
-	}
 }
 
 template<int ContentT>
@@ -77,13 +89,10 @@ void Edge<ContentT>::
 write( std::ofstream &ofs ) const
 {
 	ofs.write((char*) &ind, sizeof(szt));
-}
-
-template<int ContentT>
-void Edge<ContentT>::
-print( const szt a, const bool finish ) const
-{
-	print(std::cout, a, finish);
+	ofs.write((char*) &indcl, sizeof(szt));
+	ofs.write((char*) &cl, sizeof(szt));
+	ofs.write((char*) &fin[0], sizeof(ulong));
+	ofs.write((char*) &fin[1], sizeof(ulong));
 }
 
 template<int ContentT>
@@ -94,7 +103,6 @@ print( std::ostream& os, const szt a, const bool finish ) const
 	os << " ind " << ind; 
 	os << " indcl " << indcl;
 	os << " fin " << fin[0] << " " << fin[1];
-	os << " cin " << cin[0] << " " << cin[1];
 	if (finish) os << "\n";
 }
 
