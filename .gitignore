@@ -1,0 +1,10 @@
+
+.DS_Store
+runs/**
+mitosim/manual_make/.DS_Store
+mitosim/manual_make/asm/
+mitosim/manual_make/obj/
+mitosim/build/**
+xcode/**
+readme.rtf
+
