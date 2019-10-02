@@ -5,18 +5,18 @@
 ### Biological interpretation: mitochondria
 
 Mitochondria are organelles in biological cells essential for keeping the cells alive. 
-They are able to move around the cytosol (intracellular volume outside nucleus), where the form extensive quichly reorganizing networks.
-Quantitative description oftheir morphology and dynamics was problematic  
+They are able to move around the cytosol (intracellular volume outside nucleus), where the form extensive fastly reorganizing networks.
+Quantitative description of their morphology and dynamics was problematic 
 because of the seemingly irregular and constantly changing shape they can adopt. 
 This problem is tackled by representing the mitochondria as a graph evolving in time. 
 
 ### The dynamics
 
 The graph evolution results from the division and fusion of the branches, implemented as a time-dependent stochastic process. 
-Specialized protein complexes performing these transformations in the mitochondria network are known from empirical studies, 
-but the implemented dynamics is more general.
+Specialized protein complexes performing these transformations in the mitochondria are known from empirical studies, 
+but the dynamics is not dependent on the details of their operation and may be implemented in more general terms.  
 In this minimal representation, node degrees are constrained to a very narrow range (1, 2 and 3), 
-and only the graph topology is accounted for, totally neglecting the embodiment of the network in space.
+and only the graph topology is accounted for, thus neglecting the embodiment of the network in space.
 Such formulation corresponds to a well-mixed chemical system, so that any graph node has equal probability to interact with any other 
 node appropriate for the reaction type. 
 The evolution corresponds to a minimization of the free energy of node interactions. 
@@ -47,7 +47,7 @@ and, in the case of an update, do this explicitly on the submodule:
 #### Installation
 
 The code requires a C++17 - capable compiler (e.g, it was tested with gcc 7.3.0 or clang 10.0.0 on macOS). 
-For generation of pseudo-random numbers, [Utils::Random](external/utils/random) 
+For generation of pseudo-random numbers, [Utils::Random](https://github.com/vsukhor/utils/tree/master/utils/random) 
 relies on either [boost](https://www.boost.org/) or [NVIDIA cuRAND](https://developer.nvidia.com/curand), so
 depending on the factory type chosen, one of these should be accessible (in the case of the former, the headers suffice).
 
@@ -67,8 +67,8 @@ Static linking is a default, so the executable can then be copied to another dir
 
 ### Running the simulation
 
-The simulation parameters are read from a configuration file as in the example [config_sample.txt](https://github.com/vsukhor/mitoSim/blob/master/tests/config_sample.txt). 
-More detailes on the file formatting can be found in the Utils::Config [documentation](external/utils/config/conf_file_structure.md) 
+The simulation parameters are read from a configuration file as in the example [config_sample.txt](https://github.com/vsukhor/utils/blob/master/utils/config/code_example.md). 
+More detailes on the file formatting can be found in the Utils::Config [documentation](https://github.com/vsukhor/utils/blob/master/utils/config/conf_file_structure.md) 
 The file is expected to be named as 'config_X.txt', where X is the configuraion-specific suffix and the rest of the name is fixed.
 Then, using the above example, and the executable 'mitosim_CPU' simulation may be launched as
 
