@@ -24,10 +24,9 @@ So, in the coarse of the simulation run, the network settles in a dynamic steady
 defined by the reaction parameters and the network dimensions.
 Formally, the process corresponds to a solution of the master equation describing the transformations in continuous time.
 
-For more detailes, please see the original [publication](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002745):  
+More details can be found in the original [publication](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002745):  
 Sukhorukov VM, Dikov D, Reichert AS, Meyer-Hermann M: Emergence of the mitochondrial reticulum from fission and fusion dynamics. 
 PLoS Comput Biol. 2012, 8: e1002745-10.1371/journal.pcbi.1002745.
-
 Please reference the above manuscript whenever the results produced by this code are made publicly available.
 
 ### Installation
