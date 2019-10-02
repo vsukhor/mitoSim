@@ -34,7 +34,7 @@
 #include <string>
 
 #include "utils/common/msgr.h"
-#include "config/reader.h"
+#include "utils/config/reader.h"
 
 namespace MitoD {
 
@@ -46,7 +46,7 @@ class Config {
 
 	const std::string	configSuffix;	///< Application-specific suffix of the configuration file.
 	const std::string	cfgFname;		///< Configuration file name.
-	::Config::Reader	read;			///< Generic reader of configuraion files.
+	Utils::Config::Reader	read;		///< Generic reader of configuraion files.
 
 public:
 

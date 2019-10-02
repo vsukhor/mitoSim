@@ -1,14 +1,12 @@
 # IMPOTRANT NOTE: Unless set in the environment,
 # values of the following variables need to be supplied via the command line
 # (1) $(BOOST_DIR)  # default is empty, path to boost library (only the headers will be needed)
-# (2) $(UTILS_DIR)  # default is empty, path to utils library (without slash at the end)
-# (2) $(CONFIG_DIR)  # default is empty, path to utils library (without slash at the end)
-# (3) $(PROCESSOR)  # may take values 0 or 1: to set use of the pseudo-random number generator
+# (2) $(PROCESSOR)  # may take values 0 or 1: to set use of the pseudo-random number generator
  					# from boost or (in case of cuda availablility) curand respectively; default is 1
 # You may also need to supply explicitely executables for $(AR), $(AS) and $(CC)
 # to override or supplement the environment variables
 # e.g., the call from the directory where the Makefile is, may look like:
-# make PROCESSOR=0 -B all BOOST_DIR=/path/to/boost_includes UTILS_DIR=/path/to/utils /path/to/config AS=/usr/bin/as AR=/usr/bin/ar CC=/usr/local/gcc-9.1.0/bin/gcc-9.1.0
+# make PROCESSOR=0 -B all BOOST_DIR=/path/to/boost_includes AS=/usr/bin/as AR=/usr/bin/ar CC=/usr/local/gcc-9.1.0/bin/gcc-9.1.0
 # Alternatively, hardcode them directly here.
 #
 # The executable is ../app/mitosim_X, where "X" is either "CPU" or "CUDA", depending on the $(PROCESSOR)
@@ -17,6 +15,8 @@
 # make print-VAR
 
 print-%  : ; @echo $* = $($*)
+
+UTILS_DIR := ../external/
 
 MITOSIM_DIR := ../
 MITOSIM_APP_DIR := $(MITOSIM_DIR)app/
@@ -35,7 +35,7 @@ ASMS_FULL = $(patsubst %,$(ASMS_DIR)%,$(ASMS))
 
 MITOSIM_INC_DIR := $(MITOSIM_DIR)include/
 REACTS_INC_DIR := $(MITOSIM_DIR)include/reactions/
-INCDIR = -I$(BOOST_DIR) -I$(UTILS_DIR) -I$(CONFIG_DIR) -I$(MITOSIM_INC_DIR) -I$(REACTS_INC_DIR)
+INCDIR = -I$(BOOST_DIR) -I$(UTILS_DIR) -I$(MITOSIM_INC_DIR) -I$(REACTS_INC_DIR)
 
 TARGET_DIR := ./
 TARGET_CORE := mitosim
@@ -55,9 +55,9 @@ all : $(TARGET)
 
 CC := gcc
 CFLAGS = -c -Wall -O3 -msse4 -march=native $(INCDIR) $(CPP_VARS) -std=c++17
-LFLAGS = -Wall -L$(UTILS_DIR)/lib -lpthread -lstdc++ -lutils
+LFLAGS = -Wall -L$(UTILS_DIR)lib -lpthread -lstdc++ -lutils
 
-$(TARGET) : $(OBJS_FULL)
+$(TARGET) : $(OBJS_FULL) $(UTILS_DIR)lib/libutils.a
 	$(CC) $(LFLAGS) $^ -o $@
 
 $(OBJS_DIR)main.o : $(ASMS_DIR)main.s
@@ -88,6 +88,9 @@ $(ASMS_DIR)main.s : $(MITOSIM_APP_DIR)main.cpp \
 	$(MITOSIM_INC_DIR)network.h \
 	$(MITOSIM_INC_DIR)config.h
 	$(CC) $(CFLAGS) -S $< -o $@
+
+$(UTILS_DIR)lib/libutils.a : 
+    make $(UTILS_DIR)manual_make/Makefile
 
 #clean:
 

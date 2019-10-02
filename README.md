@@ -1,4 +1,4 @@
-#  MitoSim 
+#  mitoSim 
 
 ## A simulator of mitochondria reticulum (minimal spaceless formulation)
 
