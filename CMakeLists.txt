@@ -7,8 +7,6 @@ project(mitosim
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 
-    # Optionally set things like CMAKE_CXX_STANDARD, CMAKE_POSITION_INDEPENDENT_CODE here
-
     # Let's ensure -std=c++xx instead of -std=g++xx
     set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -41,12 +39,8 @@ endif()
 # FetchContent downloads during the configure step
 include(FetchContent)
 
-#SET(CMAKE_CXX_COMPILER /Library/Developer/CommandLineTools/usr/bin)
-#SET(CMAKE_ASM_COMPILER /usr/bin/as)
-#add_compile_options(-O3 -S -msse4 -march=native -Wa,-q)
 add_compile_options(-O3 -msse4)
 
-# This is header only, so could be replaced with git submodules or FetchContent
 find_package(Boost REQUIRED)
 
 set(LIB_UTILS "${CMAKE_CURRENT_SOURCE_DIR}/external/lib/libutils.a")
@@ -55,12 +49,6 @@ add_subdirectory(external)
 
 # The executable code is here
 add_subdirectory(app)
-
-# Testing only available if this is the main app
-# Emergency override MODERN_CMAKE_BUILD_TESTING provided as well
-###if((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR MODERN_CMAKE_BUILD_TESTING) AND BUILD_TESTING)
-###    add_subdirectory(tests)
-###endif()
 
 
 
