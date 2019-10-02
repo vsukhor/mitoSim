@@ -7,3 +7,4 @@ manual_make/mitosim*
 build/**
 docs/html/**
 docs/latex/**
+app/mitosim_CPU
