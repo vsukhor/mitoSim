@@ -26,7 +26,7 @@ Formally, the process corresponds to a solution of the master equation describin
 
 More details can be found in the original [publication](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002745):  
 Sukhorukov VM, Dikov D, Reichert AS, Meyer-Hermann M: Emergence of the mitochondrial reticulum from fission and fusion dynamics. 
-PLoS Comput Biol. 2012, 8: e1002745-10.1371/journal.pcbi.1002745.
+PLoS Comput Biol. 2012, 8: e1002745-10.1371/journal.pcbi.1002745.  
 Please reference the above manuscript whenever the results produced by this code are made publicly available.
 
 ### Installation
@@ -66,12 +66,14 @@ Static linking is a default, so the executable can then be copied to another dir
 
 ### Running the simulation
 
-The simulation parameters are read from a configuration file as in the example [config_sample.txt](https://github.com/vsukhor/utils/blob/master/utils/config/code_example.md). 
-More detailes on the file formatting can be found in the Utils::Config [documentation](https://github.com/vsukhor/utils/blob/master/utils/config/conf_file_structure.md) 
+The simulation parameters are read from a configuration file, structured 
+as in the example [config_sample.txt](https://github.com/vsukhor/utils/blob/master/utils/config/code_example.md). 
+More detailes on the config file formatting can be found in the 
+Utils::Config [documentation](https://github.com/vsukhor/utils/blob/master/utils/config/conf_file_structure.md) 
 The file is expected to be named as 'config_X.txt', where X is the configuraion-specific suffix and the rest of the name is fixed.
 Then, using the above example, and the executable 'mitosim_CPU' simulation may be launched as
 
     ./mitosim_CPU   /working/directory/   sample   22   28
 
 The first two arguments are the working directory where the config file is positioned and the config file suffix respectively.
-The last two arguments are the range limits of the run indexes used choosing for pseudo-rng seeds. 
+The last two arguments are the range limits of the run indexes used for choosing rng seeds. 
