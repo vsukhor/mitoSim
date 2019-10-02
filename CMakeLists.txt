@@ -15,8 +15,6 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     # Let's nicely support folders in IDE's
     set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-#    include(CTest)
-
     find_package(Doxygen)
     if(Doxygen_FOUND)
 #		add_subdirectory(docs)
@@ -48,14 +46,12 @@ include(FetchContent)
 #add_compile_options(-O3 -S -msse4 -march=native -Wa,-q)
 add_compile_options(-O3 -msse4)
 
-# Accumulator library
 # This is header only, so could be replaced with git submodules or FetchContent
 find_package(Boost REQUIRED)
 
-#find_library(LIB_UTILS_LOCATION /Users/vs/Mitofraps/utils/lib/libutils_CPU.a)
+set(LIB_UTILS "${CMAKE_CURRENT_SOURCE_DIR}/external/lib/libutils.a")
 
-# The compiled library code is here
-#add_subdirectory(lib/utils/src)
+add_subdirectory(external)
 
 # The executable code is here
 add_subdirectory(app)

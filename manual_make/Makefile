@@ -37,7 +37,7 @@ MITOSIM_INC_DIR := $(MITOSIM_DIR)include/
 REACTS_INC_DIR := $(MITOSIM_DIR)include/reactions/
 INCDIR = -I$(BOOST_DIR) -I$(UTILS_DIR) -I$(MITOSIM_INC_DIR) -I$(REACTS_INC_DIR)
 
-TARGET_DIR := ./
+TARGET_DIR := ../app/
 TARGET_CORE := mitosim
 
 PROCESSOR_CPU := 0
@@ -57,7 +57,7 @@ CC := gcc
 CFLAGS = -c -Wall -O3 -msse4 -march=native $(INCDIR) $(CPP_VARS) -std=c++17
 LFLAGS = -Wall -L$(UTILS_DIR)lib -lpthread -lstdc++ -lutils
 
-$(TARGET) : $(OBJS_FULL) 
+$(TARGET) : $(OBJS_FULL)
 	$(CC) $(LFLAGS) $^ -o $@
 
 $(OBJS_DIR)main.o : $(ASMS_DIR)main.s
