@@ -57,7 +57,7 @@ CC := gcc
 CFLAGS = -c -Wall -O3 -msse4 -march=native $(INCDIR) $(CPP_VARS) -std=c++17
 LFLAGS = -Wall -L$(UTILS_DIR)lib -lpthread -lstdc++ -lutils
 
-$(TARGET) : $(OBJS_FULL) $(UTILS_DIR)lib/libutils.a
+$(TARGET) : $(OBJS_FULL) 
 	$(CC) $(LFLAGS) $^ -o $@
 
 $(OBJS_DIR)main.o : $(ASMS_DIR)main.s
@@ -88,9 +88,6 @@ $(ASMS_DIR)main.s : $(MITOSIM_APP_DIR)main.cpp \
 	$(MITOSIM_INC_DIR)network.h \
 	$(MITOSIM_INC_DIR)config.h
 	$(CC) $(CFLAGS) -S $< -o $@
-
-$(UTILS_DIR)lib/libutils.a : 
-    make $(UTILS_DIR)manual_make/Makefile
 
 #clean:
 
