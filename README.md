@@ -15,8 +15,8 @@ defined by the reaction parameters and the network dimensions.
 A well-mixed spaceless representation is assumed, which means that any graph node has equal probability to interact with any other 
 node allowed by the reaction.
 
-For more detailes, please see the original publication:
+For more detailes, please see the original [publication](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002745):  
 Sukhorukov VM, Dikov D, Reichert AS, Meyer-Hermann M: Emergence of the mitochondrial reticulum from fission and fusion dynamics. 
-PLoS Comput Biol. 2012, 8: e1002745-10.1371/journal.pcbi.1002745 [link]().
+PLoS Comput Biol. 2012, 8: e1002745-10.1371/journal.pcbi.1002745.
 
 Please reference the above paper whenever results of this code are published.
