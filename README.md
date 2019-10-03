@@ -54,7 +54,7 @@ depending on the factory type chosen, one of these should be accessible (in the 
 
 Alternative ways for building the code.
 
-1. On systems having cmake (ver. 3.15 or higher) installed, the build can be performed e.g. as follows:  
+1. On systems having [cmake](https://cmake.org) (ver. 3.15 or higher) installed, the build can be performed e.g. as follows:  
     * cd mitosim
     * mkdir build
     * cmake -S . -B build
