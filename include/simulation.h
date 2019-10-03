@@ -54,14 +54,15 @@ class Simulation {
 
 public:
 
-	/**@brief Constructor
+	/**
+	 * @brief Constructor
 	 * @param netw the network to be simulated
 	 * @param rnd random number factory
 	 * @param time current time
 	 * @param it iteration counter
 	 * @param msgr Output message processor.
 	 */
-	Simulation(
+	explicit Simulation(
 		Ntw& netw,
 		RandFactory& rnd,
 		double& time,
@@ -73,13 +74,13 @@ public:
 
 private:
 
-	Ntw& netw;	///< ref: simulated network.
+	Ntw& netw;	///< ref: Simulated network.
 
 	// Convenience references to some data fields of the network
-	Msgr&			msgr;			///< ref: Output message processor.
-	RandFactory&	rnd;			///< ref: random number factory.
-	double&			time;			///< ref: current time.
-	ulong&			it;				///< ref: iteration counter.
+	Msgr&			msgr;		///< ref: Output message processor.
+	RandFactory&	rnd;		///< ref: random number factory.
+	double&			time;		///< ref: current time.
+	ulong&			it;			///< ref: iteration counter.
 
 	// Output parameters
 	szt		logFrequency;	///< Frequency of short output to a log line.
@@ -87,12 +88,18 @@ private:
 
 	Gillespie<RandFactory,Reaction> gsp;	///< Gillespie reactor controlling the simulation.
 
-	void populateRc();					///< Adds reactions to the Gillespie simulator.
-	void terminate(const std::string&);	///< Terminates upon the reactant exhaustion.
+	void populateRc();					///< Add reactions to the Gillespie simulator.
+
+
+	/**
+	 * @brief Terminate the simulation early due to the reactant exhaustion.
+	 * @param s Message to pring on termination.
+	 */
+	void terminate(const std::string& s);
 
 	// Logging
-	void update_log();					///< Outputs status summary to a log file.
-	void update_log(std::ostream&);		///< Outputs status summary to a log file.
+	void update_log();					///< Output status summary to a log file.
+	void update_log(std::ostream&);		///< Output status summary to a log file.
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

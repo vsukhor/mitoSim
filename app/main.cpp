@@ -25,9 +25,9 @@
 #include <string>
 #include <vector>
 
-#define FP32			/* comment this to switch to a double precision */
-#define _DEBUG			/* toggles XASSERTs */
-//#define PRINT_EDGES	/* comment this to avoid printing detailed edge information */
+#define FP32			// comment this to switch to a double precision.
+#define _DEBUG			// toggles XASSERTs.
+//#define PRINT_EDGES	// comment this to avoid printing detailed edge information.
 
 #ifdef FP32
 	using real = float;
@@ -43,7 +43,7 @@
 namespace MitoSim {
 using namespace Utils::Common;
 using RandFactory = Utils::Random::Boost<real>;
-constexpr bool verbose {};		/**< work in verbose mode */
+constexpr bool verbose {};		///< Work in verbose mode.
 }
 
 #include "config.h"

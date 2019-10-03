@@ -24,6 +24,12 @@
 
 ============================================================================== */
 
+/**
+* @file ability_for_fission.h
+* @brief Contains class responsible for the graph fillsin capacity.
+* @author Valerii Sukhorukov
+*/
+
 #ifndef ABILITY_FOR_FISSION_H
 #define ABILITY_FOR_FISSION_H
 
@@ -42,7 +48,7 @@ template<typename> class Fission;
 /**
  * @brief The AbilityForFission class template.
  * @details Adds node type-specific fission capability and updates the network for it.
- * @tparam Mt type of the Edge forming the network
+ * @tparam Mt Type of the Edge forming the network.
  */
 template<typename Mt>
 class AbilityForFission
@@ -65,48 +71,52 @@ public:
 	using CoreTransformer<Mt>::fuse_parallel;
 	using CoreTransformer<Mt>::update_gIndcl;
 
-	/**@brief Constructor
+	/**
+	 * @brief Constructor.
 	 * @param msgr Output message processor.
 	 */
 	explicit AbilityForFission(Msgr& msgr);
 
-	/** Performs fission of a segment
-	 * @param w segment index
-	 * @param a division positon inside the segment
+	/**
+	 * @brief Perform fission of a segment.
+	 * @param w Segment index.
+	 * @param a Division positon inside the segment.
 	 */
 	std::array<szt,2> fiss( const szt w, const szt a);
 
 	/**
-	 * Divides the segment at a node of degree 2.
-	 * @param w a global segment index
-	 * @param a the node position inside the segment
+	 * @brief Divide the segment at a node of degree 2.
+	 * @param w Global segment index.
+	 * @param a The node position inside the segment.
 	 */
 	std::array<szt,2> fiss2(const szt w, const szt a);
 
 	/**
-	 * Divides the segment at a node of degree 3.
-	 * @param w a global segment index
-	 * @param a the node position inside the segment
+	 * @brief Divide the segment at a node of degree 3.
+	 * @param w Global segment index.
+	 * @param a The node position inside the segment.
 	 */
 	std::array<szt,2> fiss3(const szt w, const szt a);
 
 private:
 
-	std::vector<szt>  vis;	/**< auxiliary, indicating a visited or not status of segments during the graph search */
+	std::vector<szt>  vis;	///< Auxiliary, indicating a visited or not status of segments during the graph search.
 
-	/** Updates network component to account for changes resulting from its division.
-	 * Returns a flag indicating if the division produces a pair of disconnected components
-	 * @param w segment index
-	 * @param e segment end
+	/**
+	 * @brief Update network component to account for changes resulting from its division.
+	 * @return A flag indicating if the division produces a pair of disconnected components.
+	 * @param w Segment index.
+	 * @param e Segment end.
 	 */
 	bool update_cl_fiss(const szt w, const szt e);
 
-	/** Depth-first search of the network graph.
-	 * @param w1 initial segment index
-	 * @param e1 initial segment end
-	 * @param w2 final segment index
-	 * @param e2 final segment end
-	 * @return true if there is a connection between {w1,e1} and {w2,e2}
+	/**
+	 * @brief Depth-first search of the network graph.
+	 * @param w1 Initial segment index.
+	 * @param e1 Initial segment end.
+	 * @param w2 Final segment index.
+	 * @param e2 Final segment end.
+	 * @return True if there is a connection between {w1,e1} and {w2,e2}.
 	 */
 	bool dfs(const szt w1, const szt e1, const szt w2, const szt e2);
 };

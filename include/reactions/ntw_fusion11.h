@@ -23,6 +23,12 @@
 
 ============================================================================== */
 
+/**
+* @file ntw_fusion11.h
+* @brief Contains class encapsulating slot on the graph which enables tip-to-tip fusion.
+* @author Valerii Sukhorukov
+*/
+
 #ifndef NTW_FUSION11_H
 #define NTW_FUSION11_H
 
@@ -34,8 +40,8 @@ namespace MitoSim {
 template<typename> class Fusion11;
 
 /**
- * Network-specific reaction slot for fusion of two nodes of degree 1.
- * @tparam Ntw type of the network
+ * @brief Network-specific reaction slot for fusion of two nodes of degree 1.
+ * @tparam Ntw Type of the network.
  */
 template<typename Ntw>
 class NtwFusion11 {
@@ -46,24 +52,24 @@ public:
 
 	explicit NtwFusion11(Ntw&);		///< Constructor.
 
-	/** sets this reaction propensity for the whole network */
+	/// Set this reaction propensity for the whole network.
 	szt set_prop() noexcept;
 
 private:
 
-	Ntw& host;	/**< ref: the host network for this reaction */
+	Ntw& host;	///< ref: the host network for this reaction.
 
-	// Convenience references to some of the host members
+	// Convenience references to some of the host members.
 	RandFactory&							rnd;
 	const std::vector<szt>&					mt11;
 	const std::vector<std::array<szt,2>>&	mt13;
 
-	FusionCandidatesXX	cnd; /**< node pairs suitable for this type of fusion */
+	FusionCandidatesXX	cnd; ///< node pairs suitable for this type of fusion.
 
-	/** populates the vector of node pairs suitable for this type of fusion */
+	/// Populate the vector of node pairs suitable for this type of fusion.
 	void populate() noexcept;
 
-	/** executes the reaction event */
+	/// Execute the raction event.
 	auto fire() noexcept;
 };
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

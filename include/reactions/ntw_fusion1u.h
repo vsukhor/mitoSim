@@ -23,6 +23,12 @@
 
 ============================================================================== */
 
+/**
+* @file ntw_fusion1u.h
+* @brief Contains class encapsulating slot on the graph which enables tip-to-loop fusion.
+* @author Valerii Sukhorukov
+*/
+
 #ifndef NTW_FUSION1U_H
 #define NTW_FUSION1U_H
 
@@ -33,8 +39,8 @@ namespace MitoSim {
 template<typename> class Fusion1U;
 
 /**
- * Network-specific reaction slot for fusion of a degree 1 node with a looped segment.
- * @tparam Ntw type of the network
+ * @brief Network-specific reaction slot for fusion of a degree 1 node with a looped segment.
+ * @tparam Ntw Type of the network.
  */
 template<typename Ntw>
 class NtwFusion1L {
@@ -43,27 +49,27 @@ class NtwFusion1L {
 
 public:
 
-	explicit NtwFusion1L(Ntw&);		/**< Constructor */
+	explicit NtwFusion1L(Ntw&);		///< Constructor.
 
-	/** sets this reaction propensity for the whole network */
+	/// Set this reaction propensity for the whole network.
 	szt set_prop() noexcept;
 
 private:
 
-	Ntw& host;	/**< ref: the host network for this reaction */
+	Ntw& host;	///< ref: the host network for this reaction.
 
-	// Convenience references to some of the host members
+	// Convenience references to some of the host members.
 	RandFactory&							rnd;
 	const std::vector<szt>&					mt11;
 	const std::vector<std::array<szt,2>>&	mt13;
 	const std::vector<szt>&					mt22;
 
-	FusionCandidatesXU	cnd;	/**< node pairs suitable for this type of fusion */
+	FusionCandidatesXU	cnd;	///< node pairs suitable for this type of fusion.
 
-	/** populates the vector of node pairs suitable for this type of fusion */
+	/// Populate the vector of node pairs suitable for this type of fusion.
 	void populate() noexcept;
 
-	/** executes the reaction event */
+	/// Execute the reaction event.
 	auto fire() noexcept;
 };
 

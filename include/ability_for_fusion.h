@@ -46,8 +46,8 @@ namespace MitoSim {
 /**
  * @brief The AbilityForFusion class.
  * @details Adds node type-specific fusion capability and updates the network for it.
- * Forms base for clases adding more specific tapes of dynamics.
- * @tparam Mt type of the Edge forming the network
+ * 			Forms base for clases adding more specific tapes of dynamics.
+ * @tparam Mt Type of the Edge forming the network.
  */
 template<typename Mt>
 class AbilityForFusion
@@ -63,12 +63,14 @@ public:
 	using CoreTransformer<Mt>::fuse_parallel;
 	using AbilityForFission<Mt>::fiss2;
 
-	/**@brief Constructor.
+	/**
+	 * @brief Constructor.
 	 * @param msgr Output message processor.
 	 */
 	explicit AbilityForFusion(Msgr& msgr);
 
-	/**@brief Fuse two nodes of degree 1.
+	/**
+	 * @brief Fuse two nodes of degree 1.
 	 * @param w1 Segment index of the 1st fusion partner.
 	 * @param e1 Segment end of the 1st fusion partner.
 	 * @param w2 Segment index of the 2nd fusion partner.
@@ -76,7 +78,8 @@ public:
 	 */
 	std::array<szt,2> fuse11(const szt w1, const szt e1, const szt w2, const szt e2) noexcept;
 
-	/**@brief Fuse a node of degree 1 to a node of degree 2.
+	/**
+	 * @brief Fuse a node of degree 1 to a node of degree 2.
 	 * @param w1 Segment index of the fusion partner containing the node of degree 1.
 	 * @param end Segment end of the fusion partner containing the node of degree 1.
 	 * @param w2 Segment index of the fusion partner containing the node of degree 2.
@@ -84,15 +87,17 @@ public:
 	 */
 	std::array<szt,2> fuse12(const szt w1, const szt end, const szt w2, const szt a2) noexcept;
 
-	/**@brief Fuse a node of degree 1 to the end node in a disconnected loop.
+	/**
+	 * @brief Fuse a node of degree 1 to the end node in a disconnected loop.
 	 * @param w1 Segment index of the fusion partner containing the node of degree 1.
 	 * @param e1 Segment end of the fusion partner containing the node of degree 1.
 	 * @param w2 Segment index of the loop segment.
 	 */
 	std::array<szt,2> fuse1L(const szt w1, const szt e1, const szt w2) noexcept;
 
-	/**@brief Fuse end nodes a disconnected segment having free ends to form a loop.
-	 * @param w segment index
+	/**
+	 * @brief Fuse end nodes a disconnected segment having free ends to form a loop.
+	 * @param w Segment index.
 	 */
 	std::array<szt,2> fuse_to_loop(const szt w) noexcept;
 

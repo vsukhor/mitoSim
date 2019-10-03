@@ -23,6 +23,12 @@
 
 ============================================================================== */
 
+/**
+* @file fusion12.h
+* @brief Contains class encapsulating tip-to-side fusion reaction.
+* @author Valerii Sukhorukov
+*/
+
 #ifndef FUSION12_H
 #define FUSION12_H
 
@@ -34,8 +40,8 @@
 namespace MitoSim {
 	
 /**
- * Reaction slot for fusion of a degree 1 node with a degree 2 node.
- * @tparam Ntw type of the network
+ * @brief Reaction slot for fusion of a degree 1 node with a degree 2 node.
+ * @tparam Ntw Type of the network.
  */
 template<typename Ntw>
 class Fusion12
@@ -45,13 +51,14 @@ class Fusion12
 
 public:
 
-	/**@brief Constructor.
+	/**
+	 * @brief Constructor.
 	 * @param msgr Output message processor.
-	 * @param ind reaction id
-	 * @param netw the network
-	 * @param rate rate constant
-	 * @param it iteration counter
-	 * @param time current time
+	 * @param ind Reaction id.
+	 * @param netw The network object.
+	 * @param rate Rate constant.
+	 * @param it Iteration counter.
+	 * @param time Current time.
 	 */
 	Fusion12(
 			Msgr& msgr,
@@ -64,29 +71,35 @@ public:
 		: Fusion<1,2,Ntw>{msgr, ind, netw, rate, it, time, name}
 	{}
 
-	/** Sets the Gillespie score for this reaction */
+	/// Set the Gillespie score for this reaction.
 	void set_score() noexcept final;
 
-	/** Gillespie score for this reaction
-	* @result total weight of this reaction in the simulation set
-	*/
+	/**
+	 * @brief Gillespie score for this reaction.
+	 * @result Total weight of this reaction in the simulation set.
+	 */
 	real get_score() const noexcept final { return *score; };
 
-	/** Updates propensity for a pair of network components
-	* @param c1 index of the 1st component to update
-	* @param c2 index of the 2nd component to update
-	*/
+	/**
+	 * @brief Update propensity for a pair of network components.
+	 * @param c1 Index of the 1st component to update.
+	 * @param c2 Index of the 2nd component to update.
+	 */
 	void update_prop(const szt c1, const szt c2) noexcept final;
 
-	/** Executes the raction event */
+	/// Execute the raction event.
 	void fire() noexcept override;
 
-	/** Returns the number of times this reaction was fired */
+	/**
+	 * @brief The number of times this reaction was fired.
+	 * @result the number of times this reaction was fired.
+	 */
 	szt event_count() const noexcept final { return eventCount; }
 
-	/** Prints the parameters
-	* @param le true if new line after the output
-	*/
+	/**
+	 * @brief Print the parameters.
+	 * @param le True if new line after the output.
+	 */
 	void print(const bool le) const override;
 
 private:
@@ -98,16 +111,17 @@ private:
 	using Fusion<1,2,Ntw>::update_netw_stats;
 	using Fusion<1,2,Ntw>::print;
 
-	static const std::string name;	/**< reaction name constant */
-	real*	score {};			/**< current rate as seen by the Gillespie reactor */
-	szt		eventCount {};		/**< number of times this reaction was fired */
-	szt		propTotal {};		/**< total propensity for this reaction over all network components */
+	static const std::string name;	///< Reaction name constant.
+	real*	score {};			///< Current rate as seen by the Gillespie reactor.
+	szt		eventCount {};		///< Number of times this reaction was fired.
+	szt		propTotal {};		///< Total propensity for this reaction over all network components.
 
-	/** Sets this reaction propensity for the whole network */
+	/// Set this reaction propensity for the whole network.
 	void set_prop() noexcept final;
 
-	/** Attaches this score to the Gillespie mechanism
-	* @param a placeholder in the Gillespie object responsible for this reaction score
+	/**
+	* @brief Attach this score to the Gillespie mechanism.
+	* @param a Placeholder in the Gillespie object responsible for this reaction score.
 	*/
 	void attach_score_pointer(real* a) noexcept final { score = a; };
 };

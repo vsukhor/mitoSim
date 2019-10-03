@@ -83,43 +83,53 @@ public:
 	Msgr&		msgr;						///< Output message processor.
 	static constexpr szt minLoopLength {2};	///< Minimal length of a segment that can bend into a cycle.
 
+	/**
 	/// @brief Constructor.
 	/// @param msgr Output message processor.
+	 */
 	explicit Structure(Msgr& msgr);
 
-	/// Updates internal data.
+	/// Update internal data.
 	void basic_update() noexcept;
 
-	/// Updates internal data.
+	/// Update internal data.
 	void update_adjacency() noexcept;
 
-	/// Updates internal vectors.
+	/// Update internal vectors.
 	void update_structure() noexcept;
 
-	/// Initializes or updates glm and gla vectors.
+	/// Initialize or updates glm and gla vectors.
 	void make_indma() noexcept;
 
-	/// @brief Initializes or updates adjacency list.
-	/// @param ic Disconnected network component index.
-	/// @param a The adjacency list.
+	/**
+	 * @brief Initialize or update adjacency list.
+	 * @param ic Disconnected network component index.
+	 * @param a The adjacency list.
+	 */
 	void make_adjacency_list_edges( const szt ic, vec2<szt>& a ) noexcept;
 
 	/// Populates 'mt??', 'mtc??', 'nn' and 'clmt' vectors
 	void populate_cluster_vectors() noexcept;
 
-	/// Updates 'nn' for the specific node degree.
-	/// @param deg Node degree to consider.
+	/**
+	 * Update 'nn' for the specific node degree.
+	 * @param deg Node degree to consider.
+	 */
 	void update_nn(const szt deg) noexcept;
 
-	/// Updates 'nn' for all node degrese.
+	/// Update 'nn' for all node degrese.
 	void update_nn() noexcept;
 
-	/// Prints the network components using prefix specified.
-	/// @param tag Prefix.
+	/**
+	 * Print the network components using prefix specified.
+	 * @param tag Prefix.
+	 */
 	void print_mitos(const std::string& tag) const;
 
-	/// Prints the network components to a text-foramtted stream.
-	/// @param ofs Output stream.
+	/**
+	 * Print the network components to a text-foramtted stream.
+	 * @param ofs Output stream.
+	 */
 	void print(std::ostream& ofs) const;
 
 private:

@@ -52,24 +52,28 @@ public:
 	szt					cl {huge<szt>};		///< Current cluster index.
 	std::array<ulong,2>	fin {{}};			///< Contribution to fission propensity at each end.
 
-	/**@brief Constructor.
+	/**
+	 * @brief Constructor.
 	 * @param ind Index network-wide.
 	 * @param indcl Index cluster-wide.
 	 * @param cl Current cluster index.
 	 */
-	Edge(const szt ind,
+	explicit Edge(const szt ind,
 		 const szt indcl,
 		 const szt cl);
+
 
 	/// Swap the edge ends.
 	void reflect();
 
-	/** Write the edge to a file.
+	/**
+	 *@brief Write the edge to a file.
 	 * @param ofs Output file stream.
-	*/
+	 */
 	void write(std::ofstream& ofs) const;
 
-	/** Print the edge to a stream.
+	/**
+	 * @brief Print the edge to a stream.
 	 * @param os Output stream.
 	 * @param a Position inside segment.
 	 * @param endline Flag to end current line.

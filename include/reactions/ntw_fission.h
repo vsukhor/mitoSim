@@ -23,6 +23,12 @@
 
 ============================================================================== */
 
+/**
+* @file ntw_fission.h
+* @brief Contains class encapsulating slot on the graph which enables fission.
+* @author Valerii Sukhorukov
+*/
+
 #ifndef NTW_FISSION_H
 #define NTW_FISSION_H
 
@@ -31,8 +37,8 @@ namespace MitoSim {
 template<typename> class Fission;
 
 /**
- * Base class for network-specific fission reaction slots.
- * @tparam Ntw type of the network
+ * @brief Base class for network-specific fission reaction slots.
+ * @tparam Ntw Type of the network.
  */
 template<typename Ntw>
 class NtwFission {
@@ -43,44 +49,45 @@ public:
 
 	explicit NtwFission(Ntw&);		///< Constructor.
 
-	/** sets this reaction propensity for the whole network */
+	/// Set this reaction propensity for the whole network.
 	ulong set_prop()  noexcept;
 
 	/**
-	 * Updates this reaction propensity for the whole network.
-	 * This is done after updating it for the cluster indexed.
-	  * @param c cluster index that triggers the update
-	*/
+	 * @brief Update this reaction propensity for the whole network.
+	 * 		  This is done after updating it for the cluster indexed.
+	 * @param c Cluster index that triggers the update.
+	 */
 	void update_prop(const szt c) noexcept;
 
-	/** prTotal getter */
+	/// prTotal getter.
 	constexpr ulong get_prTotal() const noexcept { return prTotal; }
 
 private:
 
-	Ntw& host;		/**< ref: the host network for this reaction */
+	Ntw& host;		///< ref: The host network for this reaction.
 
 	// Convenience references to some of the host members
-	typename Ntw::Reticulum&	mt;		/**< ref: the segments */
-	const szt&					clnum;	/**< ref: current number fo clusters */
+	typename Ntw::Reticulum&	mt;		///< ref: The segments.
+	const szt&					clnum;	///< ref: Current number fo clusters.
 
 	// Propensities
-	std::vector<ulong>	pr;				/**< propensities per cluster */
-	ulong				prTotal {};		/**< total propensity */
+	std::vector<ulong>	pr;				///< Propensities per cluster.
+	ulong				prTotal {};		///< Total propensity.
 
 	/**
-	 * Sets this reaction propensity for the indexed cluster.
-	 * Does not update the whole network propensity.
-	 * @param c index of the cluster that is updateed
+	 * @brief Set this reaction propensity for the indexed cluster.
+	 * @note Does not update the whole network propensity.
+	 * @param c Index of the cluster that is updateed
 	 */
 	void set_prop(const szt c) noexcept;
 
-	/** Executes the reaction event */
+	/// Execute the raction event.
 	auto fire() noexcept;
 
-	/** Find sa random node from those suitable for this reaction.
-	 * @param w index of random segment
-	 * @param a random position inside the segment 
+	/**
+	 * @brief Find sa random node from those suitable for this reaction.
+	 * @param w Index of random segment.
+	 * @param a Random position inside the segment.
 	 */
 	bool find_random_node(szt& w, szt& a) const noexcept;
 };

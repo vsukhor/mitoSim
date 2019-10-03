@@ -23,6 +23,12 @@
 
 ============================================================================== */
 
+/**
+* @file fission.h
+* @brief Contains class encapsulating the fission reaction.
+* @author Valerii Sukhorukov
+*/
+
 #ifndef FISSION_H
 #define FISSION_H
 
@@ -40,7 +46,7 @@ template<uint, uint, typename>
 class Fusion;
 
 /**
- * Fission reaction class.
+ * @brief Fission reaction class.
  * @tparam Ntw type of the network
  */
 template<typename Ntw>
@@ -51,13 +57,14 @@ class Fission
 
 public:
 
-	/**@brief Constructor.
+	/**
+	 * @brief Constructor.
 	 * @param msgr Output message processor.
-	 * @param ind reaction id
-	 * @param netw the network
-	 * @param rate rate constant
-	 * @param it iteration counter
-	 * @param time current time
+	 * @param ind reaction id.
+	 * @param netw The network object.
+	 * @param rate Reaction rate constant.
+	 * @param it Iteration counter.
+	 * @param time Current time.
 	 */
 	Fission( Msgr& msgr,
 			 const szt ind,
@@ -71,34 +78,46 @@ public:
 		, rnd {netw.rnd}
 	{}
 
-	/** Sets the Gillespie score for this reaction */
+	/// Set the Gillespie score for this reaction.
 	void set_score() noexcept override;
 
-	/** Gillespie score for this reaction
-	* @result total weight of this reaction in the simulation set
+	/**
+	* @brief Gillespie score for this reaction.
+	* @result Total weight of this reaction in the simulation set.
 	*/
 	real get_score() const noexcept override { return *score; };
 
-	/** Updates propensity for two network components indexed in the parameters */
+
+	/// Updatee propensity for two network components indexed in the parameters.
 	void update_prop(szt,szt) noexcept override;
 
-	/** Executes the raction event */
+
+	/// Execute the raction event.
 	void fire() noexcept override;
 
-	static constexpr auto is_active(const std::unique_ptr<Reaction>&) noexcept;
 
 	/**
-	* Populates the vector of reactions that need a score update after *this has fired
-	* and initializes the propensities and effective rate
-	*/
-	void initialize_dependencies(const vup<Reaction>&) noexcept override;
+	 * @brief Activity status of the reaction.
+	 * @return True if the reaction is used in the current simulation session.
+	 * @param r Pointer to the reaction.
+	 */
+	static constexpr auto is_active(const std::unique_ptr<Reaction>& r) noexcept;
 
-	/** Returns the number of times this reaction was fired */
+	/**
+	 * @brief Populate the vector of reactions that need a score update.
+	 * @details The update is performed after *this has fired
+	 *          and initializes the propensities and effective rate.
+	 * @param rc Vector of unique pointers to all reactions taking part in the simulation.
+	 */
+	void initialize_dependencies(const vup<Reaction>& rc) noexcept override;
+
+	/// Return the number of times this reaction was fired.
 	szt event_count() const noexcept override { return eventCount; }
 
-	/** Prints the parameters
-	* @param le true if new line after the output
-	*/
+	/**
+	 * @brief Print the parameters.
+	 * @param le True if new line after the output.
+	 */
 	void print(const bool le) const override;
 
 private:
@@ -108,21 +127,22 @@ private:
 	using Reaction::msgr;
 
 	// Convenience references
-	Ntw&					netw;	/**< ref: the network */
-	RandFactory&			rnd;	/**< ref: random number factory */
+	Ntw&					netw;	///< ref: The network.
+	RandFactory&			rnd;	///< ref: Random number factory.
 
 	std::array<szt,2>		cc;
-	real*					score {};		/**< current rate as seen by the Gillespie reactor */
-	szt						eventCount {};	/**< number of times this reaction was fired */
-	std::vector<Reaction*>	dependents;		/**< reactions that need a score update after *this has fired */
-	static const std::string name;			/**< reaction name constant */
+	real*					score {};		///< Current rate as seen by the Gillespie reactor.
+	szt						eventCount {};	///< Number of times this reaction was fired.
+	std::vector<Reaction*>	dependents;		///< Reactions that need a score update after *this has fired.
+	static const std::string name;			///< Reaction name constant.
 
-	/** sets this reaction propensity for the whole network */
+	/// Set this reaction propensity for the whole network.
 	void set_prop() noexcept;
 
-	/** attaches this score to the Gillespie mechanism */
+	/// Attach this score to the Gillespie mechanism.
 	void attach_score_pointer(real*a) noexcept override { score = a; };
 
+	/// All network and reaction updates necessary after the given reaction event was executed.
 	void update_netw_stats() override;
 
 };

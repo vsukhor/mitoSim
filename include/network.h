@@ -24,9 +24,9 @@
 ============================================================================== */
 
 /**
-* \file network.h
-* \brief High-level network components and functionality.
-* \author Valerii Sukhorukov
+* @file network.h
+* @brief High-level network components and functionality.
+* @author Valerii Sukhorukov
 */
 
 #ifndef NETWORK_H
@@ -46,9 +46,9 @@
 namespace MitoSim {
 
 /**
- * The Network class template.
- * Represents a fully dynamic network, capable for both fusion and division.
- * @tparam SegmentT type of the segment used by the network
+ * @brief The Network class template.
+ * @details Represents a fully dynamic network, capable for both fusion and division.
+ * @tparam SegmentT type of the segment used by the network.
  */
 template<typename SegmentT>
 class Network
@@ -67,20 +67,21 @@ public:
 	using Structure<SegmentT>::glm;
 	using Structure<SegmentT>::msgr;
 
-	const Config& 			cfg;	/**< configuration */
-	RandFactory& 			rnd;	/**< random number factory */
-	double					time;	/**< current time */
-	ulong					it;		/**< iteration counter */
+	const Config& 		cfg;	///< Configuration.
+	RandFactory& 		rnd;	///< Random number factory.
+	double				time;	///< Current time.
+	ulong				it;		///< Iteration counter.
 
-	NtwFission<thisT>		fis;	/**< slot for fission reaction */
-	NtwFusion11<thisT>		fu11;	/**< slot for fusion of raction of nodes with degrees 1 and 1 */
-	NtwFusion12<thisT>		fu12;	/**< slot for fusion of raction of nodes with degrees 1 and 2 */
-	NtwFusion1L<thisT>		fu1L;	/**< slot for fusion of raction of nodes with degrees 1 and a loop */
+	NtwFission<thisT>	fis;	///< Slot for fission reaction.
+	NtwFusion11<thisT>	fu11;	///< Slot for fusion of raction of nodes with degrees 1 and 1.
+	NtwFusion12<thisT>	fu12;	///< Slot for fusion of raction of nodes with degrees 1 and 2.
+	NtwFusion1L<thisT>	fu1L;	///< Slot for fusion of raction of nodes with degrees 1 and a loop.
 
-	/**@brief Constructor.
-	 * @param cfg configuration object
-	 * @param runIndex run index
-	 * @param rnd random number factory
+	/**
+	 * @brief Constructor.
+	 * @param cfg Configuration object.
+	 * @param runIndex Run index.
+	 * @param rnd Random number factory.
 	 * @param msgr Output message processor.
 	 */
 	explicit Network(
@@ -90,17 +91,19 @@ public:
 			Msgr& msgr
 		);
 
-	/** Generates the network components */
+	/// Generate the network components
 	void generate_mitos();
 
-	/** update the network state variables */
+
+	/// Update the network state variables
 	void update_books() noexcept;
 
-	/** Writes network to a file.
-	 * @param startnew start a new file vs. adding new data records
-	 * @param last is the final writeout
-	 * @param itr current simulation iteration
-	 * @param t current simulation time
+	/**
+	 * @brief Write network to a file.
+	 * @param startnew Start a new file vs. adding new data records.
+	 * @param last Is the final writeout.
+	 * @param itr Current simulation iteration.
+	 * @param t Current simulation time.
 	 */
 	void save_mitos(const bool startnew,
 					const bool last,

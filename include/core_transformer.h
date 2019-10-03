@@ -24,9 +24,9 @@
 ============================================================================== */
 
 /**
-* \file core_transformer.h
-* \brief Contains low-level network transformations as implemented in class CoreTransformer.
-* \author Valerii Sukhorukov
+* @file core_transformer.h
+* @brief Contains low-level network transformations as implemented in class CoreTransformer.
+* @author Valerii Sukhorukov
 */
 
 #ifndef CORE_TRANSFORMER_H
@@ -45,7 +45,7 @@ namespace MitoSim {
 /**
  * @brief The CoreTransformer class.
  * @details Encapsulates a elementary dynamics and updates the network for it.
- * Forms base for clases adding more specific tapes of dynamics.
+ * 			Forms base for clases adding more specific tapes of dynamics.
  * @tparam Mt type of the network Edge.
  */
 template<typename Mt>
@@ -59,79 +59,89 @@ public:
 	using Structure<Mt>::mtnum;
 	using Structure<Mt>::clnum;
 
-	/**@brief Constructor,
+	/**
+	 * @brief Constructor,
 	 * @param msgr Output message processor.
 	 */
 	explicit CoreTransformer(Msgr& msgr);
 
-	/** Updates the structure of diaconnected components resulting from a fusion event.
-	 * @param w1 index of the 1st participant segment
-	 * @param w2 index of the 2nd participant segment
+	/**
+	 * @brief Update the structure of diaconnected components resulting from a fusion event.
+	 * @param w1 Index of the 1st participant segment.
+	 * @param w2 Index of the 2nd participant segment.
 	 */
 	constexpr void update_mtcl_fuse(const szt w1, const szt w2) noexcept;
 
-	/** Updates the structure of diaconnected components resulting from a fusion event.
-	 * @param c1 index of the 1st participant component
-	 * @param c2 index of the 2nd participant component
+	/**
+	 * @brief Update the structure of diaconnected components resulting from a fusion event.
+	 * @param c1 Index of the 1st participant component.
+	 * @param c2 Index of the 2nd participant component.
 	 */
 	constexpr void update_cl_fuse(const szt c1, const szt c2) noexcept;
 
-	/** Updates the diaconnected component indexes.
-	 * @param cf initial index
-	 * @param ct final index
+	/**
+	 * @brief Update the diaconnected component indexes.
+	 * @param cf Initial index.
+	 * @param ct Final index.
 	 */
 	constexpr void update_cl(const szt cf, const szt ct) noexcept;
 
-	/** Updates the diaconnected component indexes.
-	 * @param c initial index
+	/**
+	 * @brief Update the diaconnected component indexes.
+	 * @param c Initial index.
 	 */
 	constexpr void update_gIndcl(const szt c) noexcept;
 
 protected:
 
-	/** Performs fusion of two antiparallel oriented segments.
-	 * Antiparallel orientation is defined as
-	 * fusion of end 1 of the 1st segment to to end 1 of the 2nd segment, or
-	 * fusion of end 2 of the 1st segment to to end 2 of the 2nd segment.
-	 * @param end end index at the fusion position
-	 * @param w1 index of the 1st segment
-	 * @param w2 index of the 2nd segment
+	/**
+	 * @brief Perform fusion of two antiparallel oriented segments.
+	 * @details Antiparallel orientation is defined as
+	 * 			fusion of end 1 of the 1st segment to to end 1 of the 2nd segment, or
+	 * 			fusion of end 2 of the 1st segment to to end 2 of the 2nd segment.
+	 * @param end End index at the fusion position.
+	 * @param w1 Index of the 1st segment.
+	 * @param w2 Index of the 2nd segment.
 	 */
 	std::array<szt,2> fuse_antiparallel(const szt end, const szt w1, const szt w2) noexcept;
 
-	/** Performs fusion of two parallel oriented segments.
-	 * Parallel orientation is defined as
-	 * fusion of end 1 of the 1st segment to to end 2 of the 2nd segment, or
-	 * fusion of end 2 of the 1st segment to to end 1 of the 2nd segment.
-	 * @param w1 index of the 1st segment
-	 * @param w2 index of the 2nd segment
+	/**
+	 * @brief Perform fusion of two parallel oriented segments.
+	 * @details Parallel orientation is defined as
+	 * 			fusion of end 1 of the 1st segment to to end 2 of the 2nd segment, or
+	 * 			fusion of end 2 of the 1st segment to to end 1 of the 2nd segment.
+	 * @param w1 Index of the 1st segment.
+	 * @param w2 Index of the 2nd segment.
 	 */
 	 std::array<szt,2> fuse_parallel(const szt w1, const szt w2) noexcept;
 
-	/** Update the network segment indexes such that segment indexed as source will become target.
-	 * @param f source segment index
-	 * @param t target segment index
+	/**
+	 * @brief Update the network segment indexes such that segment indexed as source will become target.
+	 * @param f Source segment index.
+	 * @param t Target segment index.
 	*/
 	void rename_mito(const szt f, const szt t);
 
 protected:
 
-	/** Copy connection partners to a new segment.
-	 * @param f source segment index
-	 * @param ef source segment end
-	 * @param t target segment index
-	 * @param et target segment end
+	/**
+	 * @brief Copy connection partners to a new segment.
+	 * @param f Source segment index.
+	 * @param ef Source segment end.
+	 * @param t Target segment index.
+	 * @param et Target segment end.
 	*/
 	void copy_neigs(const szt f, const szt ef, const szt t, const szt et) noexcept;
 
-	/** Update segment neighbours.
-	 * @param oldn old neighbour segment index
-	 * @param oend old neighbour segment end
-	 * @param n1 neighbour initial index
-	 * @param n2 neighbour final index
-	 * @param newn new neighbour segment index
-	 * @param nend new neighbour segment end
-	 * @param removefromneigs flag if the neighbouring segments should be removed
+	/**
+	 * @brief Update segment neighbours.
+	 * @param oldn Old neighbour segment index.
+	 * @param oend Old neighbour segment end.
+	 * @param n1 Neighbour initial index.
+	 * @param n2 Neighbour final index.
+	 * @param newn New neighbour segment index.
+	 * @param nend New neighbour segment end.
+	 * @param removefromneigs Flag if the neighbouring segments should be removed.
 	*/
 	void update_neigs(const szt oldn, const szt oend,
 					  const szt n1, const szt n2,

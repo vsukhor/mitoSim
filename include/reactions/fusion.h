@@ -23,6 +23,12 @@
 
 ============================================================================== */
 
+/**
+* @file fusion.h
+* @brief Contains base class for fusions reactions.
+* @author Valerii Sukhorukov
+*/
+
 #ifndef FUSION_h
 #define FUSION_h
 
@@ -52,10 +58,11 @@ class Fusion
 
 public:
 
-	/**@brief Constructor.
+	/**
+	 * @brief Constructor.
 	 * @param msgr Output message processor.
 	 * @param ind reaction id
-	 * @param netw the network
+	 * @param netw The network object.
 	 * @param rate rate constant
 	 * @param it iteration counter
 	 * @param time current time
@@ -74,17 +81,24 @@ public:
 		, rnd {netw.rnd}
 	{}
 
+	/**
+	 * @brief Activity status of the reaction.
+	 * @return True if the reaction is used in the current simulation session.
+	 * @param r Pointer to the reaction.
+	 */
 	static constexpr auto is_active(const std::unique_ptr<Reaction>& r);
 
 	/**
-	* Populates the vector of reactions that need a score update after *this has fired
-	* and initializes the propensities and effective rate
-	* @param rc vector of unique pointers to all reactions taking part in the simulation
-	*/
+	 * @brief Populate the vector of reactions that need a score update.
+	 * @details The update is performed after *this has fired
+	 *          and initializes the propensities and effective rate.
+	 * @param rc Vector of unique pointers to all reactions taking part in the simulation.
+	 */
 	void initialize_dependencies(const vup<Reaction>& rc) noexcept override;
 
-	/** Prints the parameters
-	* @param le true if new line after the output
+	/**
+	* @brief Print the parameters.
+	* @param le True if new line after the output.
 	*/
 	void print(const bool le) const override;
 
@@ -92,11 +106,11 @@ protected:
 
 	using Reaction::msgr;
 
-	// Convenience references
-	Ntw&		 		netw;		/**< ref: the host network for this reaction */
-	RandFactory& 		rnd;		/**< ref: random number factory */
+	// Convenience references.
+	Ntw&		 		netw;		///< ref: The host network for this reaction.
+	RandFactory& 		rnd;		///< ref: Random number factory.
 
-	std::array<szt,2>	cc;			/**< indices of the clusters */
+	std::array<szt,2>	cc;			///< Indices of the clusters.
 
 	void update_netw_stats() override;
 
@@ -105,9 +119,9 @@ private:
 	using Reaction::set_score;
 	using Reaction::it;
 
-	std::vector<Reaction*>  dependents;	/**< reactions that need a score update after *this has fired */
+	std::vector<Reaction*>  dependents;	///< Reactions that need a score update after *this has fired.
 
-	/** Sets this reaction propensity for the whole network */
+	/// Sets this reaction propensity for the whole network.
 	virtual void set_prop() noexcept = 0;
 };
 

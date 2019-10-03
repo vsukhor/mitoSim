@@ -25,7 +25,7 @@
 
 /**
 * @file fusion_candidates.h
-* @brief Contains classes storing nodes available for fusion.
+* @brief Contains classes for storing nodes available for fusion.
 * @author Valerii Sukhorukov
 */
 
@@ -47,7 +47,8 @@ struct FusionCandidatesXX {
 	void clear() noexcept { u.clear();
 							v.clear(); }
 
-	/**@brief Add a node pair.
+	/**
+	 * @brief Add a node pair.
 	 * @param uc Segment and end indexes of the 1st participant.
 	 * @param vc Segment and end indexes of the 2nd participant.
 	 */
@@ -57,10 +58,12 @@ struct FusionCandidatesXX {
 		v.emplace_back(vc);
 	}
 
-	/**@brief Report the number of elements.
+	/**
+	 * @brief Report the number of elements.
 	 * @result Current number of candidate fusion pairs.
 	 */
 	szt size() const noexcept { return u.size(); }
+
 
 	/// Print the content out.
 	void print() {
@@ -69,10 +72,11 @@ struct FusionCandidatesXX {
 		std::cout << "\n";
 	}
 
-	/**@brief Print a particular element.
-	  * @param i Element index inside the container.
-	  * @param nl Bool true is cr is intended.
-	  */
+	/**
+	 * @brief Print a particular element.
+	 * @param i Element index inside the container.
+	 * @param nl Bool true is cr is intended.
+	 */
 	void print( const szt i,
 				bool nl=true ) {
 		std::cout << " [" <<  u[i][0] << " " << u[i][1] << " + "

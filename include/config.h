@@ -22,10 +22,11 @@
    SOFTWARE.
 
 ============================================================================== */
+
 /**
-* \file config.h
-* \brief Configuration parameters, import from the configuration file.
-* \author Valerii Sukhorukov.
+* @file config.h
+* @brief Configuration parameters, import from the configuration file.
+* @author Valerii Sukhorukov.
 */
 
 #ifndef CONFIG_H
@@ -39,8 +40,8 @@
 namespace MitoSim {
 
 /**
- * \brief Encapsulates and reads configuration parameters.
- * \details Reads from a file and stores initial configuration parameters for the hole modeling session.
+ * @brief Encapsulates and reads configuration parameters.
+ * @details Reads from a file and stores initial configuration parameters for the hole modeling session.
  */
 class Config {
 
@@ -75,9 +76,9 @@ public:
 
 	/**
 	 * @brief Constructor.
-	 * @par workingDirOut directory for the output
-	 * @par configSuffix application-specific suffix of the configuration file
-	 * @par runName run index
+	 * @par workingDirOut Directory for the output.
+	 * @par configSuffix Application-specific suffix of the configuration file.
+	 * @par runName Run index.
 	 * @par msgr Output message processor.
 	 */
 	explicit Config(

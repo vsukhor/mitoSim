@@ -54,7 +54,16 @@ public:	// Only constant parameters are public
 	const std::string	shortName;	///< Reaction name.
 	const std::string	srt;		///< Reaction name abbreviation.
 
-	/// Constructor.
+	/**
+	 * @brief Constructor.
+	 * @param msgr Output message processor.
+	 * @param ind reaction id.
+	 * @param rate Reaction rate constant.
+	 * @param it Iteration counter.
+	 * @param time Current time.
+	 * @param shortName Reaction name.
+	 * @param srt Reaction name abbreviated.
+	 */
 	Reaction( Msgr& msgr,
 			  const szt ind,
 			  const real rate,
@@ -72,43 +81,51 @@ public:	// Only constant parameters are public
 		, msgr {msgr}
 	{}
 
-	///< virtual destructor.
+
+	/// Virtual destructor.
 	virtual ~Reaction() {};
 
-	
-	/// Sets the Gillespie score for this reaction.
+
+	/// Set the Gillespie score for this reaction.
 	virtual void set_score() noexcept = 0;
 
-	/// Returns the Gillespie score for this reaction.
+
+	/// Return the Gillespie score for this reaction.
 	virtual real get_score() const noexcept = 0;
 
-	/**@brief Updates propensity for a pair of network components.
+	/**
+	 * @brief Update propensity for a pair of network components.
 	 * @param c1 Index of the 1st component to update.
 	 * @param c2 Index of the 2nd component to update.
 	 */
 	virtual void update_prop(const szt c1, const szt c2) noexcept = 0;
 	
-	/// Executes the raction event.
+
+	/// Execute the raction event.
 	virtual void fire() noexcept = 0;
 
-	/**@brief Attaches this score to the Gillespie mechanism.
+	/**
+	 * @brief Attach this score to the Gillespie mechanism.
 	 * @param a Placeholder in the Gillespie object responsible for this reaction score.
 	 */
 	virtual void attach_score_pointer(real* a) noexcept = 0;
 
-	/** @brief Populates the vector of reactions that need a score update.
+	/**
+	 * @brief Populate the vector of reactions that need a score update.
 	 * @details The update is performed after *this has fired
 	 *          and initializes the propensities and effective rate.
 	 * @param rc Vector of unique pointers to all reactions taking part in the simulation.
 	 */
 	virtual void initialize_dependencies(const vup<Reaction>& rc) noexcept = 0;
 
-	/**@brief The number of times this reaction was fired.
+	/**
+	 * @brief The number of times this reaction was fired.
 	 * @result The number of times this reaction was fired.
 	 */
 	virtual szt event_count() const noexcept = 0;
 
-	/**@brief Prints the parameters common to all reactions.
+	/**
+	 * @brief Print the parameters common to all reactions.
 	 * @param le True if new line after the output.
 	 */
 	virtual	void print( const bool le ) const
