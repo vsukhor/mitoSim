@@ -60,16 +60,16 @@ Alternative ways for building the code.
     * cmake -S . -B build
     * cmake --build build
     
-2. cmake-independent Makefiles are available for for a more targeted manulal build. 
-    Please make sure to build of the utility library separately, before building the executable. 
-    Detailes are given in the initial part of the makefiles.
+2. cmake-independent Makefiles are available for a more targeted manulal build. 
+    Please make sure to build the utility library separately, before building the executable. 
+    Their use is straightforward, detailes are given in the initial parts of the makefiles.
 
 Static linking is a default, so the executable can then be copied to another directory if necessary.
 
 ### Running the simulation
 
-The simulation parameters are read from a configuration file, structured 
-as in the example [config_sample.txt](https://github.com/vsukhor/utils/blob/master/utils/config/code_example.md). 
+The simulation parameters are read from a short configuration file, structured 
+as in the example [config_sample.txt](tests/config_sample.txt). 
 More detailes on the config file formatting can be found in the 
 Utils::Config [documentation](https://github.com/vsukhor/utils/blob/master/utils/config/conf_file_structure.md) 
 The file is expected to be named as 'config_X.txt', where X is the configuraion-specific suffix and the rest of the name is fixed.
