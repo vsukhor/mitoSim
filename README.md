@@ -7,14 +7,14 @@
 ### Biological interpretation: mitochondria
 
 Mitochondria are organelles in biological cells essential for keeping the cells alive. 
-They are able to move around the cytosol (intracellular volume outside nucleus), where the form extensive fastly reorganizing networks.
+They are able to move around the cytosol (intracellular volume outside nucleus), where they form extensive rapidly reorganizing networks.
 Quantitative description of their morphology and dynamics was problematic 
-because of the seemingly irregular and constantly changing shape they can adopt. 
-This problem is tackled by representing the mitochondria as a graph evolving in time. 
+because of the seemingly irregular and constantly changing reticular conformations they can adopt. 
+This problem is tackled here by representing the mitochondria as a graph evolving in time. 
 
 ### The dynamics
 
-The graph evolution results from the division and fusion of the branches, implemented as a time-dependent stochastic process. 
+The graph evolution results from the division and fusion of branches, implemented as a time-dependent stochastic process. 
 Specialized protein complexes performing these transformations in the mitochondria are known from empirical studies, 
 but the dynamics is not dependent on the details of their operation and may be implemented in more general terms.  
 In this minimal representation, node degrees are constrained to a very narrow range (1, 2 and 3), 
