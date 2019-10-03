@@ -2,6 +2,8 @@
 
 ### A stochastic simulator of graphs evolving under the action of division and fusion of components
 
+![dynamic graph](imgs/dynamic_graph.png)
+
 ### Biological interpretation: mitochondria
 
 Mitochondria are organelles in biological cells essential for keeping the cells alive. 
