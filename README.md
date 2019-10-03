@@ -62,7 +62,7 @@ Alternative ways for building the code.
     
 2. cmake-independent Makefiles are available for a more targeted manulal build. 
     Please make sure to build the utility library separately, before building the executable. 
-    Their use is straightforward, detailes are given in the initial parts of the makefiles.
+    Their use is straightforward, detailed instructions are given in the initial parts of the makefiles.
 
 Static linking is a default, so the executable can then be copied to another directory if necessary.
 
