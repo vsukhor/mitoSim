@@ -61,7 +61,7 @@ Alternative ways for building the code.
     * cmake --build build
     
 2. Two cmake-independent makefiles ([this](https://github.com/vsukhor/utils/blob/master/manual_make/Makefile) 
-    and [this](manual_make/Makefile)) are available for a more targeted manulal builds of the utility library and the main application respectively. 
+    and [this](manual_make/Makefile)) are available for more targeted manulal builds of the utility library and the main application respectively. 
     If the library is built separately, please make sure to do this before building the executable. 
     Their use is straightforward, and detailed instructions are given in the beginning of the makefiles.
 
