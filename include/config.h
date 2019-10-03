@@ -36,7 +36,7 @@
 #include "utils/common/msgr.h"
 #include "utils/config/reader.h"
 
-namespace MitoD {
+namespace MitoSim {
 
 /**
  * \brief Encapsulates and reads configuration parameters.
@@ -74,11 +74,11 @@ public:
 	const real	fusion_rate_1L;			///< Probability of a free end to bind to a separate cycle junction node.
 
 	/**
-	 * \brief Constructor.
+	 * @brief Constructor.
 	 * @par workingDirOut directory for the output
 	 * @par configSuffix application-specific suffix of the configuration file
 	 * @par runName run index
-	 * @par msgr logging facility
+	 * @par msgr Output message processor.
 	 */
 	explicit Config(
 			const std::string& workingDirOut,
@@ -113,6 +113,6 @@ public:
 	{}
 };
 
-}	// namespace MitoD
+}	// namespace MitoSim
 
 #endif // CONFIG_H

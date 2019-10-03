@@ -26,7 +26,7 @@
 #ifndef NTW_FISSION_H
 #define NTW_FISSION_H
 
-namespace MitoD {
+namespace MitoSim {
 
 template<typename> class Fission;
 
@@ -41,7 +41,7 @@ public:
 
 	friend Fission<Ntw>;
 
-	explicit NtwFission(Ntw&);		/**< Constructor */
+	explicit NtwFission(Ntw&);		///< Constructor.
 
 	/** sets this reaction propensity for the whole network */
 	ulong set_prop()  noexcept;
@@ -175,6 +175,6 @@ find_random_node( szt& w, szt& a ) const noexcept
 	return false;
 }
 
-}	// namespace MitoD
+}	// namespace MitoSim
 
 #endif // NTW_FISSION_H

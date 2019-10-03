@@ -35,7 +35,7 @@
 
 #include "core_transformer.h"
 
-namespace MitoD {
+namespace MitoSim {
 
 template<typename> class Fission;
 
@@ -65,8 +65,8 @@ public:
 	using CoreTransformer<Mt>::fuse_parallel;
 	using CoreTransformer<Mt>::update_gIndcl;
 
-	/** @brief Constructor
-	 * @param msgr logging facility object
+	/**@brief Constructor
+	 * @param msgr Output message processor.
 	 */
 	explicit AbilityForFission(Msgr& msgr);
 
@@ -412,6 +412,6 @@ fiss3( const szt w, const szt a )
 	return {mt[w1].cl, mt[w2].cl};
 }
 
-}	// namespace MitoD
+}	// namespace MitoSim
 
 #endif //  ABILITY_FOR_FISSION_H

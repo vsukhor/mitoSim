@@ -24,9 +24,9 @@
 ============================================================================== */
 
 /**
-* \file structure.h
-* \brief Contains low-level network transformations as implemented in class CoreTransformer.
-* \author Valerii Sukhorukov
+* @file structure.h
+* @brief Contains low-level network transformations as implemented in class CoreTransformer.
+* @author Valerii Sukhorukov
 */
 
 #ifndef STRUCTURE_H
@@ -35,14 +35,14 @@
 #include "utils/common/misc.h"
 #include "utils/common/msgr.h"
 
-namespace MitoD {
+namespace MitoSim {
 
 /**
- * The Structure class.
- * Encapsulates the major structure-related proterties, such a  collection of the Segments,
+ * @brief The Structure class.
+ * @details Encapsulates the major structure-related proterties, such a  collection of the Segments,
  * but is unaware of any dynamics.
  * Forms base for clases adding the network reconfiguration dynamics.
-  * @tparam Mt type of the Edge forming the network
+  * @tparam Mt Type of the Edge forming the network.
 */
 template<typename Mt>
 class Structure {
@@ -51,85 +51,80 @@ public:
 
 	using Reticulum = std::vector<Mt>;
 
-	vec3<szt>					clagl;		/**< edge adjacency_lists per cluster */
+	vec3<szt>					clagl;		///< Edge adjacency_lists per cluster.
 
-	std::vector<szt>			glm;		/**< mapping of the edge indexes to segment indexes */
-	std::vector<szt>			gla;		/**< mapping of the edge indexes to element index inside segments */
+	std::vector<szt>			glm;		///< Mapping of the edge indexes to segment indexes.
+	std::vector<szt>			gla;		///< Mapping of the edge indexes to element index inside segments.
 
-	Reticulum					mt;			/**< the segments */
+	Reticulum					mt;			///< The segments.
 
-	std::array<szt,Mt::maxDeg>	nn {{}};	/**< total number of nodes by node degree */
+	std::array<szt,Mt::maxDeg>	nn {{}};	///< Total number of nodes by node degree.
 
-	szt							mtnum {};	/**< actual number of segments */
-	szt							clnum {};	/**< actual number of clusters */
-	szt							mtmass {};	/**< current number of edges */
+	szt							mtnum {};	///< Actual number of segments.
+	szt							clnum {};	///< Actual number of clusters.
+	szt							mtmass {};	///< Current number of edges.
 
-	vec2<szt>					clmt;		/**< segment indices segregated into clusters: clmt - total */
-	std::vector<szt>			cls;		/**< cluster sizes measured in edges */
+	vec2<szt>					clmt;		///< Segment indices segregated into clusters: clmt - total.
+	std::vector<szt>			cls;		///< Cluster sizes measured in edges.
 
-	// segment indices of the corresponding end degrees
-	std::vector<szt>				mt11;	/**< indexes of disconnected segments not looped onto itself */
-	std::vector<szt>				mtc11;	/**< indexes of disconnected segments not looped onto itself */
+	// Segment indices of the corresponding end degrees.
+	std::vector<szt>				mt11;	///< Indexes of disconnected segments not looped onto itself.
+	std::vector<szt>				mtc11;	///< Indexes of disconnected segments not looped onto itself.
 
-	std::vector<szt>				mt22;	/**< indexes of disconnected looped segments */
-	std::vector<szt>				mtc22;	/**< indexes of disconnected looped segments */
+	std::vector<szt>				mt22;	///< Indexes of disconnected looped segments.
+	std::vector<szt>				mtc22;	///< Indexes of disconnected looped segments.
 
-	std::vector<szt>				mt33;	/**< indexes of segments between nodes of degree 3 and 3: all together */
-	vec2<szt>						mtc33;	/**< indexes of segments between nodes of degree 3 and 3: sorted into clusters */
+	std::vector<szt>				mt33;	///< Indexes of segments between nodes of degree 3 and 3: all together.
+	vec2<szt>						mtc33;	///< Indexes of segments between nodes of degree 3 and 3: sorted into clusters.
 	
-	std::vector<std::array<szt,2>>	mt13;	/**< {index,end} pairs for segments between nodes of degree 1 and 3: all together */
-	vec2<std::array<szt,2>>			mtc13;	/**< {index,end} pairs for segments between nodes of degree 1 and 3: sorted into clusters */
+	std::vector<std::array<szt,2>>	mt13;	///< {index,end} Pairs for segments between nodes of degree 1 and 3: all together.
+	vec2<std::array<szt,2>>			mtc13;	///< {index,end} Pairs for segments between nodes of degree 1 and 3: sorted into clusters.
 
-	Msgr&		msgr;				/**< logging facility */
-	static constexpr szt minLoopLength {2};	/**< minimal length of a segment that can bend into a cycle */
+	Msgr&		msgr;						///< Output message processor.
+	static constexpr szt minLoopLength {2};	///< Minimal length of a segment that can bend into a cycle.
 
-	/** Constructor.
-	 * @param msgr logging facility object
-	 */
+	/// @brief Constructor.
+	/// @param msgr Output message processor.
 	explicit Structure(Msgr& msgr);
 
-	/** Updates internal data */
+	/// Updates internal data.
 	void basic_update() noexcept;
 
-	/** Updates internal data */
+	/// Updates internal data.
 	void update_adjacency() noexcept;
 
-	/** Updates internal vectors */
+	/// Updates internal vectors.
 	void update_structure() noexcept;
 
-	/** Initializes or updates glm and gla vectors */
+	/// Initializes or updates glm and gla vectors.
 	void make_indma() noexcept;
 
-	/** Initializes or updates adjacency list.
-	 * @param ic disconnected network component index
-	 * @param a the adjacency list
-	 */
+	/// @brief Initializes or updates adjacency list.
+	/// @param ic Disconnected network component index.
+	/// @param a The adjacency list.
 	void make_adjacency_list_edges( const szt ic, vec2<szt>& a ) noexcept;
 
-	/** Populates 'mt??', 'mtc??', 'nn' and 'clmt' vectors */
+	/// Populates 'mt??', 'mtc??', 'nn' and 'clmt' vectors
 	void populate_cluster_vectors() noexcept;
 
-	/** Updates 'nn' for the specific node degree
-	 * @param deg node degree to consider
-	 */
+	/// Updates 'nn' for the specific node degree.
+	/// @param deg Node degree to consider.
 	void update_nn(const szt deg) noexcept;
 
-	/** Updates 'nn' for all node degrese */
+	/// Updates 'nn' for all node degrese.
 	void update_nn() noexcept;
 
-	/** Prints the network components using prefix specified
-	* @param tag prefix
-	*/
+	/// Prints the network components using prefix specified.
+	/// @param tag Prefix.
 	void print_mitos(const std::string& tag) const;
 
-	/** Prints the network components to a text-foramtted stream
-	* @param ofs output stream
-	*/
+	/// Prints the network components to a text-foramtted stream.
+	/// @param ofs Output stream.
 	void print(std::ostream& ofs) const;
 
 private:
 
-	vec2<bool> clvisited;	/** temporary auxiliary field */
+	vec2<bool> clvisited;	///< Temporary auxiliary field.
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -328,6 +323,6 @@ print( std::ostream& ofs ) const
 		<< " cln " << clnum;
 }
 
-}	// namespace MitoD
+}	// namespace MitoSim
 
 #endif // STRUCTURE_H

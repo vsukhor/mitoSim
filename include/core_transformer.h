@@ -40,7 +40,7 @@
 #include "structure.h"
 #include "structure.h"
 
-namespace MitoD {
+namespace MitoSim {
 
 /**
  * @brief The CoreTransformer class.
@@ -59,8 +59,8 @@ public:
 	using Structure<Mt>::mtnum;
 	using Structure<Mt>::clnum;
 
-	/** Constructor,
-	 * @param msgr logging facility object
+	/**@brief Constructor,
+	 * @param msgr Output message processor.
 	 */
 	explicit CoreTransformer(Msgr& msgr);
 
@@ -344,6 +344,6 @@ update_gIndcl( const szt cl ) noexcept
 			indcl = mt[j].set_gCl(cl, indcl);
 }
 
-}	// namespace MitoD
+}	// namespace MitoSim
 
 #endif // CORE_TRANSFORMER_H

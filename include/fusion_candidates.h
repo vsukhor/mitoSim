@@ -23,49 +23,56 @@
 
 ============================================================================== */
 
+/**
+* @file fusion_candidates.h
+* @brief Contains classes storing nodes available for fusion.
+* @author Valerii Sukhorukov
+*/
+
 #ifndef FUSION_CANDIDATES_H
 #define FUSION_CANDIDATES_H
 
-namespace MitoD {
+namespace MitoSim {
 
 /**
- * Container for fusion candidate nodes.
- * Should be used only the reactions not intended for fusion to a loop segment.
+ * @brief Container for fusion candidate nodes.
+ * @note Should be used only the reactions not intended for fusion to a loop segment.
  */
 struct FusionCandidatesXX {
 
-	std::vector<std::array<szt,2>> u;	/**< segment and end indexes of the 1st participant */
-	std::vector<std::array<szt,2>> v;	/**< segment and end indexes of the 2nd participant */
+	std::vector<std::array<szt,2>> u;	///< Segment and end indexes of the 1st participant.
+	std::vector<std::array<szt,2>> v;	///< Segment and end indexes of the 2nd participant.
 
-	/** Empty the container */
-	void clear() noexcept { u.clear(); v.clear(); }
+	/// Empty the container.
+	void clear() noexcept { u.clear();
+							v.clear(); }
 
-	/** Add a node pair
-	 * @param uc segment and end indexes of the 1st participant
-	 * @param vc segment and end indexes of the 2nd participant
-	*/
+	/**@brief Add a node pair.
+	 * @param uc Segment and end indexes of the 1st participant.
+	 * @param vc Segment and end indexes of the 2nd participant.
+	 */
 	void add(const std::array<szt,2>& uc,
 			 const std::array<szt,2>& vc ) {
 		u.emplace_back(uc);
 		v.emplace_back(vc);
 	}
 
-	/** Report the number of elements
-	* @result current number of candidate fusion pairs
-	*/
+	/**@brief Report the number of elements.
+	 * @result Current number of candidate fusion pairs.
+	 */
 	szt size() const noexcept { return u.size(); }
 
-	/** Print the content out */
+	/// Print the content out.
 	void print() {
 		for(szt i=0; i<size(); i++)
 			print(i, false);
 		std::cout << "\n";
 	}
 
-	/** Print a particular element
-	 * @param i element index inside the container
-	 * @param nl bool true is cr is intended
-	 */
+	/**@brief Print a particular element.
+	  * @param i Element index inside the container.
+	  * @param nl Bool true is cr is intended.
+	  */
 	void print( const szt i,
 				bool nl=true ) {
 		std::cout << " [" <<  u[i][0] << " " << u[i][1] << " + "
@@ -76,20 +83,20 @@ struct FusionCandidatesXX {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
- * Container for fusion candidate nodes.
- * Should be used only the reactions intended for fusion to a loop segment.
+ * @brief Container for fusion candidate nodes.
+ * @note Should be used only the reactions intended for fusion to a loop segment.
  */
 struct FusionCandidatesXU {
 
-	std::vector<std::array<szt,2>> 	u;	/**< segment and end indexes of the non-looped participant */
-	std::vector<szt>	 			v;	/**< segment index of the looped participant */
+	std::vector<std::array<szt,2>> 	u;	///< Segment and end indexes of the non-looped participant.
+	std::vector<szt>	 			v;	///< Segment index of the looped participant.
 
-	/** Empty the container */
+	/// Empty the container.
 	void clear() noexcept { u.clear(); v.clear(); }
 
-	/** Add a node pair
-	 * @param uc segment and end indexes of the non-looped participant
-	 * @param vc segment index of the looped participant
+	/** Add a node pair.
+	 * @param uc Segment and end indexes of the non-looped participant.
+	 * @param vc Segment index of the looped participant.
 	*/
 	void add(std::array<szt,2> uc,
 			 szt vc ) {
@@ -97,12 +104,12 @@ struct FusionCandidatesXU {
 		v.emplace_back(vc);
 	}
 
-	/** Report the number of elements
-	 * @return current number of elements
+	/**@brief Report the number of elements.
+	 * @return Current number of elements.
 	 */
 	szt size() const noexcept { return u.size(); }
 };
 
-}	// namespace MitoD
+}	// namespace MitoSim
 
 #endif // FUSION_CANDIDATES_H

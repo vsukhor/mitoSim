@@ -29,7 +29,7 @@
 #include "utils/common/misc.h"
 #include "fusion_candidates.h"
 
-namespace MitoD {
+namespace MitoSim {
 
 template<typename> class Fusion11;
 
@@ -44,7 +44,7 @@ public:
 
 	friend Fusion11<Ntw>;
 
-	explicit NtwFusion11(Ntw&);		/**< Constructor */
+	explicit NtwFusion11(Ntw&);		///< Constructor.
 
 	/** sets this reaction propensity for the whole network */
 	szt set_prop() noexcept;
@@ -125,6 +125,6 @@ fire() noexcept
 	return host.fuse11(cnd.u[r][0], cnd.u[r][1], cnd.v[r][0], cnd.v[r][1]);
 }
 
-}	// namespace MitoD
+}	// namespace MitoSim
 
 #endif // NTW_FUSION11_H

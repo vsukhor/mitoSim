@@ -23,6 +23,12 @@
 
 ============================================================================== */
 
+/**
+* @file ability_for_fusion.h
+* @brief Contains class responsible for the graph fusion capacity.
+* @author Valerii Sukhorukov
+*/
+
 #ifndef ABILITY_FOR_FUSION_H
 #define ABILITY_FOR_FUSION_H
 
@@ -35,11 +41,11 @@
 #include "core_transformer.h"
 #include "ability_for_fission.h"
 
-namespace MitoD {
+namespace MitoSim {
 
 /**
- * The AbilityForFusion class.
- * Adds node type-specific fusion capability and updates the network for it.
+ * @brief The AbilityForFusion class.
+ * @details Adds node type-specific fusion capability and updates the network for it.
  * Forms base for clases adding more specific tapes of dynamics.
  * @tparam Mt type of the Edge forming the network
  */
@@ -57,35 +63,35 @@ public:
 	using CoreTransformer<Mt>::fuse_parallel;
 	using AbilityForFission<Mt>::fiss2;
 
-	/** Constructor.
-	 * @param msgr logging facility object
+	/**@brief Constructor.
+	 * @param msgr Output message processor.
 	 */
 	explicit AbilityForFusion(Msgr& msgr);
 
-	/** Fuse two nodes of degree 1.
-	 * @param w1 segment index of the 1st fusion partner
-	 * @param e1 segment end of the 1st fusion partner
-	 * @param w2 segment index of the 2nd fusion partner
-	 * @param e2 segment end of the 2nd fusion partner
+	/**@brief Fuse two nodes of degree 1.
+	 * @param w1 Segment index of the 1st fusion partner.
+	 * @param e1 Segment end of the 1st fusion partner.
+	 * @param w2 Segment index of the 2nd fusion partner.
+	 * @param e2 Segment end of the 2nd fusion partner.
 	 */
 	std::array<szt,2> fuse11(const szt w1, const szt e1, const szt w2, const szt e2) noexcept;
 
-	/** Fuse a node of degree 1 to a node of degree 2.
-	 * @param w1 segment index of the fusion partner containing the node of degree 1
-	 * @param end segment end of the fusion partner containing the node of degree 1
-	 * @param w2 segment index of the fusion partner containing the node of degree 2
-	 * @param a2 position of the node of degree 2 relative to the segment starting edge
+	/**@brief Fuse a node of degree 1 to a node of degree 2.
+	 * @param w1 Segment index of the fusion partner containing the node of degree 1.
+	 * @param end Segment end of the fusion partner containing the node of degree 1.
+	 * @param w2 Segment index of the fusion partner containing the node of degree 2.
+	 * @param a2 Position of the node of degree 2 relative to the segment starting edge.
 	 */
 	std::array<szt,2> fuse12(const szt w1, const szt end, const szt w2, const szt a2) noexcept;
 
-	/** Fuse a node of degree 1 to the end node in a disconnected loop.
-	 * @param w1 segment index of the fusion partner containing the node of degree 1
-	 * @param e1 segment end of the fusion partner containing the node of degree 1
-	 * @param w2 segment index of the loop segment
+	/**@brief Fuse a node of degree 1 to the end node in a disconnected loop.
+	 * @param w1 Segment index of the fusion partner containing the node of degree 1.
+	 * @param e1 Segment end of the fusion partner containing the node of degree 1.
+	 * @param w2 Segment index of the loop segment.
 	 */
 	std::array<szt,2> fuse1L(const szt w1, const szt e1, const szt w2) noexcept;
 
-	/** Fuse end nodes a disconnected segment having free ends to form a loop.
+	/**@brief Fuse end nodes a disconnected segment having free ends to form a loop.
 	 * @param w segment index
 	 */
 	std::array<szt,2> fuse_to_loop(const szt w) noexcept;
@@ -249,6 +255,6 @@ fuse_to_loop( const szt w ) noexcept
 	return {mt[w].cl, mt[w].cl};
 }
 
-}	// namespace MitoD
+}	// namespace MitoSim
 
 #endif // ABILITY_FOR_FUSION_H

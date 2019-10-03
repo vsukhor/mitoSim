@@ -34,7 +34,7 @@
 
 #include "reaction.h"
 
-namespace MitoD {
+namespace MitoSim {
 
 /**
  * @brief Base class for fusion reaction classes.
@@ -52,8 +52,8 @@ class Fusion
 
 public:
 
-	/** Constructor.
-	 * @param msgr logging facility object
+	/**@brief Constructor.
+	 * @param msgr Output message processor.
 	 * @param ind reaction id
 	 * @param netw the network
 	 * @param rate rate constant

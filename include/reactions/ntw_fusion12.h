@@ -28,7 +28,7 @@
 
 #include "../fusion_candidates.h"
 
-namespace MitoD {
+namespace MitoSim {
 
 template<typename> class Fusion12;
 
@@ -155,6 +155,6 @@ fire() noexcept
 	return host.fuse12(cnd.u[r][0], cnd.u[r][1], cnd.v[r][0], cnd.v[r][1]);
 }
 
-}	// namespace MitoD
+}	// namespace MitoSim
 
 #endif // NTW_FUSION12_H

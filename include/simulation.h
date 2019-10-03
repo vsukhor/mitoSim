@@ -23,6 +23,12 @@
 
 ============================================================================== */
 
+/**
+* @file simulation.h
+* @brief The simulation control class.
+* @author Valerii Sukhorukov
+*/
+
 #ifndef SIMULATION_H
 #define SIMULATION_H
 
@@ -35,11 +41,11 @@
 #include "reactions/fusion12.h"
 #include "reactions/fusion1u.h"
 
-namespace MitoD {
+namespace MitoSim {
 
 /**
- * The Simulation class.
- * Handles the overall simulation process and its termination.
+ * @brief The Simulation class.
+ * @details Handles the overall simulation process and its termination.
  * The reactions are encapsulated inside the Gillespie object, constructed here.
  * Controlls the output.
  */
@@ -48,12 +54,12 @@ class Simulation {
 
 public:
 
-	/** Constructor
+	/**@brief Constructor
 	 * @param netw the network to be simulated
 	 * @param rnd random number factory
 	 * @param time current time
 	 * @param it iteration counter
-	 * @param msgr logging facility
+	 * @param msgr Output message processor.
 	 */
 	Simulation(
 		Ntw& netw,
@@ -63,30 +69,30 @@ public:
 		Msgr& msgr
 	);
 
-	void operator()();	/**< Runs the simulation */
+	void operator()();	///< Runs the simulation.
 
 private:
 
-	Ntw& netw;	/**< ref: simulated network */
+	Ntw& netw;	///< ref: simulated network.
 
 	// Convenience references to some data fields of the network
-	Msgr&			msgr;			/**< ref: logging facility */
-	RandFactory&	rnd;			/**< ref: random number factory */
-	double&			time;			/**< ref: current time */
-	ulong&			it;				/**< ref: iteration counter */
+	Msgr&			msgr;			///< ref: Output message processor.
+	RandFactory&	rnd;			///< ref: random number factory.
+	double&			time;			///< ref: current time.
+	ulong&			it;				///< ref: iteration counter.
 
 	// Output parameters
-	szt		logFrequency;	/**< frequency of short output to a log line */
-	szt		saveFrequency;	/**< frequency of detailed output to flie */
+	szt		logFrequency;	///< Frequency of short output to a log line.
+	szt		saveFrequency;	///< Frequency of detailed output to flie.
 
-	Gillespie<RandFactory,Reaction> gsp;			/**< Gillespie reactor controlling the simulation */
+	Gillespie<RandFactory,Reaction> gsp;	///< Gillespie reactor controlling the simulation.
 
-	void populateRc();					/**< Adds reactions to the Gillespie simulator */
-	void terminate(const std::string&);	/**< Terminates upon the reactant exhaustion */
+	void populateRc();					///< Adds reactions to the Gillespie simulator.
+	void terminate(const std::string&);	///< Terminates upon the reactant exhaustion.
 
 	// Logging
-	void update_log();					/**< Outputs status summary to a log file */
-	void update_log(std::ostream&);		/**< Outputs status summary to a log file */
+	void update_log();					///< Outputs status summary to a log file.
+	void update_log(std::ostream&);		///< Outputs status summary to a log file.
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -190,6 +196,6 @@ update_log( std::ostream &ofs )
 	ofs << std::endl;
 }
 
-}	// namespace MitoD
+}	// namespace MitoSim
 
 #endif // SIMULATION_H

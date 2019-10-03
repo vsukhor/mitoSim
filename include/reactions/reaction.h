@@ -23,6 +23,12 @@
 
 ============================================================================== */
 
+/**
+* @file reaction.h
+* @brief Base class for the simulated reactions.
+* @author Valerii Sukhorukov
+*/
+
 #ifndef REACTION_h
 #define REACTION_h
 
@@ -31,26 +37,24 @@
 #include "utils/common/misc.h"
 #include "utils/common/msgr.h"
 
-namespace MitoD {
+namespace MitoSim {
 
-/**
-* An abstract base class for all the reactions
-*/
+/// An abstract base class for all the reactions
 class Reaction {
 
 public:	// Only constant parameters are public
 
-	const szt			ind {};	 /**< index in Simulation::rc, i.e. index among all used and not used reactions */
-	const real			rate {}; /**< reaction rate constant */
+	const szt			ind {};	 ///< Index in Simulation::rc, i.e. index among all used and not used reactions.
+	const real			rate {}; ///< Reaction rate constant.
 
 	// Convenience references
-	const ulong&		it;		/**< ref: internal network iteration counter */
-	const real&			time;	/**< ref: internal network time */
+	const ulong&		it;		///< ref: Internal network iteration counter.
+	const real&			time;	///< ref: Internal network time.
 
-	const std::string	shortName;	/**< reaction name */
-	const std::string	srt;		/**< reaction name abbreviation */
+	const std::string	shortName;	///< Reaction name.
+	const std::string	srt;		///< Reaction name abbreviation.
 
-	/** Constructor */
+	/// Constructor.
 	Reaction( Msgr& msgr,
 			  const szt ind,
 			  const real rate,
@@ -68,44 +72,45 @@ public:	// Only constant parameters are public
 		, msgr {msgr}
 	{}
 
-	/** virtual destructor */
+	///< virtual destructor.
 	virtual ~Reaction() {};
 
 	
-	/** Sets the Gillespie score for this reaction */
+	/// Sets the Gillespie score for this reaction.
 	virtual void set_score() noexcept = 0;
 
-	/** Returns the Gillespie score for this reaction */
+	/// Returns the Gillespie score for this reaction.
 	virtual real get_score() const noexcept = 0;
 
-	/** Updates propensity for a pair of network components
-	* @param c1 index of the 1st component to update
-	* @param c2 index of the 2nd component to update
-	*/
+	/**@brief Updates propensity for a pair of network components.
+	 * @param c1 Index of the 1st component to update.
+	 * @param c2 Index of the 2nd component to update.
+	 */
 	virtual void update_prop(const szt c1, const szt c2) noexcept = 0;
 	
-	/** Executes the raction event */
+	/// Executes the raction event.
 	virtual void fire() noexcept = 0;
 
-	/** Attaches this score to the Gillespie mechanism
-	* @param a placeholder in the Gillespie object responsible for this reaction score
-	*/
+	/**@brief Attaches this score to the Gillespie mechanism.
+	 * @param a Placeholder in the Gillespie object responsible for this reaction score.
+	 */
 	virtual void attach_score_pointer(real* a) noexcept = 0;
 
-	/** Populates the vector of reactions that need a score update after *this has fired
-	* and initializes the propensities and effective rate
-	* @param rc vector of unique pointers to all reactions taking part in the simulation
-	*/
+	/** @brief Populates the vector of reactions that need a score update.
+	 * @details The update is performed after *this has fired
+	 *          and initializes the propensities and effective rate.
+	 * @param rc Vector of unique pointers to all reactions taking part in the simulation.
+	 */
 	virtual void initialize_dependencies(const vup<Reaction>& rc) noexcept = 0;
 
-	/** The number of times this reaction was fired
-	* @result the number of times this reaction was fired
-	*/
+	/**@brief The number of times this reaction was fired.
+	 * @result The number of times this reaction was fired.
+	 */
 	virtual szt event_count() const noexcept = 0;
 
-	/** Prints the parameters common to all reactions
-	* @param le true if new line after the output
-	*/
+	/**@brief Prints the parameters common to all reactions.
+	 * @param le True if new line after the output.
+	 */
 	virtual	void print( const bool le ) const
 	{
 		msgr.print<false>(" it %d", it);
@@ -116,15 +121,13 @@ public:	// Only constant parameters are public
 
 protected:
 
-	Msgr& msgr;		/**< ref: logging facility */
+	Msgr& msgr;		///< ref: Output message processor.
 
-	/**
-	* Pure virtual function: All network and reaction updates necessary after the given reaction event was executed
-	*/
+	/// Pure virtual function: All network and reaction updates necessary after the given reaction event was executed.
 	virtual void update_netw_stats() = 0;
 
 };
 
-}	// namespace MitoD
+}	// namespace MitoSim
 
 #endif // REACTION_H

@@ -23,50 +23,56 @@
 
 ============================================================================== */
 
+/**
+* @file edge.h
+* @brief The graph Edge class.
+* @author Valerii Sukhorukov
+*/
+
 #ifndef EDGE_H
 #define EDGE_H
 
 #include "utils/common/misc.h"
 
-namespace MitoD {
+namespace MitoSim {
 
 /**
- * The Network Edge class.
- * Edge is a minimal structural unit of the network.
+ * @brief The Network Edge class.
+ * @details Edge is a minimal structural unit of the network.
  * The class handles the tasks and properties specific to a single edge and its relation to other network components.
- * @tparam ContentT slot for specifying strucutre of the internal content the Edge can hold; currently not used
+ * @tparam ContentT Slot for specifying strucutre of the internal content the Edge can hold; currently not used.
  */
 template<int ContentT>
 class Edge {
 
 public:
 
-	szt					ind {huge<szt>};	/**< index network-wide: starts from 0 */
-	szt					indcl {huge<szt>};	/**< index cluster-wide: starts from 0 */
-	szt					cl {huge<szt>};		/**< current cluster index */
-	std::array<ulong,2>	fin {{}};			/**< contribution to fission propensity at each end */
+	szt					ind {huge<szt>};	///< Index network-wide: starts from 0.
+	szt					indcl {huge<szt>};	///< Index cluster-wide: starts from 0.
+	szt					cl {huge<szt>};		///< Current cluster index.
+	std::array<ulong,2>	fin {{}};			///< Contribution to fission propensity at each end.
 
-	/** Constructor
-	 * @param ind index network-wide
-	 * @param indcl index cluster-wide
-	 * @param cl current cluster index
+	/**@brief Constructor.
+	 * @param ind Index network-wide.
+	 * @param indcl Index cluster-wide.
+	 * @param cl Current cluster index.
 	 */
 	Edge(const szt ind,
 		 const szt indcl,
 		 const szt cl);
 
-	/** Swap the edge ends */
+	/// Swap the edge ends.
 	void reflect();
 
-	/** Write the edge to a file
-	 * @param ofs output file stream
+	/** Write the edge to a file.
+	 * @param ofs Output file stream.
 	*/
 	void write(std::ofstream& ofs) const;
 
-	/** Print the edge to a stream
-	 * @param os output stream
-	 * @param a position inside segment
-	 * @param endline flag to end current line
+	/** Print the edge to a stream.
+	 * @param os Output stream.
+	 * @param a Position inside segment.
+	 * @param endline Flag to end current line.
 	*/
 	void print(std::ostream& os,
 			   const szt a,
@@ -118,7 +124,7 @@ print( std::ostream& os,
 	if (endline) os << "\n";
 }
 
-}	// namespace MitoD
+}	// namespace MitoSim
 
 #endif // EDGE_H
 

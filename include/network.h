@@ -43,7 +43,7 @@
 #include "ntw_fusion1u.h"
 #include "simulation.h"
 
-namespace MitoD {
+namespace MitoSim {
 
 /**
  * The Network class template.
@@ -77,11 +77,11 @@ public:
 	NtwFusion12<thisT>		fu12;	/**< slot for fusion of raction of nodes with degrees 1 and 2 */
 	NtwFusion1L<thisT>		fu1L;	/**< slot for fusion of raction of nodes with degrees 1 and a loop */
 
-	/** Constructor.
+	/**@brief Constructor.
 	 * @param cfg configuration object
 	 * @param runIndex run index
 	 * @param rnd random number factory
-	 * @param msgr logging facility object
+	 * @param msgr Output message processor.
 	 */
 	explicit Network(
 			const Config& cfg,
@@ -207,7 +207,7 @@ save_mitos( const bool startnew,
 	ofs.write(reinterpret_cast<const char*>(&nst2save), sizeof(szt));
 }
 
-}	// namespace MitoD
+}	// namespace MitoSim
 
 #endif // NETWORK_H
 	

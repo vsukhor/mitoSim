@@ -28,7 +28,7 @@
 
 #include "../fusion_candidates.h"
 
-namespace MitoD {
+namespace MitoSim {
 
 template<typename> class Fusion1U;
 
@@ -112,6 +112,6 @@ fire() noexcept
 }
 
 
-}	// namespace MitoD
+}	// namespace MitoSim
 
 #endif // NTW_FUSION1U_H

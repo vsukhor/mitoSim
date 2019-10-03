@@ -23,6 +23,12 @@
 
 ============================================================================== */
 
+/**
+* @file segment.h
+* @brief Contains Segment class template and its specialization for graphs of max degree 3.
+* @author Valerii Sukhorukov
+*/
+
 #ifndef SEGMENT_H
 #define SEGMENT_H
 
@@ -31,11 +37,11 @@
 
 #include "edge.h"
 
-namespace MitoD {
+namespace MitoSim {
 
 /**
- * Segment class of the Network.
- * Segment is a sequence of edges linked linearly (without branches).
+ * @brief Segment class of the Network.
+ * @details Segment is a sequence of edges linked linearly (without branches).
  * Segment ends may form branching sites, where it is connected to other segments.
  * A segment not connected to other segments or
  * a complete collection of segments connected to each other form
@@ -47,8 +53,8 @@ template<szt>
 class Segment {};
 
 /**
- * Segment class specification for max node degree equal to 3.
- * Segment is a sequence of edges linked linearly (without branches).
+ * @brief Segment class specification for max node degree equal to 3.
+ * @details Segment is a sequence of edges linked linearly (without branches).
  * Segment ends may form branching sites, where it is connected to other segments.
  * A segment not connected to other segments or
  * a complete collection of segments connected to each other form
@@ -61,29 +67,29 @@ class Segment<3> {
 
 public:
 
-	static constexpr szt maxDeg {3};	/**< maximal node degree allowed */
+	static constexpr szt maxDeg {3};	///< Maximal node degree allowed.
 
 	using EdgeT = Edge<maxDeg>;
 	using thisT = Segment<maxDeg>;
 
-	Msgr&								msgr;		/**< logging facility */
-	std::vector<EdgeT>					g;			/**< the edges */
-	szt									cl {};		/**< cluster index */
-	std::array<szt,maxDeg>				nn {{}};	/**< number of neighbours */
-	std::array<std::vector<szt>,maxDeg>	neig;		/**< neighbours */
-	std::array<std::vector<szt>,maxDeg>	neen;		/**< neighbour ends */
+	Msgr&								msgr;		///< Output message processor.
+	std::vector<EdgeT>					g;			///< the edges.
+	szt									cl {};		///< cluster index.
+	std::array<szt,maxDeg>				nn {{}};	///< number of neighbours.
+	std::array<std::vector<szt>,maxDeg>	neig;		///< neighbours.
+	std::array<std::vector<szt>,maxDeg>	neen;		///< neighbour ends.
 
-	/** Constructor
-	 * @param msgr logging facility object
+	/**@brief Constructor
+	 * @param msgr Output message processor.
 	 */
 	explicit Segment(Msgr& msgr);
 
-	/** Constructor
-	 * @param segmass segment mass
-	 * @param cl index of subnetwork to which the sebment belongs
-	 * @param mtmass total mass of the network
-	 * @param ei index of the last edge in this segment
-	 * @param msgr logging facility object
+	/**@brief Constructor.
+	 * @param segmass Segment mass.
+	 * @param cl Index of subnetwork to which the sebment belongs.
+	 * @param mtmass Total mass of the network.
+	 * @param ei Index of the last edge in this segment.
+	 * @param msgr Output message processor.
 	 */
 	explicit Segment(
 		  const szt segmass,
@@ -92,83 +98,92 @@ public:
 		  szt& ei, 
 		  Msgr& msgr );
 
-	/** Reflects the vector containing the segment edges */
+	/// Reflects the vector containing the segment edges.
 	void reflect_g();
 
-	/** Change disconnected network component-related indexes of the segment edges,
-			keeping the segment index unoltered
-	 * @param newcl new disconnected component index
-	 * @param initind starting edge index in the current disconnected network component
+	/**@brief Change disconnected network component-related indexes of the segment edges,
+			  keeping the segment index unoltered.
+	 * @param newcl New disconnected component index.
+	 * @param initind Starting edge index in the current disconnected network component.
 	 */
 	szt set_gCl(const szt newcl, const szt initind);
 
-	/** Change disconnected network component-related indexes of the segment edges, and the the segment itself
-	 * @param newcl new disconnected component index
-	 * @param initind starting edge index in the current disconnected network component
-	 * @return the last edge index in the current disconnected network component
+	/**@brief Change disconnected network component-related indexes of the segment edges, and the the segment itself.
+	 * @param newcl New disconnected component index.
+	 * @param initind Starting edge index in the current disconnected network component.
+	 * @return The last edge index in the current disconnected network component.
 	 */
 	szt setCl(const szt newcl, const szt initind);
 
-	/** Converts the segment end index of the boundary edge to internal position in the segment
-	 * @param e segment end index
-	 * @return internal position
-	 * @return the last edge index in the current disconnected network component
+	/**@brief Converts the segment end index of the boundary edge to internal position in the segment.
+	 * @param e Segment end index.
+	 * @return Internal position.
+	 * @return The last edge index in the current disconnected network component.
 	 */
-	constexpr szt end2a(const szt& e) const;
+	constexpr szt end2a(const szt e) const;
 
-	/** Determine if the segment has one free end
- 	 * @return the end index if true
+	/**@brief Determine if the segment has one free end.
+ 	 * @return The end index if true.
 	 */
 	constexpr szt has_one_free_end() const;
 
-	/** Neigbour indexe at a segment end
-	 * @param e segment end
- 	 * @return the neighbour index
+	/**@brief Neigbour indexes at a segment end.
+	 * @param e Segment end.
+ 	 * @return the Neighbour index.
 	 */
-	szt single_neig_index(const szt& e) const;
+	szt single_neig_index(const szt e) const;
 
-	/** Neigbour indexes at a segment end
-	 * @param e segment end
- 	 * @return the neighbour indexes
+	/**@brief Neigbour indexes at a segment end
+	 * @param e Segment end.
+ 	 * @return the Neighbour indexes.
 	 */
-	std::vector<szt> double_neig_indexes(const szt& e) const;
+	std::vector<szt> double_neig_indexes(const szt e) const;
 
-	/** Report if the segment is looped onto itself */
+	/// Report if the segment is looped onto itself.
 	constexpr bool is_cycle() const;
 
-	/** Report the number of nodes of a given degree.
-	 * @param deg node degree
-	 * @return the number of nodes
+	/**@brief Report the number of nodes of a given degree.
+	 * @param deg Node degree.
+	 * @return the Number of nodes.
 	 */
-	szt num_nodes(const szt& deg) const;
+	szt num_nodes(const szt deg) const;
 
-	/** Report the segment length measured in edges.
-	 * @return the segment length measured in edges
+	/**@brief Report the segment length measured in edges.
+	 * @return the Segment length measured in edges.
 	 */
 	szt length() const noexcept { return g.size(); }
 
+	/**@brief Set fission-specific factor for an end node.
+	 * @param a In-segment node posiiton.
+	 */
 	ulong set_end_fin(const szt a);
+
+	/**@brief Set fission-specific factor for a bulk node.
+	 * @param a In-segment node posiiton.
+	 */
 	ulong set_bulk_fin(const szt a);
 
+	/// Print segment parameters.
 	void print( const szt w, const std::string& tag, const szt at=huge<szt> ) const;
+
+	/// Print segment parameters.
 	void print( std::ostream& os, const szt w, const std::string& tag, const szt at=huge<szt> ) const;
 
-	/** Write the segment to a binary file.
-	 * @param ofs std::ofstream to write to
+	/**@brief Write the segment to a binary file.
+	 * @param ofs std::ofstream to write to.
 	 */
 	void write(std::ofstream& ofs) const;
 
 private:
 
-	/**
-	* Inserts an edge imediately after g[a] making it g[a+1].
-	* @return the pointer to the newly inserted edge.
-	* @param a position of the edge preceding the newly inserted one relative to the segment end 1
-	* @param p edge to be inserted
+	/**@brief Inserts an edge imediately after g[a] making it g[a+1].
+	* @param a Position of the edge preceding the newly inserted one relative to the segment end 1.
+	* @param p Edge to be inserted.
+	* @return The pointer to the newly inserted edge.
 	*/
-	EdgeT* increment_length( const long a, EdgeT p );	// inserts a particle after g[a] making it g[a+1]
+	EdgeT* increment_length( const long a, EdgeT p );
 
-	/** Initialises the neig vectors at both ends. */
+	/// Initialise the neigbour vectors at both ends.
 	void init_ends();
 };
 
@@ -187,7 +202,7 @@ Segment(
 	  const szt cl,
 	  szt& mtmass, 		// var ref
 	  szt& ei, 			// var ref
-	  Msgr& msgr			// var ref
+	  Msgr& msgr		// var ref
 	)
 	: msgr {msgr}
 	, cl {cl}
@@ -250,7 +265,7 @@ setCl( const szt newcl, const szt initind )
 
 constexpr
 szt Segment<3>::
-end2a( const szt& e ) const 
+end2a( const szt e ) const
 {
 	return (e == 1) ? 0 : (szt)g.size()-1;
 }
@@ -266,7 +281,7 @@ has_one_free_end() const 		// return the end index if true
 
 inline
 szt Segment<3>::
-single_neig_index( const szt& e ) const
+single_neig_index( const szt e ) const
 {
 	for (szt i=1; i<=nn[e]; i++) 
 		if (neig[e][i])
@@ -277,7 +292,7 @@ single_neig_index( const szt& e ) const
 
 inline
 std::vector<szt> Segment<3>::
-double_neig_indexes( const szt& e ) const
+double_neig_indexes( const szt e ) const
 {
 	XASSERT(nn[e] == 2, "Error in Mito::double_neig_indexes: nn[e] != 2 in cluster "+STR(cl)+"\n");
 
@@ -300,7 +315,7 @@ is_cycle() const
 }
 
 szt Segment<3>::
-num_nodes( const szt& deg ) const				// deg = 1, 2, 3
+num_nodes( const szt deg ) const				// deg = 1, 2, 3
 {														
 	if (deg == 1) {														// count nodes of degree 1
 		if (      nn[1] &&  nn[2]) 	return 0;
@@ -399,6 +414,6 @@ write( std::ofstream& ofs ) const
 		g[j].write(ofs);
 }
 
-}	// namespace MitoD
+}	// namespace MitoSim
 
 #endif // SEGMENT_H

@@ -40,7 +40,7 @@
 #include "utils/common/stop_watch.h"
 #include "utils/random/with_boost.h"
 
-namespace MitoD {
+namespace MitoSim {
 using namespace Utils::Common;
 using RandFactory = Utils::Random::Boost<real>;
 constexpr bool verbose {};		/**< work in verbose mode */
@@ -52,7 +52,7 @@ constexpr bool verbose {};		/**< work in verbose mode */
 
 int main( int argc, char* argv[] )
 {
-	using namespace MitoD;
+	using namespace MitoSim;
 
 	if (argc < 5)
 		return Exceptions::simple("Error: not sufficient configuration data provided");
@@ -76,7 +76,7 @@ int main( int argc, char* argv[] )
 		msgr.print("runIni = %d ", runIni);
 		msgr.print("runEnd = %d ", runEnd);
 
-		MitoD::Config cfg {workingDirOut, configSuffix, STR(ii), msgr};
+		MitoSim::Config cfg {workingDirOut, configSuffix, STR(ii), msgr};
 
 		const auto seedFileName {workingDirIn+"seeds"};
 		if (!file_exists(seedFileName))

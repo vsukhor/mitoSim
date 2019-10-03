@@ -33,7 +33,7 @@
 #include "utils/common/msgr.h"
 #include "reaction.h"
 
-namespace MitoD {
+namespace MitoSim {
 using namespace Utils;
 
 template<uint, uint, typename>
@@ -51,8 +51,8 @@ class Fission
 
 public:
 
-	/** Constructor.
-	 * @param msgr logging facility object
+	/**@brief Constructor.
+	 * @param msgr Output message processor.
 	 * @param ind reaction id
 	 * @param netw the network
 	 * @param rate rate constant
@@ -209,6 +209,6 @@ print( const bool le ) const
 	if (le) msgr.print("\n");
 }
 
-}	// namespace MitoD
+}	// namespace MitoSim
 
 #endif // FISSION_H

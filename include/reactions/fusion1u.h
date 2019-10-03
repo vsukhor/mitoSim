@@ -31,7 +31,7 @@
 
 #include "fusion.h"
 
-namespace MitoD {
+namespace MitoSim {
 	
 /**
  * Reaction slot for fusion of a degree 1 node with a loop segment.
@@ -45,8 +45,8 @@ class Fusion1U
 
 public:
 
-	/** Constructor.
-	 * @param msgr logging facility object
+	/**@brief Constructor.
+	 * @param msgr Output message processor.
 	 * @param ind reaction id
 	 * @param netw the network
 	 * @param rate rate constant
@@ -159,6 +159,6 @@ print( const bool le ) const
 	if (le) msgr.print("\n");
 }
 
-}	// namespace MitoD
+}	// namespace MitoSim
 
 #endif	// FUSION1U_H 
