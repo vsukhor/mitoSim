@@ -158,8 +158,8 @@ dfs( const szt w1, const szt e1,
 	 const szt w2, const szt e2 )
 {
 	for (szt i=1; i<=mt[w1].nn[e1]; i++) {
-		const auto cn {mt[w1].neig[e1][i]};
-		const auto ce {mt[w1].neen[e1][i]};
+		const auto cn = mt[w1].neig[e1][i];
+		const auto ce = mt[w1].neen[e1][i];
 		if (cn == w2) {
 			if(ce == e2)
 				return true;
@@ -206,10 +206,10 @@ fiss2( const szt w, const szt a )
 	if constexpr (verbose)
 		mt[w].print(w, "fission2:  ", a);		// cuts between g[a-1] and g[a]
 
-	const auto clini {mt[w].cl};
+	const auto clini = mt[w].cl;
 
-	const auto ind1 {mt[w].g[a-1].ind};
-	const auto ind2 {mt[w].g[a].ind};
+	const auto ind1 = mt[w].g[a-1].ind;
+	const auto ind2 = mt[w].g[a].ind;
 
 	bool inCycle {};
 	mt[w].nn[2] ? (inCycle = update_cl_fiss(w, 2))
@@ -252,8 +252,8 @@ fiss2( const szt w, const szt a )
 	}
 
 	basic_update();
-	const auto w1 {glm[ind1]};
-	const auto w2 {glm[ind2]};
+	const auto w1 = glm[ind1];
+	const auto w2 = glm[ind2];
 
 	XASSERT(mt[w1].cl == clini || mt[w2].cl == clini, "Error in fiss3: mt[w1].cl != clini && mt[w2].cl != clini\n");
 	if constexpr (verbose) {
@@ -278,12 +278,12 @@ fiss3( const szt w, const szt a )
 	if constexpr (verbose)
 		mt[w].print(w, "fission3:  ", a);
 
-	const auto clini {mt[w].cl};
+	const auto clini = mt[w].cl;
 	bool inCycle {};
 	bool f {};
 	szt n[2], e[2];
-	auto ind1 {huge<szt>};
-	auto ind2 {huge<szt>};
+	auto ind1 = huge<szt>;
+	auto ind2 = huge<szt>;
 	if (!a) {															// at end 1
 		ind1 = mt[w].g.front().ind;
 		ind2 = mt[mt[w].neig[1][1]].g[mt[mt[w].neig[1][1]].end2a(mt[w].neen[1][1])].ind;

@@ -57,13 +57,13 @@ int main( int argc, char* argv[] )
 	if (argc < 5)
 		return Exceptions::simple("Error: not sufficient configuration data provided");
 
-	const auto workingDir {std::string(argv[1])};	// working directory
-	const auto configSuffix {std::string(argv[2])};	// application-specific suffix of the configuration file
-	const auto runIni {static_cast<szt>(std::stoi(argv[3]))};	// index of the starting run
-	const auto runEnd {static_cast<szt>(std::stoi(argv[4]))};	// index of the last run
+	const auto workingDir = std::string(argv[1]);	// working directory
+	const auto configSuffix = std::string(argv[2]);	// application-specific suffix of the configuration file
+	const auto runIni = static_cast<szt>(std::stoi(argv[3]));	// index of the starting run
+	const auto runEnd = static_cast<szt>(std::stoi(argv[4]));	// index of the last run
 
-	const auto workingDirIn {workingDir};	// directory for the input
-	const auto workingDirOut {workingDir};	// directory for the output
+	const auto workingDirIn = workingDir;	// directory for the input
+	const auto workingDirOut = workingDir;	// directory for the output
 
 	for (szt ii=runIni; ii<=runEnd; ii++) {
 		StopWatch stopwatch;
@@ -78,12 +78,12 @@ int main( int argc, char* argv[] )
 
 		MitoSim::Config cfg {workingDirOut, configSuffix, STR(ii), msgr};
 
-		const auto seedFileName {workingDirIn+"seeds"};
+		const auto seedFileName = workingDirIn+"seeds";
 		if (!file_exists(seedFileName))
 			RandFactory::make_seed(seedFileName, &msgr);
 
-		auto rnd {std::make_unique<RandFactory>(seedFileName, ii, msgr)};
-		const auto network {std::make_unique<Network<Segment<3>>>(cfg, ii, *rnd, msgr)};
+		auto rnd = std::make_unique<RandFactory>(seedFileName, ii, msgr);
+		const auto network = std::make_unique<Network<Segment<3>>>(cfg, ii, *rnd, msgr);
 
 		stopwatch.stop();
 		msgr.print("Run "+STR(ii)+" finished: "+stopwatch.stop.str+"after "+stopwatch.duration()+" sec\n");

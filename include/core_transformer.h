@@ -219,10 +219,10 @@ template<typename Mt>
 std::array<szt,2> CoreTransformer<Mt>::
 fuse_antiparallel( const szt end, const szt w1, const szt w2 ) noexcept
 {
-	[[maybe_unused]] const auto len1 {mt[w1].g.size()};
-	[[maybe_unused]] const auto len2 {mt[w2].g.size()};
-	const auto cl1 {mt[w1].cl};
-	const auto cl2 {mt[w2].cl};
+	[[maybe_unused]] const auto len1 = mt[w1].g.size();
+	[[maybe_unused]] const auto len2 = mt[w2].g.size();
+	const auto cl1 = mt[w1].cl;
+	const auto cl2 = mt[w2].cl;
 
 	if constexpr (verbose) {
 		msgr.print("Fusion11a: %d(of %d) with %d(of %d) at end %d", w1, len1, w2, len2, end);
@@ -267,10 +267,10 @@ template<typename Mt>
 std::array<szt,2> CoreTransformer<Mt>::
 fuse_parallel( const szt w1, const szt w2 ) noexcept
 {
-	[[maybe_unused]] const auto len1 {mt[w1].g.size()};
-	[[maybe_unused]] const auto len2 {mt[w2].g.size()};
-	const auto cl1 {mt[w1].cl};
-	const auto cl2 {mt[w2].cl};
+	[[maybe_unused]] const auto len1 = mt[w1].g.size();
+	[[maybe_unused]] const auto len2 = mt[w2].g.size();
+	const auto cl1 = mt[w1].cl;
+	const auto cl2 = mt[w2].cl;
 
 	if constexpr (verbose) {
 		msgr.print("Fusion11p: %d(of %d) with %d(of %d)", w1, len1, w2, len2);

@@ -158,10 +158,10 @@ template<typename Ntw>
 bool NtwFission<Ntw>::
 find_random_node( szt& w, szt& a ) const noexcept
 {
-	auto k {host.rnd.uniform1(prTotal)};
-	auto ksum {0UL};
+	auto k = host.rnd.uniform1(prTotal);
+	szt ksum {};
 	for (w=1; w<=host.mtnum; w++) {
-		const auto& g {mt[w].g};
+		const auto& g = mt[w].g;
 		a = 0;
 		ksum += g[a].fin[0];
 		if (k <= ksum)

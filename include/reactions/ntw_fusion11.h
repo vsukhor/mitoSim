@@ -98,9 +98,9 @@ populate() noexcept
 	constexpr auto minLL = Structure<typename Ntw::ST>::minLoopLength;
 
 	cnd.clear();
-	const auto mtn11  {mt11.size()};
+	const auto mtn11 = mt11.size();
 	for (szt i1=0; i1<mtn11; i1++) {					// 11 ends to ...
-		const auto w1 {mt11[i1]};
+		const auto w1 = mt11[i1];
 		if (host.mt[w1].g.size() >= minLL)				// ... opposite end in the same segment
 			cnd.add({w1,1}, {w1,2});
 
@@ -116,7 +116,7 @@ populate() noexcept
 				cnd.add({w1, e1}, we2);
 		}
 	}
-	const auto mtn13  {mt13.size()};
+	const auto mtn13 = mt13.size();
 	for (szt i1=0; i1<mtn13; i1++) 						// free ends of 13 to ...
 		for (szt i2=i1+1; i2<mtn13; i2++)				// ... free ends of other 13
 			cnd.add(mt13[i1], mt13[i2]);
@@ -126,7 +126,7 @@ template<typename Ntw>
 auto NtwFusion11<Ntw>::
 fire() noexcept
 {
-	const auto r {rnd.uniform0(cnd.size())};
+	const auto r = rnd.uniform0(cnd.size());
 
 	return host.fuse11(cnd.u[r][0], cnd.u[r][1], cnd.v[r][0], cnd.v[r][1]);
 }

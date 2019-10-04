@@ -132,10 +132,10 @@ fuse12( const szt w1, const szt end, const szt w2, const szt a2 ) noexcept
 		mt[w1].print(w1, "     before s: ");
 		mt[w2].print(w2, "     before s: ");
 	}
-	const auto cl1 {mt[w1].cl};
-	const auto cl2 {mt[w2].cl};
+	const auto cl1 = mt[w1].cl;
+	const auto cl2 = mt[w2].cl;
 
-	auto mi {mt[w2].is_cycle() ? w2 : mtnum+1};	// mt[mi] is to be  produced by the fission
+	auto mi = mt[w2].is_cycle() ? w2 : mtnum+1;	// mt[mi] is to be  produced by the fission
 
 	fiss2(w2, a2);
 

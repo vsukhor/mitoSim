@@ -357,7 +357,7 @@ inline
 ulong Segment<3>::
 set_end_fin( const szt e )
 {
-	auto& f {g[end2a(e)].fin};
+	auto& f = g[end2a(e)].fin;
 	f[e-1] = nn[e] ? 1 : 0;
 
 	return f[e-1];

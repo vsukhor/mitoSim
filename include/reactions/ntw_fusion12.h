@@ -108,8 +108,8 @@ populate() noexcept
 			const std::array<szt,2> we1 {w1,e1};
 			for (const auto w2 : mt11)						// ... 11 bulk
 				for (szt i=1; i<mt[w2].g.size(); i++) {
-					const auto skip {w1 == w2 && ((e1 == 1 && i < minLL) ||
-												  (e1 == 2 && mt[w2].g.size()-i < minLL))};
+					const auto skip = w1 == w2 && ((e1 == 1 && i < minLL) ||
+												   (e1 == 2 && mt[w2].g.size()-i < minLL));
 					if (!skip) {
 						cnd.add(we1, {w2,i});
 						cnd.add(we1, {w2,i});
@@ -135,9 +135,9 @@ populate() noexcept
 
 		for (const auto& we2 : mt13) {						// ... 13 bulk
 			for (szt i=1; i<mt[we2[0]].g.size(); i++) {
-				const auto skip {we1[0] == we2[0] &&
+				const auto skip = we1[0] == we2[0] &&
 								 ((we1[1] == 1 && i < minLL) ||
-								  (we1[1] == 2 && mt[we2[0]].g.size()-i < minLL))};
+								  (we1[1] == 2 && mt[we2[0]].g.size()-i < minLL));
 				if (!skip)
 					cnd.add(we1, {we2[0],i});
 			}
@@ -156,7 +156,7 @@ template<typename Ntw>
 auto NtwFusion12<Ntw>::
 fire() noexcept
 {
-	const auto r {rnd.uniform0(cnd.size())};
+	const auto r = rnd.uniform0(cnd.size());
 
 	return host.fuse12(cnd.u[r][0], cnd.u[r][1], cnd.v[r][0], cnd.v[r][1]);
 }

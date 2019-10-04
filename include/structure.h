@@ -188,7 +188,7 @@ make_indma() noexcept
 	gla.resize(mtmass);
 	for (szt j=1; j<=mtnum; j++)
 		for (szt k=0; k<mt[j].g.size(); k++) {
-			const auto& g {mt[j].g[k]};
+			const auto& g = mt[j].g[k];
 			glm[g.ind] = j;
 			gla[g.ind] = k;
 		}
@@ -204,28 +204,28 @@ make_adjacency_list_edges( const szt c, vec2<szt>& a ) noexcept
 
 	for (const auto& j : clmt[c])
 		for (szt k=0; k<mt[j].g.size(); k++) {
-			const auto ind {mt[j].g[k].indcl};
+			const auto ind = mt[j].g[k].indcl;
 			if (k == 0) {
 				for (szt e=1; e<=mt[j].nn[1]; e++) {		// connection backwards: only other segments might be found
-					const auto w2 {mt[j].neig[1][e]};
-					const auto a2 {mt[w2].end2a(mt[j].neen[1][e])};
-					a[ind].push_back( mt[w2].g[a2].indcl );
+					const auto w2 = mt[j].neig[1][e];
+					const auto a2 = mt[w2].end2a(mt[j].neen[1][e]);
+					a[ind].push_back(mt[w2].g[a2].indcl);
 				}
 				if (mt[j].g.size() == 1)					// connection forwards: to other segment
 					for (szt e=1; e<=mt[j].nn[2]; e++) {
-						const auto w2 {mt[j].neig[2][e]};
-						const auto a2 {mt[w2].end2a(mt[j].neen[2][e])};
+						const auto w2 = mt[j].neig[2][e];
+						const auto a2 = mt[w2].end2a(mt[j].neen[2][e]);
 						a[ind].push_back(mt[w2].g[a2].indcl);
 					}
 				else {										// connection forwards: to the same segment
-					a[ind].push_back( mt[j].g[k+1].indcl );
+					a[ind].push_back(mt[j].g[k+1].indcl);
 				}
 			}
 			else if (k == mt[j].g.size()-1) {				// but not  a1 == 0  =>  mt[m1].g.size() > 1
 				a[ind].push_back(mt[j].g[k-1].indcl);		// connection backwards: to the same segment
 				for (szt e=1; e<=mt[j].nn[2]; e++) {		// connection forwards: to other segment
-					const auto w2 {mt[j].neig[2][e]};
-					const auto a2 {mt[w2].end2a(mt[j].neen[2][e])};
+					const auto w2 = mt[j].neig[2][e];
+					const auto a2 = mt[w2].end2a(mt[j].neen[2][e]);
 					a[ind].push_back(mt[w2].g[a2].indcl);
 				}
 			}
@@ -249,11 +249,11 @@ populate_cluster_vectors() noexcept
 	clmt.resize(clnum);		for (auto& o : clmt) o.clear();		// # of segments
 	
 	for (szt j=1; j<=mtnum; j++) {
-		const auto& m {mt[j]};
+		const auto& m = mt[j];
 		clmt[m.cl].push_back(j);						// mitochondrial indexes clusterwise
 		nn[1] += m.num_nodes(2);
 
-		const auto e {m.has_one_free_end()};
+		const auto e = m.has_one_free_end();
 		if (e) {
 			const szt oe {e == 1 ? static_cast<szt>(2) : static_cast<szt>(1)};
 			nn[0]++;

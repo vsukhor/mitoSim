@@ -112,7 +112,7 @@ template<typename Ntw>
 auto NtwFusion1L<Ntw>::
 fire() noexcept
 {
-	const auto r {rnd.uniform0(cnd.size())};
+	const auto r = rnd.uniform0(cnd.size());
 
 	return host.fuse1L(cnd.u[r][0], cnd.u[r][1], cnd.v[r]);
 }
