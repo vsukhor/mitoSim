@@ -250,7 +250,7 @@ inline // inserts a particle imediately after g[a] making it g[a+1]
 typename Segment<3>::EdgeT* Segment<3>::
 increment_length( const long a, Segment<3>::EdgeT p )
 {
-	g.insert(g.begin()+a+1, std::move(p));
+	g.insert(g.begin()+(a+1), std::move(p));
 	return &g[a+1];
 }
 
