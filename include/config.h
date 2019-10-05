@@ -89,7 +89,7 @@ public:
 			)
 		: configSuffix {configSuffix}
 		, cfgFname {workingDirOut+"config"+"_"+configSuffix+".txt"}
-		, read {cfgFname, msgr}
+		, read {cfgFname, &msgr}
 		, runName {runName}
 		, workingDirOut {workingDirOut}
 		, timeTotal			{read("timeTotal", zerohuge<real>)}
