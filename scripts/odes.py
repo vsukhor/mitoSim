@@ -290,7 +290,8 @@ if __name__ == '__main__':
 
     # Find the equilibrium solution as t -> Inf and plot it.
     x = [[[node_numbers_equil(cc1, cc2, l) for cc1 in c1] for cc2 in c2] for l in L]
-#    [plot_node_numbers(c1, c2, l, xx, figsize=(15, 5)) for xx, l in zip(x, L)]
+    for xx, l in zip(x, L):
+        plot_node_numbers(c1, c2, l, xx, figsize=(15, 5))
 
     # Plot the solution in phase coordinates:
     plot_phase_equil(x, c2, L, figsize=(10,10))
@@ -299,7 +300,8 @@ if __name__ == '__main__':
     # The equilibrium is asymptotically stable if real parts of all eigenvalues of the Jacobian are strictly negative.
     st = [is_stable(xx, b, a1, a2, l) for xx, l in zip(x, L)]
     # Plot the stability map indicating stable and unstable solutions with blue and red markers respectively:
-#    [plot_stability(b, c1, c2, l, s) for s, l in zip(st, L)]
+    for s, l in zip(st, L):
+        plot_stability(b, c1, c2, l, s)
 
     # Examine transient bechavior.
     # Slove the ODEs directly for specific parameters and plot the results:
