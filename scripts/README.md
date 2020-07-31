@@ -15,7 +15,7 @@ It is recommended that the work is done using Python virtual environment:
 
 `$ cd ./scripts/`  
 `$ python3 -m venv venv`  
-`$ source ./venv/bin/activate` 
+`$ source ./venv/bin/activate`  
 `(venv) $ pip install -r requirements.txt` 
 
 Then, the script can be launched the ordinary way:
@@ -24,5 +24,5 @@ Then, the script can be launched the ordinary way:
 
 To install and use the notebook:
  
-`(venv) $ pip install jupyter` 
+`(venv) $ pip install jupyter`  
 `(venv) $ jupyter notebook read_log.ipynb` 
