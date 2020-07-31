@@ -13,17 +13,16 @@ For convenience, the scripts are accompanied by the corresponding ipython notebo
 
 It is recommended that the work is done using Python virtual environment:
 
-> $ cd ./scripts/ 
-> $ python3 -m venv venv
-> $ source ./venv/bin/activate
->  (venv) $ pip install -r requirements.txt
+`$ cd ./scripts/`  
+`$ python3 -m venv venv`  
+`$ source ./venv/bin/activate` 
+`(venv) $ pip install -r requirements.txt` 
 
-Then, launch the script the ordinary way:
+Then, the script can be launched the ordinary way:
 
-> (venv) $ python read_log.py
+`(venv) $ python read_log.py`  
 
-To use the notebook:
+To install and use the notebook:
  
-> (venv) $ pip install jupyter
-
-> (venv) $ jupyter notebook read_log.ipynb
+`(venv) $ pip install jupyter` 
+`(venv) $ jupyter notebook read_log.ipynb` 
