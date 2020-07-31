@@ -61,7 +61,7 @@ depending on the underlying generator chosen, one of these should be accessible 
     `cmake --build build`  
     
 2. Two cmake-independent makefiles ([this](https://github.com/vsukhor/utils/blob/master/manual_make/Makefile) 
-    and [this](manual_make/Makefile)) are available for more targeted manulal builds of the utility library and the main application respectively. 
+    and [this](manual_make/Makefile)) are available for more targeted manual builds of the utility library and the main application respectively. 
     If the library is built separately, please make sure to do this before building the executable. 
     Their use is straightforward, and detailed instructions are given in the beginning of the makefiles.
 
@@ -71,9 +71,9 @@ Static linking is a default, so the executable can then be copied to another dir
 
 The simulation parameters are read from a short configuration file, structured 
 as in the example [config_sample.txt](tests/config_sample.txt). 
-More detailes on the config file formatting can be found in the 
+More details on the config file formatting can be found in the 
 Utils::Config [documentation](https://github.com/vsukhor/utils/blob/master/utils/config/conf_file_structure.md) 
-The file is expected to be named as 'config_X.txt', where X is the configuraion-specific suffix and the rest of the name is fixed.
+The file is expected to be named as 'config_X.txt', where X is the configuration-specific suffix and the rest of the name is fixed.
 Then, using the above example, and the executable 'mitosim_CPU' simulation may be launched as
 
     ./mitosim_CPU   /working/directory/   sample   22   28
@@ -81,7 +81,7 @@ Then, using the above example, and the executable 'mitosim_CPU' simulation may b
 The first two arguments are the working directory where the config file is positioned and the config file suffix respectively.
 The last two arguments are the range limits of the run indexes used for choosing rng seeds. 
 
-### Analysing the results
+### Analyzing the results
 
 [scripts](scripts/) directory contains Python 3 code for basic visualization and analysis of simulation results.
 The scripts can be used independently of the main C++ code,  provided the output files are available (see the [instructions](scripts/README.md) inside). 
