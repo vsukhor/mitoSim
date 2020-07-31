@@ -80,3 +80,9 @@ Then, using the above example, and the executable 'mitosim_CPU' simulation may b
 
 The first two arguments are the working directory where the config file is positioned and the config file suffix respectively.
 The last two arguments are the range limits of the run indexes used for choosing rng seeds. 
+
+### Analysing the results
+
+[scripts](scripts/) directory contains Python 3 code for basic visualization and analysis of simulation results.
+The scripts can be used independently of the main C++ code,  
+provided the output files are available (see the [instructions](scripts/README.md) inside). 
