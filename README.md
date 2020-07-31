@@ -84,5 +84,4 @@ The last two arguments are the range limits of the run indexes used for choosing
 ### Analysing the results
 
 [scripts](scripts/) directory contains Python 3 code for basic visualization and analysis of simulation results.
-The scripts can be used independently of the main C++ code,  
-provided the output files are available (see the [instructions](scripts/README.md) inside). 
+The scripts can be used independently of the main C++ code,  provided the output files are available (see the [instructions](scripts/README.md) inside). 
