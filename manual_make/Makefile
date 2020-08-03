@@ -53,7 +53,7 @@ endif
 TARGET := $(TARGET_DIR)$(TARGET)
 all : $(TARGET)
 
-CC := gcc
+CC := g++
 CFLAGS = -c -Wall -O3 -msse4 -march=native $(INCDIR) $(CPP_VARS) -std=c++17
 LFLAGS = -Wall -L$(UTILS_DIR)lib -lpthread -lstdc++ -lutils
 
