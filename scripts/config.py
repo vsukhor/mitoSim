@@ -1,7 +1,6 @@
 
 
 class Config:
-
     """ Encapsulates configuration parameters.
     """
 
@@ -24,7 +23,6 @@ class Config:
         self.use_1L_fusion = None
         self.fusion_rate_1L = None
 
-    # ------------------------------------------------------------------------------------------------------------------
     def readin(self, f):
 
         """ Read the configuration data from the log file 'f'
@@ -52,8 +50,7 @@ class Config:
         self.use_1L_fusion = bool(f.readline().split()[2])
         self.fusion_rate_1L = float(f.readline().split()[2])
 
-    # ------------------------------------------------------------------------------------------------------------------
-    def  __eq__(self, c):
+    def __eq__(self, c):
 
         """ Equality operator.
         """
@@ -77,7 +74,6 @@ class Config:
 
         return True
 
-    # ------------------------------------------------------------------------------------------------------------------
     summary_fields = [
         'time_total',
         'logfreq',
@@ -95,7 +91,6 @@ class Config:
         'fusion_rate_1L',
     ]
 
-    # ------------------------------------------------------------------------------------------------------------------
     def to_summary(self):
 
         return \
@@ -113,4 +108,3 @@ class Config:
             self.fusion_rate_12, \
             self.use_1L_fusion, \
             self.fusion_rate_1L
-

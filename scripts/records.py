@@ -1,48 +1,75 @@
+"""Container class for time-dependent variables recorded in the log file.
+"""
+
 import numpy as np
 
 
 class Records:
-
     """ Container for time-dependent variables recorded in the log file.
     """
 
-    runs_read_in = []                   # run indexes
+    #: Run indexes.
+    runs_read_in = []
+
     time_unit = None
     time_label = None
 
-    # ------------------------------------------------------------------------------------------------------------------
     def __init__(self):
 
-        self.runs = None            # run indexes; if len(self.runs) > 1, all the fields except 'runs',
-                                    # 'seed', 'lattice_dims' and 'inds' are average values over the 'runs'.
-        self.seed = None            # rng seeds used to produce the runs
+        #: Run indexes; if len(self.runs) > 1,
+        #: all the fields except 'runs',
+        self.runs = None
 
-        self.inds = []              # MC iteration indexes
-        self.time = []              # system time
-        self.t = []                 # rescaled time
-        self.tau = []               # time interval from preceding reaction event
+        # 'seed', 'lattice_dims' and 'inds' are average values over the 'runs'.
+        #: Rng seeds used to produce the runs.
+        self.seed = None
+
+        #: MC iteration indexes.
+        self.inds = []
+        #: System time.
+        self.time = []
+
+        #: Rescaled time.
+        self.t = []
+
+        #: Time interval from preceding reaction event.
+        self.tau = []
+
+        #: Reaction type.
         self.rt = {'code': [],
-                   'str' : []}      # reaction type
-        self.n = [{'val' : [], 'fit' : None, 'pars': None},
-                  {'val' : [], 'fit' : None, 'pars': None},
-                  {'val' : [], 'fit' : None, 'pars': None}]       # node numbers
-        self.m = {'11' : [],
-                  '22' : [],
-                  '33' : [] ,
-                  '13' : []}        # segment numbers, by type
-        self.mtm = []               # total graph mass (in edges)
-        self.mtn = []               # number of segments, total
-        self.cln = []               # number of clusters
-        # number of reaction events executed and the curent propensity, for each reaction type:
-        self.score = {'fission'  : {'num' : [], 'val' : []},
-                      'fusion11' : {'num' : [], 'val' : []},
-                      'fusion12' : {'num' : [], 'val' : []},
-                      'fusion1L' : {'num' : [], 'val' : []}}
+                   'str':  []}
 
-    # ------------------------------------------------------------------------------------------------------------------
+        #: Number of nodes.
+        self.n = [{'val': [], 'fit': None, 'pars': None},
+                  {'val': [], 'fit': None, 'pars': None},
+                  {'val': [], 'fit': None, 'pars': None}]
+
+        #: Segment numbers, by type.
+        self.m = {'11': [],
+                  '22': [],
+                  '33': [],
+                  '13': []}
+
+        #: Total graph mass (in edges).
+        self.mtm = []
+
+        #: Number of segments, total.
+        self.mtn = []
+
+        #: Number of clusters.
+        self.cln = []
+
+        #: Number of reaction events executed and the curent propensity,
+        #: for each reaction type:
+        self.score = {'fission':  {'num': [], 'val': []},
+                      'fusion11': {'num': [], 'val': []},
+                      'fusion12': {'num': [], 'val': []},
+                      'fusion1L': {'num': [], 'val': []}}
+
     def add(self, rec):
+        """ Extract information from a string record 'rec'.
 
-        """ Extract information from a string record 'rec' adding it to the already available data.
+        Add the result to the already available data.
         """
 
         q = rec.split()
@@ -57,8 +84,8 @@ class Records:
         self.mtm.append(int(q[21]))
         self.mtn.append(int(q[23]))
         self.cln.append(int(q[25]))
-        self.score['fission' ]['num'].append(int(q[28]))
-        self.score['fission' ]['val'].append(float(q[29]))
+        self.score['fission']['num'].append(int(q[28]))
+        self.score['fission']['val'].append(float(q[29]))
         self.score['fusion11']['num'].append(int(q[31]))
         self.score['fusion11']['val'].append(float(q[32]))
         self.score['fusion12']['num'].append(int(q[34]))
@@ -66,12 +93,11 @@ class Records:
         self.score['fusion1L']['num'].append(int(q[37]))
         self.score['fusion1L']['val'].append(float(q[38]))
 
-    # ------------------------------------------------------------------------------------------------------------------
     @staticmethod
     def scale_time_to(recs, unit):
+        """ Scale time to the desired unit 'unit'.
 
-        """ Scale time to the desired unitt 'unit'.
-            Acceptable units: 'd', 'hours', 'min', 's', 'secs'
+        Acceptable units: 'd', 'hours', 'min', 's', 'secs'
         """
 
         for r in recs:
@@ -81,7 +107,7 @@ class Records:
                 r.t = [t / 3600 for t in r.time]
             elif unit == 'min':
                 r.t = [t / 60 for t in r.time]
-            elif unit == 's' or s == 'sec':
+            elif unit == 's' or unit == 'sec':
                 r.t = [t for t in r.time]
             else:
                 assert (False, 'Wrong time unit')
@@ -89,10 +115,8 @@ class Records:
         Records.time_unit = unit
         Records.time_label = 'Time (' + unit + ')'
 
-    # ------------------------------------------------------------------------------------------------------------------
     @staticmethod
     def plot_nodes(recs, pat, with_fit=False, figsize=None):
-
         """ Plot time evolution of the number of nodes.
         """
 
@@ -121,9 +145,8 @@ class Records:
 
         plt.show()
 
-    # ------------------------------------------------------------------------------------------------------------------
     @staticmethod
-    def plot_segments_by_type(recs, pat, with_fit=False, figsize=None):
+    def plot_segments_by_type(recs, pat, figsize=None):
 
         """ Plot time evolution of the number of segments.
         """
@@ -150,4 +173,3 @@ class Records:
         fig.suptitle('number of segments: runs ' + pat)
 
         plt.show()
-
