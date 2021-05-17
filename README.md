@@ -84,4 +84,4 @@ The last two arguments are the range limits of the run indexes used for choosing
 ### Analyzing the results
 
 Python 3 code for basic visualization and analysis of simulation results can be found in [mitosim-postProcessor](https://github.com/vsukhor/mitosim-postProcessor).
-The scripts can be used independently of the main C++ code,  provided the output files are available (see the [instructions](https://github.com/vsukhor/mitosim-postProcessor/README.md) inside).
+The scripts can be used independently of the main C++ code,  provided the output files are available (see the [instructions](https://github.com/vsukhor/mitoSim-postProcessor/blob/main/README.md) inside).
