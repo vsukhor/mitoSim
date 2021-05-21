@@ -25,7 +25,8 @@
 
 /**
 * @file segment.h
-* @brief Contains Segment class template and its specialization for graphs of max degree 3.
+* @brief Contains Segment class template and its specialization for graphs.
+* @details Only graphs of max degree 3 are considered.
 * @author Valerii Sukhorukov
 */
 
@@ -77,8 +78,8 @@ public:
     std::vector<EdgeT>    	    	    g;    	    ///< the edges.
     szt    	    	    	    	    cl {};	    ///< cluster index.
     std::array<szt,maxDeg>	    	    nn {{}};    ///< number of neighbours.
-    std::array<std::vector<szt>,maxDeg>    neig;	    ///< neighbours.
-    std::array<std::vector<szt>,maxDeg>    neen;	    ///< neighbour ends.
+    std::array<std::vector<szt>,maxDeg> neig;	    ///< neighbours.
+    std::array<std::vector<szt>,maxDeg> neen;	    ///< neighbour ends.
 
     /**
      * @brief Constructor
@@ -105,26 +106,37 @@ public:
     void reflect_g();
 
     /**
-     * @brief Change disconnected network component-related indexes of the segment edges,
-    	      keeping the segment index unoltered.
+     * @brief Change cluster index keeping the segment index unoltered.
+     * @details Change disconnected network component-related indexes of the
+                segment edges, keeping the segment index unoltered.
      * @param newcl New disconnected component index.
-     * @param initind Starting edge index in the current disconnected network component.
+     * @param initind Starting edge index in the current disconnected component.
      */
-    szt set_gCl(const szt newcl, const szt initind);
+    szt set_gCl(
+        const szt newcl,
+        const szt initind
+    );
 
     /**
-     * @brief Change disconnected network component-related indexes of the segment edges, and the the segment itself.
+     * @brief Changecluster index.
+     * @details Change disconnected network component-related indexes of the
+     *          segment edges, and the the segment itself.
      * @param newcl New disconnected component index.
-     * @param initind Starting edge index in the current disconnected network component.
+     * @param initind Starting edge index in the current disconnected component.
      * @return The last edge index in the current disconnected network component.
      */
-    szt setCl(const szt newcl, const szt initind);
+    szt setCl(
+        const szt newcl,
+        const szt initind
+    );
 
     /**
-     * @brief Convert the segment end index of the boundary edge to internal position in the segment.
+     * @brief Convert segment index to internal position.
+     * @details Convert the segment end index of the boundary edge to internal
+     *          position in the segment.
      * @param e Segment end index.
      * @return Internal position.
-     * @return The last edge index in the current disconnected network component.
+     * @return The last edge index in the current disconnected component.
      */
     constexpr szt end2a(const szt e) const;
 
@@ -179,11 +191,20 @@ public:
 
 
     /// Print segment parameters.
-    void print( const szt w, const std::string& tag, const szt at=huge<szt> ) const;
+    void print(
+        const szt w,
+        const std::string& tag,
+        const szt at=huge<szt>
+    ) const;
 
 
     /// Print segment parameters.
-    void print( std::ostream& os, const szt w, const std::string& tag, const szt at=huge<szt> ) const;
+    void print(
+        std::ostream& os,
+        const szt w,
+        const std::string& tag,
+        const szt at=huge<szt>
+    ) const;
 
 
     /**
@@ -196,7 +217,8 @@ private:
 
     /**
      * @brief Insert an edge imediately after g[a] making it g[a+1].
-     * @param a Position of the edge preceding the newly inserted one relative to the segment end 1.
+     * @param a Position of the edge preceding the newly inserted
+     *        one relative to the segment end 1.
      * @param p Edge to be inserted.
      * @return The pointer to the newly inserted edge.
      */
@@ -207,7 +229,7 @@ private:
     void init_ends();
 };
 
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 Segment<3>::
 Segment( Msgr& msgr )
@@ -215,6 +237,7 @@ Segment( Msgr& msgr )
 {
     init_ends();
 }
+
 
 Segment<3>::
 Segment(
@@ -235,6 +258,7 @@ Segment(
     mtmass += segmass;
 }
 
+
 inline
 void Segment<3>::
 init_ends()
@@ -246,13 +270,19 @@ init_ends()
     neen[2].resize(maxDeg);
 }
 
-inline // inserts a particle imediately after g[a] making it g[a+1]
+
+// Inserts a particle imediately after g[a] making it g[a+1].
+inline
 typename Segment<3>::EdgeT* Segment<3>::
-increment_length( const long a, Segment<3>::EdgeT p )
+increment_length(
+    const long a,
+    Segment<3>::EdgeT p
+)
 {
     g.insert(g.begin()+(a+1), std::move(p));
     return &g[a+1];
 }
+
 
 inline
 void Segment<3>::
@@ -263,9 +293,13 @@ reflect_g()
 	    o.reflect();
 }
 
+
 inline
 szt Segment<3>::
-set_gCl( const szt newcl, const szt initind )
+set_gCl(
+    const szt newcl,
+    const szt initind
+)
 {
     for (szt i=0; i<g.size(); i++) {
 	    g[i].cl = newcl;
@@ -275,13 +309,18 @@ set_gCl( const szt newcl, const szt initind )
     return initind + (szt)g.size();
 }
 
+
 inline
 szt Segment<3>::
-setCl( const szt newcl, const szt initind )
+setCl(
+    const szt newcl,
+    const szt initind
+)
 {
     cl = newcl;
     return set_gCl(newcl, initind);
 }
+
 
 constexpr
 szt Segment<3>::
@@ -290,14 +329,16 @@ end2a( const szt e ) const
     return (e == 1) ? 0 : (szt)g.size()-1;
 }
 
+
 constexpr
 szt Segment<3>::
-has_one_free_end() const 	    // return the end index if true
+has_one_free_end() const    // return the end index if true
 {
-    if (    !nn[1] &&  nn[2])      return 1;
-    else if (nn[1] && !nn[2])    return 2;
-    else	    	    	    return 0;
+    if (    !nn[1] &&  nn[2]) return 1;
+    else if (nn[1] && !nn[2]) return 2;
+    else	    	    	  return 0;
 }
+
 
 inline
 szt Segment<3>::
@@ -310,11 +351,14 @@ single_neig_index( const szt e ) const
     return huge<szt>;
 }
 
+
 inline
 std::vector<szt> Segment<3>::
 double_neig_indexes( const szt e ) const
 {
-    XASSERT(nn[e] == 2, "Error in Mito::double_neig_indexes: nn[e] != 2 in cluster "+STR(cl)+"\n");
+    XASSERT(nn[e] == 2,
+            "Error in Mito::double_neig_indexes: nn[e] != 2 in cluster "+
+            STR(cl)+"\n");
 
     std::vector<szt> neigInds(nn[e]);
     szt j {};
@@ -325,6 +369,7 @@ double_neig_indexes( const szt e ) const
     return neigInds;
 }
 
+
 constexpr
 bool Segment<3>::
 is_cycle() const
@@ -334,17 +379,20 @@ is_cycle() const
 	       neig[1][single_neig_index(1)] == neig[2][single_neig_index(2)];
 }
 
+
 szt Segment<3>::
 num_nodes( const szt deg ) const	    	    // deg = 1, 2, 3
 {	    	    	    	    	    	    	    
-    if (deg == 1) {	    	    	    	    	    	    	    // count nodes of degree 1
-	    if (      nn[1] &&  nn[2])     return 0;
-	    else if (!nn[1] && !nn[2])     return 2;
-	    else    	    	         return 1;
+    if (deg == 1) {	    	    	// count nodes of degree 1
+	    if (      nn[1] &&  nn[2]) return 0;
+	    else if (!nn[1] && !nn[2]) return 2;
+	    else    	    	       return 1;
     }
-    else if (deg == 2)
-	    return nn[1] && nn[2] && is_cycle() ? g.size() : g.size() - 1;    // count nodes of degree 2
-    else if (deg == 3) {	    	    	    	    	    	    // count nodes of degree 3
+    else if (deg == 2)      // count nodes of degree 2
+	    return nn[1] && nn[2] && is_cycle()
+               ? g.size()
+               : g.size() - 1;
+    else if (deg == 3) {	 // count nodes of degree 3
 	    if (     nn[1] == 2 && nn[2] == 2) return 2;
 	    else if (nn[1] == 2 || nn[2] == 2) return 1;
 	    else if (nn[1] != 2 && nn[2] != 2) return 0;
@@ -352,6 +400,7 @@ num_nodes( const szt deg ) const	    	    // deg = 1, 2, 3
     else msgr.exit("Error in Mito::num_nodes(). Not implemented deg", deg);
     return huge<szt>;
 }
+
 
 inline
 ulong Segment<3>::
@@ -373,6 +422,7 @@ set_bulk_fin( const szt a )
     return g[a].fin[1];
 }
 
+
 void Segment<3>::
 print( const szt w,
        const std::string& tag, 
@@ -381,6 +431,7 @@ print( const szt w,
     if (msgr.so) print(*msgr.so, w, tag, at);
     if (msgr.sl) print(*msgr.sl, w, tag, at);
 }
+
 
 void Segment<3>::
 print( std::ostream& os, 
@@ -409,6 +460,7 @@ print( std::ostream& os,
 #endif
     os << std::endl;
 }
+
 
 void Segment<3>::
 write( std::ofstream& ofs ) const

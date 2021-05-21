@@ -47,7 +47,8 @@ template<typename> class Fission;
 
 /**
  * @brief The AbilityForFission class template.
- * @details Adds node type-specific fission capability and updates the network for it.
+ * @details Adds node type-specific fission capability
+ *          and updates the network for it.
  * @tparam Mt Type of the Edge forming the network.
  */
 template<typename Mt>
@@ -75,40 +76,56 @@ public:
      * @brief Constructor.
      * @param msgr Output message processor.
      */
-    explicit AbilityForFission(Msgr& msgr);
+    explicit AbilityForFission(
+        Msgr& msgr
+    );
 
     /**
      * @brief Perform fission of a segment.
      * @param w Segment index.
      * @param a Division positon inside the segment.
      */
-    std::array<szt,2> fiss( const szt w, const szt a);
+    std::array<szt,2> fiss(
+        const szt w,
+        const szt a
+    );
 
     /**
      * @brief Divide the segment at a node of degree 2.
      * @param w Global segment index.
      * @param a The node position inside the segment.
      */
-    std::array<szt,2> fiss2(const szt w, const szt a);
+    std::array<szt,2> fiss2(
+        const szt w,
+        const szt a
+    );
 
     /**
      * @brief Divide the segment at a node of degree 3.
      * @param w Global segment index.
      * @param a The node position inside the segment.
      */
-    std::array<szt,2> fiss3(const szt w, const szt a);
+    std::array<szt,2> fiss3(
+        const szt w,
+        const szt a
+    );
 
 private:
 
-    std::vector<szt>  vis;    ///< Auxiliary, indicating a visited or not status of segments during the graph search.
+    /// Auxiliary, indicating visited status of segments during the graph search.
+    std::vector<szt>  vis;
 
     /**
-     * @brief Update network component to account for changes resulting from its division.
-     * @return A flag indicating if the division produces a pair of disconnected components.
+     * @brief Update network component for changes resulting from its division.
+     * @return A flag indicating if the division produces a pair
+     *         of disconnected components.
      * @param w Segment index.
      * @param e Segment end.
      */
-    bool update_cl_fiss(const szt w, const szt e);
+    bool update_cl_fiss(
+        const szt w,
+        const szt e
+    ) noexcept;
 
     /**
      * @brief Depth-first search of the network graph.
@@ -121,7 +138,8 @@ private:
     bool dfs(const szt w1, const szt e1, const szt w2, const szt e2);
 };
 
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename Mt>
 AbilityForFission<Mt>::
@@ -129,15 +147,19 @@ AbilityForFission(
 	    Msgr& msgr
     )
     : CoreTransformer<Mt> {msgr}
-
 {}
+
 
 template<typename Mt>
 bool AbilityForFission<Mt>::
-update_cl_fiss( const szt w, const szt e )
+update_cl_fiss(
+    const szt w,
+    const szt e
+) noexcept
 {
     vis.resize(mtnum+2);
-    std::fill(vis.begin()+1, vis.begin()+mtnum+1, 0);	    // nothing is visited in the beginning of the search
+    // Nothing is visited in the beginning of the search.
+    std::fill(vis.begin()+1, vis.begin()+mtnum+1, 0);
 
     const szt oe {(e == 1) ? szt(2) : szt(1)};
 
@@ -152,10 +174,12 @@ update_cl_fiss( const szt w, const szt e )
     return is_cycle;
 }
 
+
 template<typename Mt>
 bool AbilityForFission<Mt>::
 dfs( const szt w1, const szt e1,
-     const szt w2, const szt e2 )
+     const szt w2, const szt e2
+)
 {
     for (szt i=1; i<=mt[w1].nn[e1]; i++) {
 	    const auto cn = mt[w1].neig[e1][i];
@@ -176,10 +200,13 @@ dfs( const szt w1, const szt e1,
     return false;
 }
 
-// a is counted from 1 and is the last element to remain in the old segment
+
+// 'a' is counted from 1 and is the last element to remain in the old segment.
 template<typename Mt>
 std::array<szt,2> AbilityForFission<Mt>::
-fiss( const szt w, const szt a )
+fiss(
+    const szt w,
+        const szt a )
 {
     // node 3 -> nodes 2+1 and node 2 -> nodes 1+1 in pure loops
     if (        a && a < mt[w].g.size())
@@ -195,16 +222,20 @@ fiss( const szt w, const szt a )
     return {huge<szt>, huge<szt>};
 }
 
+
 // divides at a node of degree 2
 // 'w' is a global segment index
 // 'a' is the node position inside the segment 'w'
 // 'a' is counted from 1 and is the last element to remain in the original segment
 template<typename Mt>
 std::array<szt,2> AbilityForFission<Mt>::
-fiss2( const szt w, const szt a )
+fiss2(
+    const szt w,
+    const szt a
+)
 {
     if constexpr (verbose)
-	    mt[w].print(w, "fission2:  ", a);	    // cuts between g[a-1] and g[a]
+	    mt[w].print(w, "fission2:  ", a);	 // cuts between g[a-1] and g[a]
 
     const auto clini = mt[w].cl;
 
@@ -218,8 +249,11 @@ fiss2( const szt w, const szt a )
     mt.emplace_back(msgr);
     ++mtnum;
 
-    std::move(mt[w].g.begin()+a, mt[w].g.end(), std::back_inserter(mt[mtnum].g));
-    mt[w].g.erase(mt[w].g.begin()+a, mt[w].g.end());
+    std::move(mt[w].g.begin()+a,
+              mt[w].g.end(),
+              std::back_inserter(mt[mtnum].g));
+    mt[w].g.erase(mt[w].g.begin()+a,
+                  mt[w].g.end());
 
     mt[mtnum].nn[1] = 0;
 
@@ -230,8 +264,10 @@ fiss2( const szt w, const szt a )
 	    	     : clnum - 1;
 
     if (!inCycle) {
-	    update_gIndcl(mt[w].cl);	    // renumber Edge::indcl of the remaining part of the original cluster
-	    update_gIndcl(clnum-1);    	    // renumber Edge::indcl of the newly formed cluster
+        // Renumber Edge::indcl of the remaining part of the original cluster.
+	    update_gIndcl(mt[w].cl);
+        // Renumber Edge::indcl of the newly formed cluster.
+	    update_gIndcl(clnum-1);
     }
 
     mt[w].nn[2] = 0;
@@ -240,7 +276,8 @@ fiss2( const szt w, const szt a )
     if (1 == mt[w].nn[1] &&
 	    1 == mt[mtnum].nn[2] && 
 	    w == mt[mtnum].neig[2][mt[mtnum].single_neig_index(2)] && 
-	    mtnum == mt[w].neig[1][mt[w].single_neig_index(1)]) {	    // before fission 'w' was looped into itself
+	    mtnum == mt[w].neig[1][mt[w].single_neig_index(1)]) {
+        // Before fission 'w' was looped into itself.
 	    isSelfLooped = true;
 	    if constexpr (verbose) {
     	    mt[w].print(w, "       transiently producing ", -1);
@@ -255,7 +292,8 @@ fiss2( const szt w, const szt a )
     const auto w1 = glm[ind1];
     const auto w2 = glm[ind2];
 
-    XASSERT(mt[w1].cl == clini || mt[w2].cl == clini, "Error in fiss3: mt[w1].cl != clini && mt[w2].cl != clini\n");
+    XASSERT(mt[w1].cl == clini || mt[w2].cl == clini,
+            "Error in fiss3: mt[w1].cl != clini && mt[w2].cl != clini\n");
     if constexpr (verbose) {
 	    mt[w1].print(w1, "       producing ");
 	    if (isSelfLooped)
@@ -273,7 +311,10 @@ fiss2( const szt w, const szt a )
 // 'at' is counted from 1 and is the last element to remain in the original segment
 template<typename Mt>
 std::array<szt,2> AbilityForFission<Mt>::
-fiss3( const szt w, const szt a )
+fiss3(
+    const szt w,
+    const szt a
+)
 {
     if constexpr (verbose)
 	    mt[w].print(w, "fission3:  ", a);
@@ -284,7 +325,7 @@ fiss3( const szt w, const szt a )
     szt n[2], e[2];
     auto ind1 = huge<szt>;
     auto ind2 = huge<szt>;
-    if (!a) {    	    	    	    	    	    	    	    // at end 1
+    if (!a) {  // at end 1
 	    ind1 = mt[w].g.front().ind;
 	    ind2 = mt[mt[w].neig[1][1]].g[mt[mt[w].neig[1][1]].end2a(mt[w].neen[1][1])].ind;
 	    if (mt[w].nn[1] == 2) {
@@ -298,10 +339,12 @@ fiss3( const szt w, const szt a )
 	    else if (mt[w].nn[1] == 1)
     	    n[0] = mt[w].neig[1][1];
 
-	    // if not a cycle, this increments clnum and forms a new cluster from w's end 1 neigs and beyond (excluding w itself)
+	    // If not a cycle, this increments clnum and forms a new cluster
+        // from w's end 1 neigs and beyond (excluding w itself).
 	    inCycle = update_cl_fiss(w, 1);
 	    if(!inCycle)
-    	    update_gIndcl(clini);    	    // renumber Edge::indcl of the remaining part of the original cluster
+            // Renumber Edge::indcl of the remaining part of the original cluster.
+    	    update_gIndcl(clini);
 
 	    update_neigs(w, 1, 1, mt[w].nn[1], -1, -1, true);
 
@@ -363,18 +406,20 @@ fiss3( const szt w, const szt a )
 	    else if(mt[w].nn[2] == 1)
     	    n[0] = mt[w].neig[2][1];
 
-	    // if not a cycle, this increments clnum and forms a new cluster from w's end 2 neigs and beyond (excluding w itself)
+	    // If not a cycle, this increments clnum and forms a new cluster
+        // from w's end 2 neigs and beyond (excluding w itself).
 	    inCycle = update_cl_fiss(w, 2);
 	    if(!inCycle)
-    	    update_gIndcl(clini);    	    // renumber Edge::indcl of the remaining part of the original cluster
+            // Renumber Edge::indcl of the remaining part of the original cluster.
+    	    update_gIndcl(clini);
 
 	    update_neigs(w, 2, 1, mt[w].nn[2], -1, -1, true);
 
 	    if (f && n[0] != n[1]) {
     	    if (mt[n[0]].nn[e[0]] == 1 && 
 	    	    mt[n[1]].nn[e[1]] == 1 ) {
-	    	    const auto indneig0 = mt[n[0]].single_neig_index( e[0]);
-	    	    const auto indneig1 = mt[n[1]].single_neig_index( e[1]);
+	    	    const auto indneig0 = mt[n[0]].single_neig_index(e[0]);
+	    	    const auto indneig1 = mt[n[1]].single_neig_index(e[1]);
 	    	    if (mt[n[0]].neig[e[0]][indneig0] == n[1] && 
 	    	        mt[n[0]].neen[e[0]][indneig0] == e[1] && 
 	    	        mt[n[1]].neig[e[1]][indneig1] == n[0] && 
@@ -413,7 +458,9 @@ fiss3( const szt w, const szt a )
     basic_update();
     const auto w1 = glm[ind1];
     const auto w2 = glm[ind2];
-    XASSERT(mt[w1].cl == clini || mt[w2].cl == clini, "Error in fiss3: mt[w1].cl != clini && mt[w2].cl != clini\n");
+    XASSERT(mt[w1].cl == clini ||
+            mt[w2].cl == clini,
+            "Error in fiss3: mt[w1].cl != clini && mt[w2].cl != clini\n");
     if constexpr (verbose) {
 	    mt[w1].print(w1, "       producing ");
 	    if (w1 != w2) mt[w2].print(w2, "             and ");

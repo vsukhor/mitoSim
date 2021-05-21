@@ -60,11 +60,12 @@ private:
     Ntw& host;    ///< ref: the host network for this reaction.
 
     // Convenience references to some of the host members.
-    RandFactory&    	    	    	    rnd;
-    const std::vector<szt>&    	    	    mt11;
-    const std::vector<std::array<szt,2>>&    mt13;
+    RandFactory& rnd;
+    const std::vector<szt>&    	    	  mt11;
+    const std::vector<std::array<szt,2>>& mt13;
 
-    FusionCandidatesXX    cnd; ///< node pairs suitable for this type of fusion.
+    /// Node pairs suitable for this type of fusion.
+    FusionCandidatesXX cnd;
 
     /// Populate the vector of node pairs suitable for this type of fusion.
     void populate() noexcept;
@@ -72,7 +73,7 @@ private:
     /// Execute the raction event.
     auto fire() noexcept;
 };
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename Ntw>
 NtwFusion11<Ntw>::
@@ -99,26 +100,26 @@ populate() noexcept
 
     cnd.clear();
     const auto mtn11 = mt11.size();
-    for (szt i1=0; i1<mtn11; i1++) {    	    	    // 11 ends to ...
+    for (szt i1=0; i1<mtn11; i1++) {    	   // 11 ends to ...
 	    const auto w1 = mt11[i1];
-	    if (host.mt[w1].g.size() >= minLL)	    	    // ... opposite end in the same segment
+	    if (host.mt[w1].g.size() >= minLL)	   // ... opposite end in the same segment
     	    cnd.add({w1,1}, {w1,2});
 
 	    for (const auto e1 : {szt(1),szt(2)}) {
-    	    for (szt i2=i1+1; i2<mtn11; i2++)    	    // ... other 11 segments (both ends to both ens)
+    	    for (szt i2=i1+1; i2<mtn11; i2++)  // ... other 11 segs. (both ends to both ens)
 	    	    for (const auto e2 : {szt(1),szt(2)})
     	    	    cnd.add({w1,e1}, {mt11[i2],e2});
 
-    	    for (const auto& we2 : mt13)	    	    // ... free ends of 13
+    	    for (const auto& we2 : mt13)	   // ... free ends of 13
 	    	    cnd.add({w1, e1}, we2);
 
-    	    for (const auto& we2 : mt13)	    	    // ... free ends of 14
+    	    for (const auto& we2 : mt13)	   // ... free ends of 14
 	    	    cnd.add({w1, e1}, we2);
 	    }
     }
     const auto mtn13 = mt13.size();
-    for (szt i1=0; i1<mtn13; i1++) 	    	    	    // free ends of 13 to ...
-	    for (szt i2=i1+1; i2<mtn13; i2++)	    	    // ... free ends of other 13
+    for (szt i1=0; i1<mtn13; i1++) 	    	   // free ends of 13 to ...
+	    for (szt i2=i1+1; i2<mtn13; i2++)	   // ... free ends of other 13
     	    cnd.add(mt13[i1], mt13[i2]);
 }
 
@@ -128,7 +129,8 @@ fire() noexcept
 {
     const auto r = rnd.uniform0(cnd.size());
 
-    return host.fuse11(cnd.u[r][0], cnd.u[r][1], cnd.v[r][0], cnd.v[r][1]);
+    return host.fuse11(cnd.u[r][0], cnd.u[r][1],
+                       cnd.v[r][0], cnd.v[r][1]);
 }
 
 }    // namespace MitoSim

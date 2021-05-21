@@ -25,7 +25,7 @@
 
 /**
 * @file structure.h
-* @brief Contains low-level network transformations as implemented in class CoreTransformer.
+* @brief Contains low-level network transformations implemented in class CoreTransformer.
 * @author Valerii Sukhorukov
 */
 
@@ -39,10 +39,10 @@ namespace MitoSim {
 
 /**
  * @brief The Structure class.
- * @details Encapsulates the major structure-related proterties, such a  collection of the Segments,
- * but is unaware of any dynamics.
+ * @details Encapsulates the major structure-related proterties, such a
+ * collection of the Segments, but is unaware of any dynamics.
  * Forms base for clases adding the network reconfiguration dynamics.
-  * @tparam Mt Type of the Edge forming the network.
+ * @tparam Mt Type of the Edge forming the network.
 */
 template<typename Mt>
 class Structure {
@@ -51,37 +51,59 @@ public:
 
     using Reticulum = std::vector<Mt>;
 
-    vec3<szt>    	    	    clagl;	    ///< Edge adjacency_lists per cluster.
+    /// Edge adjacency_lists per cluster.
+    vec3<szt> clagl;
 
-    std::vector<szt>    	    glm;	    ///< Mapping of the edge indexes to segment indexes.
-    std::vector<szt>    	    gla;	    ///< Mapping of the edge indexes to element index inside segments.
+    /// Mapping of the edge indexes to segment indexes.
+    std::vector<szt>  glm;
+    /// Mapping of the edge indexes to element index inside segments.
+    std::vector<szt> gla;
 
-    Reticulum    	    	    mt;    	    ///< The segments.
+    /// The segments.
+    Reticulum mt;
 
-    std::array<szt,Mt::maxDeg>    nn {{}};    ///< Total number of nodes by node degree.
+    /// Total number of nodes by node degree.
+    std::array<szt,Mt::maxDeg>  nn {{}};
 
-    szt    	    	    	    mtnum {};    ///< Actual number of segments.
-    szt    	    	    	    clnum {};    ///< Actual number of clusters.
-    szt    	    	    	    mtmass {};    ///< Current number of edges.
+    /// Actual number of segments.
+    szt mtnum {};
+    ///< Actual number of clusters.
+    szt clnum {};
+    ///<Current number of edges.
+    szt mtmass {};
 
-    vec2<szt>    	    	    clmt;	    ///< Segment indices segregated into clusters: clmt - total.
-    std::vector<szt>    	    cls;	    ///< Cluster sizes measured in edges.
+    /// Segment indices segregated into clusters: clmt - total.
+    vec2<szt>    	 clmt;
+    /// Cluster sizes measured in edges.
+    std::vector<szt> cls;
 
     // Segment indices of the corresponding end degrees.
-    std::vector<szt>	    	    mt11;    ///< Indexes of disconnected segments not looped onto itself.
-    std::vector<szt>	    	    mtc11;    ///< Indexes of disconnected segments not looped onto itself.
 
-    std::vector<szt>	    	    mt22;    ///< Indexes of disconnected looped segments.
-    std::vector<szt>	    	    mtc22;    ///< Indexes of disconnected looped segments.
+    /// Indexes of disconnected segments not looped onto itself.
+    std::vector<szt> mt11;
+    /// Indexes of disconnected segments not looped onto itself.
+    std::vector<szt> mtc11;
 
-    std::vector<szt>	    	    mt33;    ///< Indexes of segments between nodes of degree 3 and 3: all together.
-    vec2<szt>	    	    	    mtc33;    ///< Indexes of segments between nodes of degree 3 and 3: sorted into clusters.
-    
-    std::vector<std::array<szt,2>>    mt13;    ///< {index,end} Pairs for segments between nodes of degree 1 and 3: all together.
-    vec2<std::array<szt,2>>    	    mtc13;    ///< {index,end} Pairs for segments between nodes of degree 1 and 3: sorted into clusters.
+    /// Indexes of disconnected looped segments.
+    std::vector<szt> mt22;
+    /// Indexes of disconnected looped segments.
+    std::vector<szt> mtc22;
 
-    Msgr&	    msgr;	    	    	    ///< Output message processor.
-    static constexpr szt minLoopLength {2};    ///< Minimal length of a segment that can bend into a cycle.
+    /// Indexes of segments between nodes of degree 3 and 3: all together.
+    std::vector<szt> mt33;
+    /// Indexes of segments between nodes of degree 3 and 3: sorted into clusters.
+    vec2<szt>	     mtc33;
+
+    /// {index,end} Pairs for segments between nodes of degs. 1 and 3 together.
+    std::vector<std::array<szt,2>> mt13;
+    /// {index,end} Pairs for segments between nodes of degs. 1 and 3: sorted into clusters.
+    vec2<std::array<szt,2>>    	   mtc13;
+
+    /// Output message processor.
+    Msgr& msgr;
+
+    /// Minimal length of a segment that can bend into a cycle.
+    static constexpr szt minLoopLength {2};
 
     /**
     /// @brief Constructor.
@@ -137,7 +159,7 @@ private:
     vec2<bool> clvisited;    ///< Temporary auxiliary field.
 };
 
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename Mt>
 Structure<Mt>::
@@ -206,32 +228,41 @@ make_adjacency_list_edges( const szt c, vec2<szt>& a ) noexcept
 	    for (szt k=0; k<mt[j].g.size(); k++) {
     	    const auto ind = mt[j].g[k].indcl;
     	    if (k == 0) {
-	    	    for (szt e=1; e<=mt[j].nn[1]; e++) {	    // connection backwards: only other segments might be found
+                // Connection backwards: only other segments might be found.
+	    	    for (szt e=1; e<=mt[j].nn[1]; e++) {
     	    	    const auto w2 = mt[j].neig[1][e];
     	    	    const auto a2 = mt[w2].end2a(mt[j].neen[1][e]);
     	    	    a[ind].push_back(mt[w2].g[a2].indcl);
 	    	    }
-	    	    if (mt[j].g.size() == 1)    	    	    // connection forwards: to other segment
+	    	    if (mt[j].g.size() == 1)
+                    // Connection forwards: to other segment.
     	    	    for (szt e=1; e<=mt[j].nn[2]; e++) {
 	    	    	    const auto w2 = mt[j].neig[2][e];
 	    	    	    const auto a2 = mt[w2].end2a(mt[j].neen[2][e]);
 	    	    	    a[ind].push_back(mt[w2].g[a2].indcl);
     	    	    }
-	    	    else {	    	    	    	    	    // connection forwards: to the same segment
+	    	    else {
+                    // Connection forwards: to the same segment.
     	    	    a[ind].push_back(mt[j].g[k+1].indcl);
 	    	    }
     	    }
-    	    else if (k == mt[j].g.size()-1) {	    	    // but not  a1 == 0  =>  mt[m1].g.size() > 1
-	    	    a[ind].push_back(mt[j].g[k-1].indcl);	    // connection backwards: to the same segment
-	    	    for (szt e=1; e<=mt[j].nn[2]; e++) {	    // connection forwards: to other segment
+    	    else if (k == mt[j].g.size()-1) {
+            // but not  a1 == 0  =>  mt[m1].g.size() > 1
+                // Connection backwards: to the same segment.
+	    	    a[ind].push_back(mt[j].g[k-1].indcl);
+                // Connection forwards: to other segment.
+	    	    for (szt e=1; e<=mt[j].nn[2]; e++) {
     	    	    const auto w2 = mt[j].neig[2][e];
     	    	    const auto a2 = mt[w2].end2a(mt[j].neen[2][e]);
     	    	    a[ind].push_back(mt[w2].g[a2].indcl);
 	    	    }
     	    }
-    	    else {    	    	    	    	    	    // edge in the bulk: a1 != 1 && a1 != mt[m1].g.size()
-	    	    a[ind].push_back(mt[j].g[k-1].indcl);	    // connection backwards: to the same segment
-	    	    a[ind].push_back(mt[j].g[k+1].indcl);	    // connection forwards: to the same segment
+    	    else {
+            // edge in the bulk: a1 != 1 && a1 != mt[m1].g.size()
+                // Connection backwards: to the same segment.
+	    	    a[ind].push_back(mt[j].g[k-1].indcl);
+                 // Connection forwards: to the same segment.
+	    	    a[ind].push_back(mt[j].g[k+1].indcl);
     	    }
 	    }
 }
@@ -240,17 +271,18 @@ template<typename Mt>
 void Structure<Mt>::
 populate_cluster_vectors() noexcept
 {
-    mt11.clear();    mtc11.resize(clnum);	    std::fill(mtc11.begin(),  mtc11.end(),  huge<szt>);
-    mt22.clear();    mtc22.resize(clnum);	    std::fill(mtc22.begin(),  mtc22.end(),  huge<szt>);
-    mt33.clear();    mtc33.resize(clnum);	    for (auto& o : mtc33) o.clear();
-    mt13.clear();    mtc13.resize(clnum);	    for (auto& o : mtc13) o.clear();
+    mt11.clear();    mtc11.resize(clnum);	std::fill(mtc11.begin(),  mtc11.end(),  huge<szt>);
+    mt22.clear();    mtc22.resize(clnum);	std::fill(mtc22.begin(),  mtc22.end(),  huge<szt>);
+    mt33.clear();    mtc33.resize(clnum);	for (auto& o : mtc33) o.clear();
+    mt13.clear();    mtc13.resize(clnum);	for (auto& o : mtc13) o.clear();
 
     nn = {{zero<szt>}};
-    clmt.resize(clnum);	    for (auto& o : clmt) o.clear();	    // # of segments
+    clmt.resize(clnum);
+    for (auto& o : clmt) o.clear();	// # of segments
     
     for (szt j=1; j<=mtnum; j++) {
 	    const auto& m = mt[j];
-	    clmt[m.cl].push_back(j);	    	    	    // mitochondrial indexes clusterwise
+	    clmt[m.cl].push_back(j);	// mitochondrial indexes clusterwise
 	    nn[1] += m.num_nodes(2);
 
 	    const auto e = m.has_one_free_end();
@@ -259,19 +291,19 @@ populate_cluster_vectors() noexcept
     	    nn[0]++;
     	    if (m.nn[oe] == 2) {
 	    	    const std::array<szt,2> je {j, e};
-	    	    mtc13[m.cl].emplace_back(je);    	    // segment index, free end index
+	    	    mtc13[m.cl].emplace_back(je);   // segment index, free end index
 	    	    mt13.emplace_back(je);
 	    	    nn[2]++;
     	    }
 	    }
 	    else if (m.nn[1] == 0 && m.nn[2] == 0) {
-    	    mtc11[m.cl] = j;    	    	    	    // it is a separate segment since it has two free ends
-    	    mt11.push_back(j);    	    	    	    // it is a separate segment since it has two free ends
+    	    mtc11[m.cl] = j;    // it is a separate segment since it has two free ends
+    	    mt11.push_back(j);  // it is a separate segment since it has two free ends
     	    nn[0] += 2;
 	    }
 	    else if (m.is_cycle()) {
     	    mtc22[m.cl] = j;
-    	    mt22.push_back(j);    	    	    	    // it is a separate segment since it has two free ends
+    	    mt22.push_back(j);  // it is a separate segment since it has two free ends
 	    }
 	    else if (m.nn[1] == 2 && m.nn[2] == 2) {
     	    mtc33[m.cl].push_back(j);
@@ -279,7 +311,9 @@ populate_cluster_vectors() noexcept
     	    nn[2] += 2;
 	    }
 	    else {
-    	    ; XASSERT(false, "Error in populate_cluster_vectors: failed classification for "+STR(j)+"\n");
+    	    ; XASSERT(false,
+                      "Error in populate_cluster_vectors: failed classification for "
+                      +STR(j)+"\n");
 	    }
     }
     nn[2] /= 3;

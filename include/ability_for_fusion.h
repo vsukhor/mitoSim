@@ -45,8 +45,8 @@ namespace MitoSim {
 
 /**
  * @brief The AbilityForFusion class.
- * @details Adds node type-specific fusion capability and updates the network for it.
- *     	    Forms base for clases adding more specific tapes of dynamics.
+ * @details Adds node type-specific fusion capability and updates the network
+ *     	    for it. Forms base for clases adding more specific tapes of dynamics.
  * @tparam Mt Type of the Edge forming the network.
  */
 template<typename Mt>
@@ -67,7 +67,9 @@ public:
      * @brief Constructor.
      * @param msgr Output message processor.
      */
-    explicit AbilityForFusion(Msgr& msgr);
+    explicit AbilityForFusion(
+        Msgr& msgr
+    );
 
     /**
      * @brief Fuse two nodes of degree 1.
@@ -76,7 +78,12 @@ public:
      * @param w2 Segment index of the 2nd fusion partner.
      * @param e2 Segment end of the 2nd fusion partner.
      */
-    std::array<szt,2> fuse11(const szt w1, const szt e1, const szt w2, const szt e2) noexcept;
+    std::array<szt,2> fuse11(
+        const szt w1,
+        const szt e1,
+        const szt w2,
+        const szt e2
+    ) noexcept;
 
     /**
      * @brief Fuse a node of degree 1 to a node of degree 2.
@@ -85,7 +92,12 @@ public:
      * @param w2 Segment index of the fusion partner containing the node of degree 2.
      * @param a2 Position of the node of degree 2 relative to the segment starting edge.
      */
-    std::array<szt,2> fuse12(const szt w1, const szt end, const szt w2, const szt a2) noexcept;
+    std::array<szt,2> fuse12(
+        const szt w1,
+        const szt end,
+        const szt w2,
+        const szt a2
+    ) noexcept;
 
     /**
      * @brief Fuse a node of degree 1 to the end node in a disconnected loop.
@@ -93,17 +105,24 @@ public:
      * @param e1 Segment end of the fusion partner containing the node of degree 1.
      * @param w2 Segment index of the loop segment.
      */
-    std::array<szt,2> fuse1L(const szt w1, const szt e1, const szt w2) noexcept;
+    std::array<szt,2> fuse1L(
+        const szt w1,
+        const szt e1,
+        const szt w2
+    ) noexcept;
 
     /**
      * @brief Fuse end nodes a disconnected segment having free ends to form a loop.
      * @param w Segment index.
      */
-    std::array<szt,2> fuse_to_loop(const szt w) noexcept;
+    std::array<szt,2> fuse_to_loop(
+        const szt w
+    ) noexcept;
 
 };
 
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename Mt>
 AbilityForFusion<Mt>::
@@ -113,35 +132,49 @@ AbilityForFusion(
     : AbilityForFission<Mt> {msgr}
 {}
 
+
 template<typename Mt>
 std::array<szt,2> AbilityForFusion<Mt>::
-fuse11( const szt w1, const szt e1, const szt w2, const szt e2 ) noexcept
+fuse11(
+    const szt w1,
+    const szt e1,
+    const szt w2,
+    const szt e2
+) noexcept
 {
-    if (     w2 == w1)    return fuse_to_loop(w1);
-    else if (e1 == e2)    return fuse_antiparallel(e1, w1, w2);
+    if (     w2 == w1)  return fuse_to_loop(w1);
+    else if (e1 == e2)  return fuse_antiparallel(e1, w1, w2);
     else if (e1 == 1 )  return fuse_parallel(w1, w2);
     else	    	    return fuse_parallel(w2, w1);
 }
 
+
 template<typename Mt>
 std::array<szt,2> AbilityForFusion<Mt>::
-fuse12( const szt w1, const szt end, const szt w2, const szt a2 ) noexcept
+fuse12(
+    const szt w1,
+    const szt end,
+    const szt w2,
+    const szt a2
+) noexcept
 {
     if constexpr (verbose) {
-	    msgr.print("Fusion12: %d(of %d e %d) with %d(of %d at %d)\n", w1, mt[w1].g.size(), end, w2, mt[w2].g.size(), a2);
+	    msgr.print("Fusion12: %d(of %d e %d) with %d(of %d at %d)\n",
+                   w1, mt[w1].g.size(), end, w2, mt[w2].g.size(), a2);
 	    mt[w1].print(w1, "     before s: ");
 	    mt[w2].print(w2, "     before s: ");
     }
     const auto cl1 = mt[w1].cl;
     const auto cl2 = mt[w2].cl;
 
-    auto mi = mt[w2].is_cycle() ? w2 : mtnum+1;    // mt[mi] is to be  produced by the fission
+    // mt[mi] is to be produced by fission:
+    auto mi = mt[w2].is_cycle() ? w2 : mtnum+1;
 
     fiss2(w2, a2);
 
     if (w1 == w2) {
-	    // then this is not a cycle segment because the cycle requires neighbs at both ends
-	    // while w1 is allowed to have a neig at only one end
+	    // Then, this is not a cycle segment because the cycle requires neighbs
+	    // at both ends, while w1 is allowed to have a neig at only one end
 	    if (end == 1) {
     	    mt[w1].nn[1] = 2;
     	    mt[w1].neig[1][1] = w1;	    mt[w1].neen[1][1] = 2;
@@ -198,12 +231,18 @@ fuse12( const szt w1, const szt end, const szt w2, const szt a2 ) noexcept
     return {cl1, cl2};
 }
 
+
 template<typename Mt>
 std::array<szt,2> AbilityForFusion<Mt>::
-fuse1L( const szt w1, const szt e1, const szt w2 ) noexcept
+fuse1L(
+    const szt w1,
+    const szt e1,
+    const szt w2
+) noexcept
 {
     if constexpr (verbose) {
-	    msgr.print("Fusion1U: %d(of %d e %d) with a CYCLE %d(of %d)\n", w1, mt[w1].g.size(), e1, w2, mt[w2].g.size());
+	    msgr.print("Fusion1U: %d(of %d e %d) with a CYCLE %d(of %d)\n",
+                   w1, mt[w1].g.size(), e1, w2, mt[w2].g.size());
 	    mt[w1].print( w1, "     before s: " );
 	    mt[w2].print( w2, "     before s: " );
     }
@@ -237,12 +276,15 @@ fuse1L( const szt w1, const szt e1, const szt w2 ) noexcept
     return {cl1, cl2};
 }
 
+
 template<typename Mt>
 std::array<szt,2> AbilityForFusion<Mt>::
 fuse_to_loop( const szt w ) noexcept
 {
-    XASSERT(!mt[w].is_cycle(), "Error: attempt to fuse_to_loop a separate cycle.\n");
-    XASSERT(!mt[w].nn[1] && !mt[w].nn[2], "Error: attempt to fuse_toLoop a not separate segment.\n");
+    XASSERT(!mt[w].is_cycle(),
+            "Error: attempt to fuse_to_loop a separate cycle.\n");
+    XASSERT(!mt[w].nn[1] && !mt[w].nn[2],
+            "Error: attempt to fuse_toLoop a not separate segment.\n");
 
     if constexpr (verbose) {
 	    msgr.print("Fused to cycle %d of length %d", w, mt[w].g.size());

@@ -70,25 +70,26 @@ public:
 	    Msgr& msgr
     );
 
-    void operator()();    ///< Runs the simulation.
+    void operator()();   ///< Runs the simulation.
 
 private:
 
     Ntw& netw;    ///< ref: Simulated network.
 
-    // Convenience references to some data fields of the network
-    Msgr&    	    msgr;	    ///< ref: Output message processor.
-    RandFactory&    rnd;	    ///< ref: random number factory.
-    double&    	    time;	    ///< ref: current time.
-    ulong&    	    it;    	    ///< ref: iteration counter.
+    // Convenience references to some data fields of the network.
+    Msgr&    	 msgr;	    ///< ref: Output message processor.
+    RandFactory& rnd;	    ///< ref: random number factory.
+    double&    	 time;	    ///< ref: current time.
+    ulong&    	 it;    	///< ref: iteration counter.
 
     // Output parameters
-    szt	    logFrequency;    ///< Frequency of short output to a log line.
-    szt	    saveFrequency;    ///< Frequency of detailed output to flie.
+    szt	logFrequency;    ///< Frequency of short output to a log line.
+    szt	saveFrequency;   ///< Frequency of detailed output to flie.
 
-    Gillespie<RandFactory,Reaction> gsp;    ///< Gillespie reactor controlling the simulation.
+    /// Gillespie reactor controlling the simulation.
+    Gillespie<RandFactory,Reaction> gsp;
 
-    void populateRc();    	    	    ///< Add reactions to the Gillespie simulator.
+    void populateRc();    ///< Add reactions to the Gillespie simulator.
 
 
     /**
@@ -98,11 +99,12 @@ private:
     void terminate(const std::string& s);
 
     // Logging
-    void update_log();    	    	    ///< Output status summary to a log file.
-    void update_log(std::ostream&);	    ///< Output status summary to a log file.
+    void update_log();    	    	  ///< Output status summary to a log file.
+    void update_log(std::ostream&);	  ///< Output status summary to a log file.
 };
 
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename Ntw>
 Simulation<Ntw>::
@@ -126,16 +128,18 @@ Simulation(
     gsp.initialize();
 }
 
+
 template<typename Ntw>
 void Simulation<Ntw>::
 populateRc()
 {
     szt ind {};
-    if (netw.cfg.use_fission  )    gsp.add_reaction(std::make_unique<Fission <Ntw>>(msgr, ind++, netw, netw.cfg.rate_fission, it, time));
-    if (netw.cfg.use_11_fusion)    gsp.add_reaction(std::make_unique<Fusion11<Ntw>>(msgr, ind++, netw, netw.cfg.fusion_rate_11, it, time));
-    if (netw.cfg.use_12_fusion)    gsp.add_reaction(std::make_unique<Fusion12<Ntw>>(msgr, ind++, netw, netw.cfg.fusion_rate_12, it, time));
-    if (netw.cfg.use_1L_fusion)    gsp.add_reaction(std::make_unique<Fusion1U<Ntw>>(msgr, ind++, netw, netw.cfg.fusion_rate_1L, it, time));
+    if (netw.cfg.use_fission  ) gsp.add_reaction(std::make_unique<Fission <Ntw>>(msgr, ind++, netw, netw.cfg.rate_fission, it, time));
+    if (netw.cfg.use_11_fusion) gsp.add_reaction(std::make_unique<Fusion11<Ntw>>(msgr, ind++, netw, netw.cfg.fusion_rate_11, it, time));
+    if (netw.cfg.use_12_fusion) gsp.add_reaction(std::make_unique<Fusion12<Ntw>>(msgr, ind++, netw, netw.cfg.fusion_rate_12, it, time));
+    if (netw.cfg.use_1L_fusion) gsp.add_reaction(std::make_unique<Fusion1U<Ntw>>(msgr, ind++, netw, netw.cfg.fusion_rate_1L, it, time));
 }
+
 
 template<typename Ntw>
 void Simulation<Ntw>::
@@ -151,7 +155,8 @@ operator()()
     while (time < netw.cfg.timeTotal) {
 	    it++;
 	    if (!gsp.set_asum()) {
-    	    terminate("\nNo reaction left! Termination due to reaction *score == 0 for all reactions used.");
+    	    terminate(std::string("\nNo reaction left! ") +
+                      "Termination due to reaction *score == 0 for all reactions used.");
     	    break; 
 	    }
 	    XASSERT(!std::isnan(gsp.tau()), "Tau is nan\n");
@@ -171,9 +176,10 @@ operator()()
 
     msgr.print("\nFinal state:");
     update_log();
-    netw.save_mitos(true, true, it, time);	    	    // only the last snapshot
+    netw.save_mitos(true, true, it, time);	    // only the last snapshot
     msgr.print("Final mtnum: %d\n", netw.mtnum);
 }
+
 
 template<typename Ntw>
 void Simulation<Ntw>::
@@ -184,6 +190,7 @@ terminate( const std::string& s )
     msgr.print(s);
 }
 
+
 template<typename Ntw>
 void Simulation<Ntw>::
 update_log()
@@ -191,6 +198,7 @@ update_log()
     update_log(*msgr.so);
     update_log(*msgr.sl);
 }
+
 
 template<typename Ntw>
 void Simulation<Ntw>::

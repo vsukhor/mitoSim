@@ -39,7 +39,9 @@ namespace MitoSim {
 template<typename> class Fusion1U;
 
 /**
- * @brief Network-specific reaction slot for fusion of a degree 1 node with a looped segment.
+ * @brief Reaction slot for fusion of a degree 1 node with a looped segment.
+ * @details Network-specific reaction slot for fusion of a degree 1 node with
+ *          a looped segment.
  * @tparam Ntw Type of the network.
  */
 template<typename Ntw>
@@ -59,12 +61,12 @@ private:
     Ntw& host;    ///< ref: the host network for this reaction.
 
     // Convenience references to some of the host members.
-    RandFactory&    	    	    	    rnd;
-    const std::vector<szt>&    	    	    mt11;
-    const std::vector<std::array<szt,2>>&    mt13;
-    const std::vector<szt>&    	    	    mt22;
+    RandFactory&    	    	    	  rnd;
+    const std::vector<szt>&    	    	  mt11;
+    const std::vector<std::array<szt,2>>& mt13;
+    const std::vector<szt>&    	    	  mt22;
 
-    FusionCandidatesXU    cnd;    ///< node pairs suitable for this type of fusion.
+    FusionCandidatesXU cnd;    ///< node pairs suitable for this type of fusion.
 
     /// Populate the vector of node pairs suitable for this type of fusion.
     void populate() noexcept;
@@ -73,7 +75,7 @@ private:
     auto fire() noexcept;
 };
 
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename Ntw>
 NtwFusion1L<Ntw>::
@@ -114,7 +116,8 @@ fire() noexcept
 {
     const auto r = rnd.uniform0(cnd.size());
 
-    return host.fuse1L(cnd.u[r][0], cnd.u[r][1], cnd.v[r]);
+    return host.fuse1L(cnd.u[r][0], cnd.u[r][1],
+                       cnd.v[r]);
 }
 
 

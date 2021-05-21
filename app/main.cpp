@@ -25,9 +25,9 @@
 #include <string>
 #include <vector>
 
-#define FP32    	    // comment this to switch to a double precision.
-#define _DEBUG    	    // toggles XASSERTs.
-//#define PRINT_EDGES    // comment this to avoid printing detailed edge information.
+#define FP32    	   // comment this to switch to a double precision.
+#define _DEBUG    	   // toggles XASSERTs.
+//#define PRINT_EDGES  // comment this to avoid printing detailed edge info.
 
 #ifdef FP32
     using real = float;
@@ -43,7 +43,7 @@
 namespace MitoSim {
 using namespace Utils::Common;
 using RandFactory = Utils::Random::Boost<real>;
-constexpr bool verbose {};	    ///< Work in verbose mode.
+constexpr bool verbose {};	 ///< Work in verbose mode.
 }
 
 #include "config.h"
@@ -55,15 +55,20 @@ int main( int argc, char* argv[] )
     using namespace MitoSim;
 
     if (argc < 5)
-	    return Exceptions::simple("Error: not sufficient configuration data provided");
+	    return Exceptions::simple(
+            "Error: not sufficient configuration data provided");
 
-    const auto workingDir = std::string(argv[1]);    // working directory
-    const auto configSuffix = std::string(argv[2]);    // application-specific suffix of the configuration file
-    const auto runIni = static_cast<szt>(std::stoi(argv[3]));    // index of the starting run
-    const auto runEnd = static_cast<szt>(std::stoi(argv[4]));    // index of the last run
+    // Working directory:
+    const auto workingDir = std::string(argv[1]);
+    // Application-specific suffix of the configuration file:
+    const auto configSuffix = std::string(argv[2]);
+    // Index of the starting run:
+    const auto runIni = static_cast<szt>(std::stoi(argv[3]));
+    // Index of the last run:
+    const auto runEnd = static_cast<szt>(std::stoi(argv[4]));
 
     const auto workingDirIn = workingDir;    // directory for the input
-    const auto workingDirOut = workingDir;    // directory for the output
+    const auto workingDirOut = workingDir;   // directory for the output
 
     for (szt ii=runIni; ii<=runEnd; ii++) {
 	    StopWatch stopwatch;
@@ -83,10 +88,13 @@ int main( int argc, char* argv[] )
     	    RandFactory::make_seed(seedFileName, &msgr);
 
 	    auto rnd = std::make_unique<RandFactory>(seedFileName, ii, msgr);
-	    const auto network = std::make_unique<Network<Segment<3>>>(cfg, ii, *rnd, msgr);
+	    const auto network =
+            std::make_unique<Network<Segment<3>>>(cfg, ii, *rnd, msgr);
 
 	    stopwatch.stop();
-	    msgr.print("Run "+STR(ii)+" finished: "+stopwatch.stop.str+"after "+stopwatch.duration()+" sec\n");
+	    msgr.print("Run "+STR(ii)+
+                   " finished: "+stopwatch.stop.str+
+                   " after "+stopwatch.duration()+" sec\n");
 	    
     }
 

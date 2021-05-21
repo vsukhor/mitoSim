@@ -36,12 +36,15 @@ namespace MitoSim {
 
 /**
  * @brief Container for fusion candidate nodes.
- * @note Should be used only the reactions not intended for fusion to a loop segment.
+ * @note Should be used only the reactions not intended
+ *       for fusion to a loop segment.
  */
 struct FusionCandidatesXX {
 
-    std::vector<std::array<szt,2>> u;    ///< Segment and end indexes of the 1st participant.
-    std::vector<std::array<szt,2>> v;    ///< Segment and end indexes of the 2nd participant.
+    /// Segment and end indexes of the 1st participant.
+    std::vector<std::array<szt,2>> u;
+    ///< Segment and end indexes of the 2nd participant.
+    std::vector<std::array<szt,2>> v;
 
     /// Empty the container.
     void clear() noexcept { u.clear();
@@ -53,7 +56,8 @@ struct FusionCandidatesXX {
      * @param vc Segment and end indexes of the 2nd participant.
      */
     void add(const std::array<szt,2>& uc,
-    	     const std::array<szt,2>& vc ) {
+    	     const std::array<szt,2>& vc )
+    {
 	    u.emplace_back(uc);
 	    v.emplace_back(vc);
     }
@@ -66,7 +70,8 @@ struct FusionCandidatesXX {
 
 
     /// Print the content out.
-    void print() {
+    void print()
+    {
 	    for(szt i=0; i<size(); i++)
     	    print(i, false);
 	    std::cout << "\n";
@@ -78,37 +83,43 @@ struct FusionCandidatesXX {
      * @param nl Bool true is cr is intended.
      */
     void print( const szt i,
-	    	    bool nl=true ) {
+	    	    bool nl=true )
+    {
 	    std::cout << " [" <<  u[i][0] << " " << u[i][1] << " + "
 	    	    	      <<  v[i][0] << " " << v[i][1] << "] ";
 	    if (nl) std::cout << "\n";
     }
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 /**
  * @brief Container for fusion candidate nodes.
  * @note Should be used only the reactions intended for fusion to a loop segment.
  */
 struct FusionCandidatesXU {
 
-    std::vector<std::array<szt,2>>     u;    ///< Segment and end indexes of the non-looped participant.
-    std::vector<szt>         	    v;    ///< Segment index of the looped participant.
+    /// Segment and end indexes of the non-looped participant.
+    std::vector<std::array<szt,2>>  u;
+    /// Segment index of the looped participant.
+    std::vector<szt>         	    v;
 
     /// Empty the container.
     void clear() noexcept { u.clear(); v.clear(); }
 
-    /** Add a node pair.
+    /**
+     * @brief Add a node pair.
      * @param uc Segment and end indexes of the non-looped participant.
      * @param vc Segment index of the looped participant.
     */
     void add(std::array<szt,2> uc,
-    	     szt vc ) {
+    	     szt vc )
+    {
 	    u.emplace_back(uc);
 	    v.emplace_back(vc);
     }
 
-    /**@brief Report the number of elements.
+    /**
+     * @brief Report the number of elements.
      * @return Current number of elements.
      */
     szt size() const noexcept { return u.size(); }

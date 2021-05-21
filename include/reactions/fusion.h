@@ -92,7 +92,8 @@ public:
      * @brief Populate the vector of reactions that need a score update.
      * @details The update is performed after *this has fired
      *          and initializes the propensities and effective rate.
-     * @param rc Vector of unique pointers to all reactions taking part in the simulation.
+     * @param rc Vector of unique pointers to all reactions taking part in
+     *        the simulation.
      */
     void initialize_dependencies(const vup<Reaction>& rc) noexcept override;
 
@@ -107,10 +108,10 @@ protected:
     using Reaction::msgr;
 
     // Convenience references.
-    Ntw&	     	    netw;	    ///< ref: The host network for this reaction.
-    RandFactory& 	    rnd;	    ///< ref: Random number factory.
+    Ntw&	     netw;	    ///< ref: The host network for this reaction.
+    RandFactory& rnd;	    ///< ref: Random number factory.
 
-    std::array<szt,2>    cc;    	    ///< Indices of the clusters.
+    std::array<szt,2> cc;   ///< Indices of the clusters.
 
     void update_netw_stats() override;
 
@@ -119,13 +120,14 @@ private:
     using Reaction::set_score;
     using Reaction::it;
 
-    std::vector<Reaction*>  dependents;    ///< Reactions that need a score update after *this has fired.
+    /// Reactions that need a score update after *this has fired.
+    std::vector<Reaction*>  dependents;
 
     /// Sets this reaction propensity for the whole network.
     virtual void set_prop() noexcept = 0;
 };
 
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<uint D1, uint D2, typename Ntw> constexpr
 auto Fusion<D1,D2,Ntw>::
@@ -135,6 +137,7 @@ is_active( const std::unique_ptr<Reaction>& r )
     	    r->srt == "fu11" ||
     	    r->srt == "fu12";
 }
+
 
 template<uint D1, uint D2, typename Ntw>
 void Fusion<D1,D2,Ntw>::
@@ -151,6 +154,7 @@ initialize_dependencies( const vup<Reaction>& rc ) noexcept
     set_score();
 }
 
+
 template<uint D1, uint D2, typename Ntw>
 void Fusion<D1,D2,Ntw>::
 update_netw_stats()
@@ -162,6 +166,7 @@ update_netw_stats()
 	    o->set_score();
     }
 }
+
 
 template<uint D1, uint D2, typename Ntw>
 void Fusion<D1,D2,Ntw>::

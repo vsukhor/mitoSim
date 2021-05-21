@@ -92,7 +92,7 @@ private:
     bool find_random_node(szt& w, szt& a) const noexcept;
 };
 
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename Ntw>
 NtwFission<Ntw>::
@@ -128,7 +128,7 @@ set_prop( const szt ic ) noexcept
 
 template<typename Ntw>
 void NtwFission<Ntw>::
-update_prop( const szt c ) noexcept	    // incremental clnum changes are assumed
+update_prop( const szt c ) noexcept	 // incremental clnum changes are assumed
 {
     if (pr.size() > clnum) {
 	    pr.resize(clnum);

@@ -107,7 +107,8 @@ public:
      * @brief Populate the vector of reactions that need a score update.
      * @details The update is performed after *this has fired
      *          and initializes the propensities and effective rate.
-     * @param rc Vector of unique pointers to all reactions taking part in the simulation.
+     * @param rc Vector of unique pointers to all reactions taking part in
+     *        the simulation.
      */
     void initialize_dependencies(const vup<Reaction>& rc) noexcept override;
 
@@ -127,14 +128,22 @@ private:
     using Reaction::msgr;
 
     // Convenience references
-    Ntw&    	    	    netw;    ///< ref: The network.
-    RandFactory&    	    rnd;    ///< ref: Random number factory.
+    Ntw&    	  netw;    ///< ref: The network.
+    RandFactory&  rnd;    ///< ref: Random number factory.
 
-    std::array<szt,2>	    cc;
-    real*    	    	    score {};	    ///< Current rate as seen by the Gillespie reactor.
-    szt	    	    	    eventCount {};    ///< Number of times this reaction was fired.
-    std::vector<Reaction*>    dependents;	    ///< Reactions that need a score update after *this has fired.
-    static const std::string name;    	    ///< Reaction name constant.
+    std::array<szt,2> cc;
+
+    /// Current rate as seen by the Gillespie reactor.
+    real* score {};
+
+    /// Number of times this reaction was fired.
+    szt	eventCount {};
+
+    /// Reactions that need a score update after *this has fired.
+    std::vector<Reaction*> dependents;
+
+    /// Reaction name constant.
+    static const std::string name;
 
     /// Set this reaction propensity for the whole network.
     void set_prop() noexcept;
@@ -142,13 +151,15 @@ private:
     /// Attach this score to the Gillespie mechanism.
     void attach_score_pointer(real*a) noexcept override { score = a; };
 
-    /// All network and reaction updates necessary after the given reaction event was executed.
+    /// Network and reaction updates necessary after a reaction event was executed.
     void update_netw_stats() override;
 
 };
 
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 template<typename Ntw> const std::string Fission<Ntw>::name {"fiss"};
+
 
 template<typename Ntw> constexpr
 auto Fission<Ntw>::
@@ -156,6 +167,7 @@ is_active( const std::unique_ptr<Reaction>& r ) noexcept
 {
     return r->srt == name;
 };
+
 
 template<typename Ntw>
 void Fission<Ntw>::
@@ -173,6 +185,7 @@ initialize_dependencies( const vup<Reaction>& rc ) noexcept
     set_score();
 }
 
+
 template<typename Ntw> inline
 void Fission<Ntw>::
 set_score() noexcept
@@ -180,12 +193,14 @@ set_score() noexcept
     *score = rate * netw.fis.get_prTotal();
 }
 
+
 template<typename Ntw> inline
 void Fission<Ntw>::
 set_prop() noexcept
 {
     netw.fis.set_prop();
 }
+
 
 template<typename Ntw> inline
 void Fission<Ntw>::
@@ -196,6 +211,7 @@ update_prop( szt c0, szt c1 ) noexcept
 	    netw.fis.update_prop(c1);
 }
 
+
 template<typename Ntw>
 void Fission<Ntw>::
 update_netw_stats()
@@ -205,6 +221,7 @@ update_netw_stats()
 	    o->set_score();
     }
 }
+
 
 template<typename Ntw>
 void Fission<Ntw>::
@@ -218,6 +235,7 @@ fire() noexcept
 
     update_netw_stats();
 }
+
 
 template<typename Ntw>
 void Fission<Ntw>::

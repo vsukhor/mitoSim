@@ -47,7 +47,8 @@ namespace MitoSim {
 
 /**
  * @brief The Network class template.
- * @details Represents a fully dynamic network, capable for both fusion and division.
+ * @details Represents a fully dynamic network, capable for
+ *          both fusion and division.
  * @tparam SegmentT type of the segment used by the network.
  */
 template<typename SegmentT>
@@ -69,13 +70,14 @@ public:
 
     const Config& 	    cfg;    ///< Configuration.
     RandFactory& 	    rnd;    ///< Random number factory.
-    double	    	    time;    ///< Current time.
+    double	    	    time;   ///< Current time.
     ulong	    	    it;	    ///< Iteration counter.
 
-    NtwFission<thisT>    fis;    ///< Slot for fission reaction.
-    NtwFusion11<thisT>    fu11;    ///< Slot for fusion of raction of nodes with degrees 1 and 1.
-    NtwFusion12<thisT>    fu12;    ///< Slot for fusion of raction of nodes with degrees 1 and 2.
-    NtwFusion1L<thisT>    fu1L;    ///< Slot for fusion of raction of nodes with degrees 1 and a loop.
+    // Reaction slots:
+    NtwFission<thisT>   fis;    ///< Slot for fission reaction.
+    NtwFusion11<thisT>  fu11;   ///< Slot for fusion raction of nodes with degrees 1 and 1.
+    NtwFusion12<thisT>  fu12;   ///< Slot for fusion action of nodes with degrees 1 and 2.
+    NtwFusion1L<thisT>  fu1L;   ///< Slot for fusion raction of nodes with degrees 1 and a loop.
 
     /**
      * @brief Constructor.
@@ -105,13 +107,15 @@ public:
      * @param itr Current simulation iteration.
      * @param t Current simulation time.
      */
-    void save_mitos(const bool startnew,
-    	    	    const bool last,
-    	    	    const szt itr,
-    	    	    const real t) const;
+    void save_mitos(
+        const bool startnew,
+        const bool last,
+        const szt itr,
+        const real t
+    ) const;
 };
 
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename SegmentT>
 Network<SegmentT>::
@@ -137,6 +141,7 @@ Network(
     sim();
 }
 
+
 template<typename SegmentT>
 void Network<SegmentT>::
 generate_mitos()
@@ -157,6 +162,7 @@ generate_mitos()
     msgr.print("Generated mtnum %d of mtmass: %d", mtnum, mtmass);
 }
 
+
 template<typename SegmentT>
 void Network<SegmentT>::
 update_books() noexcept
@@ -164,12 +170,15 @@ update_books() noexcept
     this->basic_update();
 }
 
+
 template<typename SegmentT>
 void Network<SegmentT>::
-save_mitos( const bool startnew,
-    	    const bool last,
-    	    const szt itr,
-    	    const real t ) const
+save_mitos(
+    const bool startnew,
+    const bool last,
+    const szt itr,
+    const real t
+) const
 {
     const auto fname = (last) ? cfg.workingDirOut+"mitos_last_"+cfg.runName
     	    	    	      : cfg.workingDirOut+"mitos_"       +cfg.runName;
@@ -213,11 +222,3 @@ save_mitos( const bool startnew,
 }    // namespace MitoSim
 
 #endif // NETWORK_H
-    
-    
-    
-    
-    
-    
-    
-    

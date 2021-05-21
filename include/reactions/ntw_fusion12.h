@@ -39,7 +39,9 @@ namespace MitoSim {
 template<typename> class Fusion12;
 
 /**
- * @brief Network-specific reaction slot for fusion of a degree 1 node with a degree 2 node.
+ * @brief Reaction slot for fusion of a degree 1 node with a degree 2 node,
+ * @details Network-specific reaction slot for fusion of a degree 1 node
+ *          with a degree 2 node.
  * @tparam Ntw Type of the network.
  */
 template<typename Ntw>
@@ -59,14 +61,15 @@ private:
     Ntw& host;    ///< ref: the host network for this reaction.
     
     // Convenience references to some of the host members.
-    RandFactory&    	    	    	    rnd;
-    const typename Ntw::Reticulum&    	    mt;
-    const std::vector<szt>&    	    	    mt11;
-    const std::vector<std::array<szt,2>>&    mt13;
-    const std::vector<szt>&    	    	    mt22;
-    const std::vector<szt>&    	    	    mt33;
+    RandFactory& rnd;
 
-    FusionCandidatesXX    cnd;    ///< node pairs suitable for this type of fusion.
+    const typename Ntw::Reticulum& mt;
+    const std::vector<szt>&    	    	  mt11;
+    const std::vector<std::array<szt,2>>& mt13;
+    const std::vector<szt>&    	    	  mt22;
+    const std::vector<szt>&    	    	  mt33;
+
+    FusionCandidatesXX cnd;   ///< node pairs suitable for this type of fusion.
 
     /// Populate the vector of node pairs suitable for this type of fusion.
     void populate() noexcept;
@@ -75,7 +78,7 @@ private:
     auto fire() noexcept;
 };
 
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename Ntw>
 NtwFusion12<Ntw>::
@@ -108,8 +111,9 @@ populate() noexcept
     	    const std::array<szt,2> we1 {w1,e1};
     	    for (const auto w2 : mt11)	    	    	    // ... 11 bulk
 	    	    for (szt i=1; i<mt[w2].g.size(); i++) {
-    	    	    const auto skip = w1 == w2 && ((e1 == 1 && i < minLL) ||
-	    	    	    	    	    	       (e1 == 2 && mt[w2].g.size()-i < minLL));
+    	    	    const auto skip = w1 == w2 && (
+                                    (e1 == 1 && i < minLL) ||
+                                    (e1 == 2 && mt[w2].g.size()-i < minLL));
     	    	    if (!skip) {
 	    	    	    cnd.add(we1, {w2,i});
 	    	    	    cnd.add(we1, {w2,i});
@@ -158,7 +162,8 @@ fire() noexcept
 {
     const auto r = rnd.uniform0(cnd.size());
 
-    return host.fuse12(cnd.u[r][0], cnd.u[r][1], cnd.v[r][0], cnd.v[r][1]);
+    return host.fuse12(cnd.u[r][0], cnd.u[r][1],
+                       cnd.v[r][0], cnd.v[r][1]);
 }
 
 }    // namespace MitoSim

@@ -42,17 +42,19 @@ namespace MitoSim {
 /// An abstract base class for all the reactions
 class Reaction {
 
-public:    // Only constant parameters are public
+public:    // Only constant parameters are public.
 
-    const szt    	    ind {};     ///< Index in Simulation::rc, i.e. index among all used and not used reactions.
-    const real    	    rate {}; ///< Reaction rate constant.
+    /// Index in Simulation::rc, i.e. index among all used and not used reactions.
+    const szt  ind {};
+    /// Reaction rate constant.
+    const real rate {};
 
     // Convenience references
-    const ulong&	    it;	    ///< ref: Internal network iteration counter.
-    const real&    	    time;    ///< ref: Internal network time.
+    const ulong& it;	  ///< ref: Internal network iteration counter.
+    const real&  time;    ///< ref: Internal network time.
 
-    const std::string    shortName;    ///< Reaction name.
-    const std::string    srt;	    ///< Reaction name abbreviation.
+    const std::string shortName;   ///< Reaction name.
+    const std::string srt;	       ///< Reaction name abbreviation.
 
     /**
      * @brief Constructor.
@@ -106,7 +108,8 @@ public:    // Only constant parameters are public
 
     /**
      * @brief Attach this score to the Gillespie mechanism.
-     * @param a Placeholder in the Gillespie object responsible for this reaction score.
+     * @param a Placeholder in the Gillespie object responsible for this
+     *        reaction score.
      */
     virtual void attach_score_pointer(real* a) noexcept = 0;
 
@@ -114,7 +117,8 @@ public:    // Only constant parameters are public
      * @brief Populate the vector of reactions that need a score update.
      * @details The update is performed after *this has fired
      *          and initializes the propensities and effective rate.
-     * @param rc Vector of unique pointers to all reactions taking part in the simulation.
+     * @param rc Vector of unique pointers to all reactions taking part in
+     *        the simulation.
      */
     virtual void initialize_dependencies(const vup<Reaction>& rc) noexcept = 0;
 
@@ -138,9 +142,12 @@ public:    // Only constant parameters are public
 
 protected:
 
-    Msgr& msgr;	    ///< ref: Output message processor.
+    Msgr& msgr;	  ///< ref: Output message processor.
 
-    /// Pure virtual function: All network and reaction updates necessary after the given reaction event was executed.
+    /** All necessary updates after the given reaction event was executed.
+     * @details Pure virtual function: Network and reaction updates necessary
+     *          after the given reaction event was executed.
+     */
     virtual void update_netw_stats() = 0;
 
 };

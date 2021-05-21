@@ -39,18 +39,22 @@ namespace MitoSim {
 /**
  * @brief The Network Edge class.
  * @details Edge is a minimal structural unit of the network.
- * The class handles the tasks and properties specific to a single edge and its relation to other network components.
- * @tparam ContentT Slot for specifying strucutre of the internal content the Edge can hold; currently not used.
+ * The class handles the tasks and properties specific to a single edge
+ * and its relation to other network components.
+ * @tparam ContentT Slot for specifying strucutre of the internal content
+ * the Edge can hold; currently not used.
  */
 template<int ContentT>
 class Edge {
 
 public:
 
-    szt    	    	    ind {huge<szt>};    ///< Index network-wide: starts from 0.
-    szt    	    	    indcl {huge<szt>};    ///< Index cluster-wide: starts from 0.
-    szt    	    	    cl {huge<szt>};	    ///< Current cluster index.
-    std::array<ulong,2>    fin {{}};    	    ///< Contribution to fission propensity at each end.
+    szt ind {huge<szt>};    ///< Index network-wide: starts from 0.
+    szt indcl {huge<szt>};  ///< Index cluster-wide: starts from 0.
+    szt cl {huge<szt>};	    ///< Current cluster index.
+
+    /// Contribution to fission propensity at each end.
+    std::array<ulong,2> fin {{}};
 
     /**
      * @brief Constructor.
@@ -58,16 +62,18 @@ public:
      * @param indcl Index cluster-wide.
      * @param cl Current cluster index.
      */
-    explicit Edge(const szt ind,
-	     const szt indcl,
-	     const szt cl);
+    explicit Edge(
+        const szt ind,
+        const szt indcl,
+        const szt cl
+    );
 
 
     /// Swap the edge ends.
     void reflect();
 
     /**
-     *@brief Write the edge to a file.
+     * @brief Write the edge to a file.
      * @param ofs Output file stream.
      */
     void write(std::ofstream& ofs) const;
@@ -78,12 +84,15 @@ public:
      * @param a Position inside segment.
      * @param endline Flag to end current line.
     */
-    void print(std::ostream& os,
-    	       const szt a,
-    	       const bool endline) const;
+    void print(
+        std::ostream& os,
+        const szt a,
+        const bool endline
+    ) const;
 };
 
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<int ContentT>
 Edge<ContentT>::
@@ -97,12 +106,14 @@ Edge(
     , cl {cl}
 {}
 
+
 template<int ContentT>
 void Edge<ContentT>::
 reflect()
 {
     std::swap(fin[0], fin[1]);
 }
+
 
 template<int ContentT>
 void Edge<ContentT>::
@@ -114,6 +125,7 @@ write( std::ofstream &ofs ) const
     ofs.write(reinterpret_cast<const char*>(&fin[0]), sizeof(ulong));
     ofs.write(reinterpret_cast<const char*>(&fin[1]), sizeof(ulong));
 }
+
 
 template<int ContentT>
 void Edge<ContentT>::
@@ -131,4 +143,3 @@ print( std::ostream& os,
 }    // namespace MitoSim
 
 #endif // EDGE_H
-

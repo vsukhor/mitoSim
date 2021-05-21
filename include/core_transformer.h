@@ -25,7 +25,9 @@
 
 /**
 * @file core_transformer.h
-* @brief Contains low-level network transformations as implemented in class CoreTransformer.
+* @brief Contains low-level network transformations.
+* @details Low-level network transformations are implemented in
+*          class CoreTransformer.
 * @author Valerii Sukhorukov
 */
 
@@ -66,25 +68,31 @@ public:
     explicit CoreTransformer(Msgr& msgr);
 
     /**
-     * @brief Update the structure of diaconnected components resulting from a fusion event.
+     * @brief Update the structure of diaconnected components produced by fusion.
      * @param w1 Index of the 1st participant segment.
      * @param w2 Index of the 2nd participant segment.
      */
-    constexpr void update_mtcl_fuse(const szt w1, const szt w2) noexcept;
+    constexpr void update_mtcl_fuse(
+        const szt w1,
+        const szt w2) noexcept;
 
     /**
-     * @brief Update the structure of diaconnected components resulting from a fusion event.
+     * @brief Update the structure of diaconnected components produced by fusion.
      * @param c1 Index of the 1st participant component.
      * @param c2 Index of the 2nd participant component.
      */
-    constexpr void update_cl_fuse(const szt c1, const szt c2) noexcept;
+    constexpr void update_cl_fuse(
+        const szt c1,
+        const szt c2) noexcept;
 
     /**
      * @brief Update the diaconnected component indexes.
      * @param cf Initial index.
      * @param ct Final index.
      */
-    constexpr void update_cl(const szt cf, const szt ct) noexcept;
+    constexpr void update_cl(
+        const szt cf,
+        const szt ct) noexcept;
 
     /**
      * @brief Update the diaconnected component indexes.
@@ -103,7 +111,11 @@ protected:
      * @param w1 Index of the 1st segment.
      * @param w2 Index of the 2nd segment.
      */
-    std::array<szt,2> fuse_antiparallel(const szt end, const szt w1, const szt w2) noexcept;
+    std::array<szt,2> fuse_antiparallel(
+        const szt end,
+        const szt w1,
+        const szt w2
+    ) noexcept;
 
     /**
      * @brief Perform fusion of two parallel oriented segments.
@@ -113,14 +125,22 @@ protected:
      * @param w1 Index of the 1st segment.
      * @param w2 Index of the 2nd segment.
      */
-     std::array<szt,2> fuse_parallel(const szt w1, const szt w2) noexcept;
+    std::array<szt,2> fuse_parallel(
+        const szt w1,
+        const szt w2
+    ) noexcept;
 
     /**
-     * @brief Update the network segment indexes such that segment indexed as source will become target.
+     * @brief Update network segment indexes.
+     * @details The network indexes are updatted such that segment
+     *          indexed as source will become target.
      * @param f Source segment index.
      * @param t Target segment index.
     */
-    void rename_mito(const szt f, const szt t);
+    void rename_mito(
+        const szt f,
+        const szt t
+    );
 
 protected:
 
@@ -131,7 +151,12 @@ protected:
      * @param t Target segment index.
      * @param et Target segment end.
     */
-    void copy_neigs(const szt f, const szt ef, const szt t, const szt et) noexcept;
+    void copy_neigs(
+        const szt f,
+        const szt ef,
+        const szt t,
+        const szt et
+    ) noexcept;
 
     /**
      * @brief Update segment neighbours.
@@ -146,11 +171,13 @@ protected:
     void update_neigs(const szt oldn, const szt oend,
     	    	      const szt n1, const szt n2,
     	    	      const szt newn, const szt nend,
-    	    	      const bool removefromneigs) noexcept;
+    	    	      const bool removefromneigs
+    ) noexcept;
 
 };
 
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename Mt>
 CoreTransformer<Mt>::
@@ -159,6 +186,7 @@ CoreTransformer(
     )
     : Structure<Mt> {msgr}
 {}
+
 
 template<typename Mt>
 void CoreTransformer<Mt>::
@@ -170,9 +198,13 @@ rename_mito( const szt f, const szt t )
     mt[t].cl = mt[f].cl;
 }
 
+
 template<typename Mt>
 void CoreTransformer<Mt>::
-copy_neigs( const szt f, const szt ef, const szt t, const szt et ) noexcept
+copy_neigs(
+    const szt f, const szt ef,
+    const szt t, const szt et
+) noexcept
 {
     for (szt j=1; j<=mt[f].nn[ef]; j++) {
 	    mt[t].neig[et][j] = mt[f].neig[ef][j];
@@ -180,32 +212,35 @@ copy_neigs( const szt f, const szt ef, const szt t, const szt et ) noexcept
     }
     mt[t].nn[et] = mt[f].nn[ef];
 
-    update_neigs(f, ef, 1, mt[f].nn[ef], t, et, false);	    // substitute f in f's neig's neigs for t
+    // Substitute f in f's neig's neigs for t:
+    update_neigs(f, ef, 1, mt[f].nn[ef], t, et, false);
 }
+
 
 template<typename Mt>
 void CoreTransformer<Mt>::
 update_neigs( const szt oldn, const szt oend,
-    	      const szt n1,      const szt n2,
+    	      const szt n1, const szt n2,
     	      const szt newn, const szt nend,
     	      const bool removefromneigs ) noexcept
 {
     for (szt j=n1; j<=n2; j++) {
-	    const auto cn = mt[oldn].neig[oend][j];    	    // our neig currently processed
-	    const auto ce = mt[oldn].neen[oend][j];    	    // our neig currently processed
+	    const auto cn = mt[oldn].neig[oend][j];  // our neig currently processed
+	    const auto ce = mt[oldn].neen[oend][j];  // our neig currently processed
 
 	    szt i1 {};
 	    while (1) {
-    	    XASSERT(++i1 <= mt[cn].nn[ce], "A neig was not found: "+STR(oldn)+" "+STR(cn)+"\n");
+    	    XASSERT(++i1 <= mt[cn].nn[ce],
+                    "A neig was not found: "+STR(oldn)+" "+STR(cn)+"\n");
     	    if (mt[cn].neig[ce][i1] == oldn &&
 	    	    mt[cn].neen[ce][i1] == oend)
 	    	    break;
 	    }
 	    if (removefromneigs) {
-    	    // remove oldn from the neig list of its j-th neig
+    	    // Remove oldn from the neig list of its j-th neig
     	    mt[cn].neig[ce][i1] = mt[cn].neig[ce][mt[cn].nn[ce]];
     	    mt[cn].neen[ce][i1] = mt[cn].neen[ce][mt[cn].nn[ce]--];
-    	    // remove the j-th neig from the oldn's list of neigs
+    	    // Remove the j-th neig from the oldn's list of neigs
     	    mt[oldn].neig[oend][j] = mt[oldn].neig[oend][mt[oldn].nn[oend]];
     	    mt[oldn].neen[oend][j] = mt[oldn].neen[oend][mt[oldn].nn[oend]--];
 	    }
@@ -215,9 +250,15 @@ update_neigs( const szt oldn, const szt oend,
 	    }
     }
 }
+
+
 template<typename Mt>
 std::array<szt,2> CoreTransformer<Mt>::
-fuse_antiparallel( const szt end, const szt w1, const szt w2 ) noexcept
+fuse_antiparallel(
+    const szt end,
+    const szt w1,
+    const szt w2
+) noexcept
 {
     [[maybe_unused]] const auto len1 = mt[w1].g.size();
     [[maybe_unused]] const auto len2 = mt[w2].g.size();
@@ -225,24 +266,34 @@ fuse_antiparallel( const szt end, const szt w1, const szt w2 ) noexcept
     const auto cl2 = mt[w2].cl;
 
     if constexpr (verbose) {
-	    msgr.print("Fusion11a: %d(of %d) with %d(of %d) at end %d", w1, len1, w2, len2, end);
+	    msgr.print("Fusion11a: %d(of %d) with %d(of %d) at end %d",
+                   w1, len1, w2, len2, end);
 	    mt[w1].print(w1, "     before a: ");
 	    mt[w2].print(w2, "     before a: ");
     }
-    XASSERT(w1 != w2, "Error during antiparallel fusion: w1 == w2: fuse_toLoop should be used instead.\n");
-    XASSERT(!mt[w1].nn[end], "Error during antiparallel fusion: end of w1 is not free.\n");
-    XASSERT(!mt[w2].nn[end], "Error during antiparallel fusion: end of w2 is not free.\n");
+    XASSERT(w1 != w2,
+            "Error during antiparallel fusion: w1 == w2: fuse_toLoop should be used instead.\n");
+    XASSERT(!mt[w1].nn[end],
+            "Error during antiparallel fusion: end of w1 is not free.\n");
+    XASSERT(!mt[w2].nn[end],
+            "Error during antiparallel fusion: end of w2 is not free.\n");
 
     const szt opend = (end==2) ? 1 : 2;
     if (end == 1)
-	    copy_neigs(w1, 2, w1, 1);	    // copy w1's 1-end neigs to its 0-end
-    copy_neigs(w2, opend, w1, 2);	    // copy w2's 1-end neigs to w1's 1-end
+	    copy_neigs(w1, 2, w1, 1);	// copy w1's 1-end neigs to its 0-end
+    copy_neigs(w2, opend, w1, 2);	// copy w2's 1-end neigs to w1's 1-end
 
     if (mt[w2].cl != mt[w1].cl)
 	    update_mtcl_fuse(w1, w2);
 
-    if (end == 1) mt[w1].reflect_g();    //  Edge::a takes values [1:g.size()]; for w1 reflect positions if 1-ends are joined;
-    else 	      mt[w2].reflect_g();    //  Edge::a takes values [1:g.size()]; for w2 reflect positions if 2-ends are joined;
+    if (end == 1)
+        // Edge::a takes values [1:g.size()];
+        // for w1 reflect positions if 1-ends are joined;
+        mt[w1].reflect_g();
+    else
+        // Edge::a takes values [1:g.size()];
+        // for w2 reflect positions if 2-ends are joined;
+        mt[w2].reflect_g();
 
     std::move(mt[w2].g.begin(), mt[w2].g.end(), std::back_inserter(mt[w1].g));
     mt[w2].g.clear();
@@ -257,15 +308,27 @@ fuse_antiparallel( const szt end, const szt w1, const szt w2 ) noexcept
 	    update_gIndcl(cl2);
 
     if constexpr (verbose) {
-	    if (w1 == mtnum+1)    { mt[w2].print(w2, "       producing "); if (msgr.so) *msgr.so << std::endl; if (msgr.sl) *msgr.sl << std::endl; }
-	    else 	    	    { mt[w1].print(w1, "       producing "); if (msgr.so) *msgr.so << std::endl; if (msgr.sl) *msgr.sl << std::endl; }
+	    if (w1 == mtnum+1) {
+            mt[w2].print(w2, "       producing ");
+            if (msgr.so) *msgr.so << std::endl;
+            if (msgr.sl) *msgr.sl << std::endl;
+        }
+	    else {
+            mt[w1].print(w1, "       producing ");
+            if (msgr.so) *msgr.so << std::endl;
+            if (msgr.sl) *msgr.sl << std::endl;
+        }
     }
     return {cl1, cl2};
 }
 
+
 template<typename Mt>
 std::array<szt,2> CoreTransformer<Mt>::
-fuse_parallel( const szt w1, const szt w2 ) noexcept
+fuse_parallel(
+    const szt w1,
+    const szt w2
+) noexcept
 {
     [[maybe_unused]] const auto len1 = mt[w1].g.size();
     [[maybe_unused]] const auto len2 = mt[w2].g.size();
@@ -277,9 +340,12 @@ fuse_parallel( const szt w1, const szt w2 ) noexcept
 	    mt[w1].print(w1, "     before p: ");
 	    mt[w2].print(w2, "     before p: ");
     }
-    XASSERT(w1 != w2, "Error during parallel fusion: w1 == w2: fuse_toLoop should be used instead.\n");
-    XASSERT(!mt[w1].nn[1], "Error during parallel fusion: end 1 of w1 is not free.\n");
-    XASSERT(!mt[w2].nn[2], "Error during parallel fusion: end 2 of w2 is not free.\n");
+    XASSERT(w1 != w2,
+            "Error during parallel fusion: w1 == w2: fuse_toLoop should be used instead.\n");
+    XASSERT(!mt[w1].nn[1],
+            "Error during parallel fusion: end 1 of w1 is not free.\n");
+    XASSERT(!mt[w2].nn[2],
+            "Error during parallel fusion: end 2 of w2 is not free.\n");
 
     copy_neigs(w2, 1, w1, 1);
     if(mt[w2].cl != mt[w1].cl)
@@ -298,16 +364,28 @@ fuse_parallel( const szt w1, const szt w2 ) noexcept
 	    update_gIndcl(cl2);
 
     if constexpr (verbose) {
-	    if (w1 == mtnum+1)    { mt[w2].print(w2, "       producing "); if (msgr.so) *msgr.so << std::endl; if (msgr.sl) *msgr.sl << std::endl; }
-	    else 	    	    { mt[w1].print(w1, "       producing "); if (msgr.so) *msgr.so << std::endl; if (msgr.sl) *msgr.sl << std::endl; }
+	    if (w1 == mtnum+1) {
+            mt[w2].print(w2, "       producing ");
+            if (msgr.so) *msgr.so << std::endl;
+            if (msgr.sl) *msgr.sl << std::endl;
+        }
+	    else {
+            mt[w1].print(w1, "       producing ");
+            if (msgr.so) *msgr.so << std::endl;
+            if (msgr.sl) *msgr.sl << std::endl;
+        }
     }
 
     return {cl1, cl2};
 }
 
+
 template<typename Mt> constexpr
 void CoreTransformer<Mt>::
-update_mtcl_fuse( const szt w1, const szt w2 ) noexcept
+update_mtcl_fuse(
+    const szt w1,
+    const szt w2
+) noexcept
 {
     const auto w1cl = mt[w1].cl;
     const auto w2cl = mt[w2].cl;
@@ -323,9 +401,13 @@ update_mtcl_fuse( const szt w1, const szt w2 ) noexcept
     clnum--;
 }
 
+
 template<typename Mt> constexpr
 void CoreTransformer<Mt>::
-update_cl_fuse( const szt c1, const szt c2 ) noexcept    // args by value
+update_cl_fuse(
+    const szt c1,
+    const szt c2
+) noexcept   // args by value
 {
     update_cl(c2, c1);
     if (c2 != clnum - 1)
@@ -333,9 +415,13 @@ update_cl_fuse( const szt c1, const szt c2 ) noexcept    // args by value
     clnum--;
 }
 
+
 template<typename Mt> constexpr
 void CoreTransformer<Mt>::
-update_cl( const szt cf, const szt ct ) noexcept    	    // args by value
+update_cl(
+    const szt cf,
+    const szt ct
+) noexcept    	// args by value
 {
     for (szt i=1; i<=mtnum; i++)
 	    if (mt[i].cl == cf)
@@ -343,6 +429,7 @@ update_cl( const szt cf, const szt ct ) noexcept    	    // args by value
 
     update_gIndcl(ct);
 }
+
 
 template<typename Mt> constexpr
 void CoreTransformer<Mt>::

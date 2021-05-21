@@ -112,21 +112,24 @@ private:
     using Fusion<1,1,Ntw>::print;
 
     static const std::string name;    ///< Reaction name constant.
-    real*    score {};	    	    ///< Current rate as seen by the Gillespie reactor.
-    szt	    eventCount {};    	    ///< Number of times this reaction was fired.
-    szt	    propTotal {};    	    ///< Total propensity for this reaction over all network components.
+    real* score {};	      ///< Current rate as seen by the Gillespie reactor.
+    szt	  eventCount {};  ///< Number of times this reaction was fired.
+
+    /// Total propensity for this reaction over all network components.
+    szt	  propTotal {};
 
     /// Set this reaction propensity for the whole network.
     void set_prop() noexcept final;
 
     /**
     * @brief Attach this score to the Gillespie mechanism.
-    * @param a Placeholder in the Gillespie object responsible for this reaction score.
+    * @param a Placeholder in the Gillespie object responsible for this
+    *        reaction score.
     */
     void attach_score_pointer(real* a) noexcept final { score = a; };
 };
     
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 template<typename Ntw> const std::string Fusion11<Ntw>::name {"fu11"};
 
 template<typename Ntw>
