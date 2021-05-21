@@ -52,63 +52,63 @@ namespace MitoSim {
  */
 template<typename SegmentT>
 class Network
-	:  public AbilityForFusion<SegmentT> {
+    :  public AbilityForFusion<SegmentT> {
 
 public:
-	
-	using thisT = Network<SegmentT>;
-	using ST = SegmentT;
+    
+    using thisT = Network<SegmentT>;
+    using ST = SegmentT;
 
-	using Structure<SegmentT>::mt;
-	using Structure<SegmentT>::mtnum;
-	using Structure<SegmentT>::clnum;
-	using Structure<SegmentT>::mtmass;
-	using Structure<SegmentT>::nn;
-	using Structure<SegmentT>::glm;
-	using Structure<SegmentT>::msgr;
+    using Structure<SegmentT>::mt;
+    using Structure<SegmentT>::mtnum;
+    using Structure<SegmentT>::clnum;
+    using Structure<SegmentT>::mtmass;
+    using Structure<SegmentT>::nn;
+    using Structure<SegmentT>::glm;
+    using Structure<SegmentT>::msgr;
 
-	const Config& 		cfg;	///< Configuration.
-	RandFactory& 		rnd;	///< Random number factory.
-	double				time;	///< Current time.
-	ulong				it;		///< Iteration counter.
+    const Config& 	    cfg;    ///< Configuration.
+    RandFactory& 	    rnd;    ///< Random number factory.
+    double	    	    time;    ///< Current time.
+    ulong	    	    it;	    ///< Iteration counter.
 
-	NtwFission<thisT>	fis;	///< Slot for fission reaction.
-	NtwFusion11<thisT>	fu11;	///< Slot for fusion of raction of nodes with degrees 1 and 1.
-	NtwFusion12<thisT>	fu12;	///< Slot for fusion of raction of nodes with degrees 1 and 2.
-	NtwFusion1L<thisT>	fu1L;	///< Slot for fusion of raction of nodes with degrees 1 and a loop.
+    NtwFission<thisT>    fis;    ///< Slot for fission reaction.
+    NtwFusion11<thisT>    fu11;    ///< Slot for fusion of raction of nodes with degrees 1 and 1.
+    NtwFusion12<thisT>    fu12;    ///< Slot for fusion of raction of nodes with degrees 1 and 2.
+    NtwFusion1L<thisT>    fu1L;    ///< Slot for fusion of raction of nodes with degrees 1 and a loop.
 
-	/**
-	 * @brief Constructor.
-	 * @param cfg Configuration object.
-	 * @param runIndex Run index.
-	 * @param rnd Random number factory.
-	 * @param msgr Output message processor.
-	 */
-	explicit Network(
-			const Config& cfg,
-			szt runIndex,
-			RandFactory& rnd,
-			Msgr& msgr
-		);
+    /**
+     * @brief Constructor.
+     * @param cfg Configuration object.
+     * @param runIndex Run index.
+     * @param rnd Random number factory.
+     * @param msgr Output message processor.
+     */
+    explicit Network(
+    	    const Config& cfg,
+    	    szt runIndex,
+    	    RandFactory& rnd,
+    	    Msgr& msgr
+	    );
 
-	/// Generate the network components
-	void generate_mitos();
+    /// Generate the network components
+    void generate_mitos();
 
 
-	/// Update the network state variables
-	void update_books() noexcept;
+    /// Update the network state variables
+    void update_books() noexcept;
 
-	/**
-	 * @brief Write network to a file.
-	 * @param startnew Start a new file vs. adding new data records.
-	 * @param last Is the final writeout.
-	 * @param itr Current simulation iteration.
-	 * @param t Current simulation time.
-	 */
-	void save_mitos(const bool startnew,
-					const bool last,
-					const szt itr,
-					const real t) const;
+    /**
+     * @brief Write network to a file.
+     * @param startnew Start a new file vs. adding new data records.
+     * @param last Is the final writeout.
+     * @param itr Current simulation iteration.
+     * @param t Current simulation time.
+     */
+    void save_mitos(const bool startnew,
+    	    	    const bool last,
+    	    	    const szt itr,
+    	    	    const real t) const;
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -116,108 +116,108 @@ public:
 template<typename SegmentT>
 Network<SegmentT>::
 Network(
-		const Config& cfg,
-		szt runIndex,
-		RandFactory& rnd,
-		Msgr& msgr
-	)
-	: AbilityForFusion<SegmentT> {msgr}
-	, cfg {cfg}
-	, rnd {rnd}
-	, time {zero<double>}
-	, it {}
-	, fis {*this}
-	, fu11 {*this}
-	, fu12 {*this}
-	, fu1L {*this}
+	    const Config& cfg,
+	    szt runIndex,
+	    RandFactory& rnd,
+	    Msgr& msgr
+    )
+    : AbilityForFusion<SegmentT> {msgr}
+    , cfg {cfg}
+    , rnd {rnd}
+    , time {zero<double>}
+    , it {}
+    , fis {*this}
+    , fu11 {*this}
+    , fu12 {*this}
+    , fu1L {*this}
 {
-	generate_mitos();
-	update_books();
-	Simulation<thisT> sim {*this, rnd, time, it, msgr};
-	sim();
+    generate_mitos();
+    update_books();
+    Simulation<thisT> sim {*this, rnd, time, it, msgr};
+    sim();
 }
 
 template<typename SegmentT>
 void Network<SegmentT>::
 generate_mitos()
 {
-	mtnum = cfg.mtmassini / cfg.segmassini;
-	if (mtnum < 1)
-		msgr.exit("The system should have at least one segment initially");
+    mtnum = cfg.mtmassini / cfg.segmassini;
+    if (mtnum < 1)
+	    msgr.exit("The system should have at least one segment initially");
 
-	mtmass = 0;
-	szt m {1};
-	szt ei {};
-	mt.emplace_back(msgr);			// an "empty" one
-	while (m <= mtnum) {
-		mt.emplace_back(cfg.segmassini, m-1, mtmass, ei, msgr);
-		m++;
-	}
-	clnum = mtnum;
-	msgr.print("Generated mtnum %d of mtmass: %d", mtnum, mtmass);
+    mtmass = 0;
+    szt m {1};
+    szt ei {};
+    mt.emplace_back(msgr);    	    // an "empty" one
+    while (m <= mtnum) {
+	    mt.emplace_back(cfg.segmassini, m-1, mtmass, ei, msgr);
+	    m++;
+    }
+    clnum = mtnum;
+    msgr.print("Generated mtnum %d of mtmass: %d", mtnum, mtmass);
 }
 
 template<typename SegmentT>
 void Network<SegmentT>::
 update_books() noexcept
 {
-	this->basic_update();
+    this->basic_update();
 }
 
 template<typename SegmentT>
 void Network<SegmentT>::
 save_mitos( const bool startnew,
-			const bool last,
-			const szt itr,
-			const real t ) const
+    	    const bool last,
+    	    const szt itr,
+    	    const real t ) const
 {
-	const auto fname = (last) ? cfg.workingDirOut+"mitos_last_"+cfg.runName
-							  : cfg.workingDirOut+"mitos_"	   +cfg.runName;
-	const auto flags = (startnew) ? std::ios::binary | std::ios::trunc
-								  : std::ios::binary | std::ios::app;
-	std::ofstream ofs {fname, flags};
-	if (ofs.fail())
-		msgr.print("Cannot open file: "+fname);
+    const auto fname = (last) ? cfg.workingDirOut+"mitos_last_"+cfg.runName
+    	    	    	      : cfg.workingDirOut+"mitos_"       +cfg.runName;
+    const auto flags = (startnew) ? std::ios::binary | std::ios::trunc
+	    	    	    	      : std::ios::binary | std::ios::app;
+    std::ofstream ofs {fname, flags};
+    if (ofs.fail())
+	    msgr.print("Cannot open file: "+fname);
 
-	ofs.write((char*) &t, sizeof(real));
-	ofs.write((char*) &mtnum, sizeof(szt));
+    ofs.write((char*) &t, sizeof(real));
+    ofs.write((char*) &mtnum, sizeof(szt));
 
-	static szt mtnummax, nn1max, nn2max;
-	if (!last) {
-		if (startnew) {
-			mtnummax = 0;
-			nn1max = 0;
-			nn2max = 0;
-		}
-		if (mtnum > mtnummax)
-			mtnummax = mtnum;
-	}
-	for (szt q=1; q<=mtnum; q++) {
-		mt[q].write( ofs );
-		if (!last) {
-			if (mt[q].nn[1] > nn1max) nn1max = mt[q].nn[1];
-			if (mt[q].nn[2] > nn2max) nn2max = mt[q].nn[2];
-		}
-	}
-	ofs.write(reinterpret_cast<const char*>(&mtnummax), sizeof(szt));
-	ofs.write(reinterpret_cast<const char*>(&nn1max), sizeof(szt));
-	ofs.write(reinterpret_cast<const char*>(&nn2max), sizeof(szt));
+    static szt mtnummax, nn1max, nn2max;
+    if (!last) {
+	    if (startnew) {
+    	    mtnummax = 0;
+    	    nn1max = 0;
+    	    nn2max = 0;
+	    }
+	    if (mtnum > mtnummax)
+    	    mtnummax = mtnum;
+    }
+    for (szt q=1; q<=mtnum; q++) {
+	    mt[q].write( ofs );
+	    if (!last) {
+    	    if (mt[q].nn[1] > nn1max) nn1max = mt[q].nn[1];
+    	    if (mt[q].nn[2] > nn2max) nn2max = mt[q].nn[2];
+	    }
+    }
+    ofs.write(reinterpret_cast<const char*>(&mtnummax), sizeof(szt));
+    ofs.write(reinterpret_cast<const char*>(&nn1max), sizeof(szt));
+    ofs.write(reinterpret_cast<const char*>(&nn2max), sizeof(szt));
 
-	szt nst2save;
-	nst2save = last
-			 ? szt{}
-			 : szt(itr/cfg.saveFrequency);
-	ofs.write(reinterpret_cast<const char*>(&nst2save), sizeof(szt));
+    szt nst2save;
+    nst2save = last
+    	     ? szt{}
+    	     : szt(itr/cfg.saveFrequency);
+    ofs.write(reinterpret_cast<const char*>(&nst2save), sizeof(szt));
 }
 
-}	// namespace MitoSim
+}    // namespace MitoSim
 
 #endif // NETWORK_H
-	
-	
-	
-	
-	
-	
-	
-	
+    
+    
+    
+    
+    
+    
+    
+    

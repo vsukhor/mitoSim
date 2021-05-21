@@ -42,109 +42,109 @@ namespace MitoSim {
 /// An abstract base class for all the reactions
 class Reaction {
 
-public:	// Only constant parameters are public
+public:    // Only constant parameters are public
 
-	const szt			ind {};	 ///< Index in Simulation::rc, i.e. index among all used and not used reactions.
-	const real			rate {}; ///< Reaction rate constant.
+    const szt    	    ind {};     ///< Index in Simulation::rc, i.e. index among all used and not used reactions.
+    const real    	    rate {}; ///< Reaction rate constant.
 
-	// Convenience references
-	const ulong&		it;		///< ref: Internal network iteration counter.
-	const real&			time;	///< ref: Internal network time.
+    // Convenience references
+    const ulong&	    it;	    ///< ref: Internal network iteration counter.
+    const real&    	    time;    ///< ref: Internal network time.
 
-	const std::string	shortName;	///< Reaction name.
-	const std::string	srt;		///< Reaction name abbreviation.
+    const std::string    shortName;    ///< Reaction name.
+    const std::string    srt;	    ///< Reaction name abbreviation.
 
-	/**
-	 * @brief Constructor.
-	 * @param msgr Output message processor.
-	 * @param ind reaction id.
-	 * @param rate Reaction rate constant.
-	 * @param it Iteration counter.
-	 * @param time Current time.
-	 * @param shortName Reaction name.
-	 * @param srt Reaction name abbreviated.
-	 */
-	Reaction( Msgr& msgr,
-			  const szt ind,
-			  const real rate,
-			  const ulong& it,		// const ref
-			  const real& time,		// const ref
-			  const std::string& shortName,
-			  const std::string& srt
-		)
-		: ind {ind}
-		, rate {rate}
-		, it {it}
-		, time {time}
-		, shortName {shortName}
-		, srt {srt}
-		, msgr {msgr}
-	{}
-
-
-	/// Virtual destructor.
-	virtual ~Reaction() {};
+    /**
+     * @brief Constructor.
+     * @param msgr Output message processor.
+     * @param ind reaction id.
+     * @param rate Reaction rate constant.
+     * @param it Iteration counter.
+     * @param time Current time.
+     * @param shortName Reaction name.
+     * @param srt Reaction name abbreviated.
+     */
+    Reaction( Msgr& msgr,
+    	      const szt ind,
+    	      const real rate,
+    	      const ulong& it,	    // const ref
+    	      const real& time,	    // const ref
+    	      const std::string& shortName,
+    	      const std::string& srt
+	    )
+	    : ind {ind}
+	    , rate {rate}
+	    , it {it}
+	    , time {time}
+	    , shortName {shortName}
+	    , srt {srt}
+	    , msgr {msgr}
+    {}
 
 
-	/// Set the Gillespie score for this reaction.
-	virtual void set_score() noexcept = 0;
+    /// Virtual destructor.
+    virtual ~Reaction() {};
 
 
-	/// Return the Gillespie score for this reaction.
-	virtual real get_score() const noexcept = 0;
+    /// Set the Gillespie score for this reaction.
+    virtual void set_score() noexcept = 0;
 
-	/**
-	 * @brief Update propensity for a pair of network components.
-	 * @param c1 Index of the 1st component to update.
-	 * @param c2 Index of the 2nd component to update.
-	 */
-	virtual void update_prop(const szt c1, const szt c2) noexcept = 0;
-	
 
-	/// Execute the raction event.
-	virtual void fire() noexcept = 0;
+    /// Return the Gillespie score for this reaction.
+    virtual real get_score() const noexcept = 0;
 
-	/**
-	 * @brief Attach this score to the Gillespie mechanism.
-	 * @param a Placeholder in the Gillespie object responsible for this reaction score.
-	 */
-	virtual void attach_score_pointer(real* a) noexcept = 0;
+    /**
+     * @brief Update propensity for a pair of network components.
+     * @param c1 Index of the 1st component to update.
+     * @param c2 Index of the 2nd component to update.
+     */
+    virtual void update_prop(const szt c1, const szt c2) noexcept = 0;
+    
 
-	/**
-	 * @brief Populate the vector of reactions that need a score update.
-	 * @details The update is performed after *this has fired
-	 *          and initializes the propensities and effective rate.
-	 * @param rc Vector of unique pointers to all reactions taking part in the simulation.
-	 */
-	virtual void initialize_dependencies(const vup<Reaction>& rc) noexcept = 0;
+    /// Execute the raction event.
+    virtual void fire() noexcept = 0;
 
-	/**
-	 * @brief The number of times this reaction was fired.
-	 * @result The number of times this reaction was fired.
-	 */
-	virtual szt event_count() const noexcept = 0;
+    /**
+     * @brief Attach this score to the Gillespie mechanism.
+     * @param a Placeholder in the Gillespie object responsible for this reaction score.
+     */
+    virtual void attach_score_pointer(real* a) noexcept = 0;
 
-	/**
-	 * @brief Print the parameters common to all reactions.
-	 * @param le True if new line after the output.
-	 */
-	virtual	void print( const bool le ) const
-	{
-		msgr.print<false>(" it %d", it);
-		msgr.print<false>(" srt "+srt);
-		msgr.print<false>(" rate %f", rate);
-		if (le) msgr.print("\n");
-	}
+    /**
+     * @brief Populate the vector of reactions that need a score update.
+     * @details The update is performed after *this has fired
+     *          and initializes the propensities and effective rate.
+     * @param rc Vector of unique pointers to all reactions taking part in the simulation.
+     */
+    virtual void initialize_dependencies(const vup<Reaction>& rc) noexcept = 0;
+
+    /**
+     * @brief The number of times this reaction was fired.
+     * @result The number of times this reaction was fired.
+     */
+    virtual szt event_count() const noexcept = 0;
+
+    /**
+     * @brief Print the parameters common to all reactions.
+     * @param le True if new line after the output.
+     */
+    virtual    void print( const bool le ) const
+    {
+	    msgr.print<false>(" it %d", it);
+	    msgr.print<false>(" srt "+srt);
+	    msgr.print<false>(" rate %f", rate);
+	    if (le) msgr.print("\n");
+    }
 
 protected:
 
-	Msgr& msgr;		///< ref: Output message processor.
+    Msgr& msgr;	    ///< ref: Output message processor.
 
-	/// Pure virtual function: All network and reaction updates necessary after the given reaction event was executed.
-	virtual void update_netw_stats() = 0;
+    /// Pure virtual function: All network and reaction updates necessary after the given reaction event was executed.
+    virtual void update_netw_stats() = 0;
 
 };
 
-}	// namespace MitoSim
+}    // namespace MitoSim
 
 #endif // REACTION_H

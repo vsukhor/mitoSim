@@ -45,32 +45,32 @@ template<typename> class Fusion1U;
 template<typename Ntw>
 class NtwFusion1L {
 
-	friend Fusion1U<Ntw>;
+    friend Fusion1U<Ntw>;
 
 public:
 
-	explicit NtwFusion1L(Ntw&);		///< Constructor.
+    explicit NtwFusion1L(Ntw&);	    ///< Constructor.
 
-	/// Set this reaction propensity for the whole network.
-	szt set_prop() noexcept;
+    /// Set this reaction propensity for the whole network.
+    szt set_prop() noexcept;
 
 private:
 
-	Ntw& host;	///< ref: the host network for this reaction.
+    Ntw& host;    ///< ref: the host network for this reaction.
 
-	// Convenience references to some of the host members.
-	RandFactory&							rnd;
-	const std::vector<szt>&					mt11;
-	const std::vector<std::array<szt,2>>&	mt13;
-	const std::vector<szt>&					mt22;
+    // Convenience references to some of the host members.
+    RandFactory&    	    	    	    rnd;
+    const std::vector<szt>&    	    	    mt11;
+    const std::vector<std::array<szt,2>>&    mt13;
+    const std::vector<szt>&    	    	    mt22;
 
-	FusionCandidatesXU	cnd;	///< node pairs suitable for this type of fusion.
+    FusionCandidatesXU    cnd;    ///< node pairs suitable for this type of fusion.
 
-	/// Populate the vector of node pairs suitable for this type of fusion.
-	void populate() noexcept;
+    /// Populate the vector of node pairs suitable for this type of fusion.
+    void populate() noexcept;
 
-	/// Execute the reaction event.
-	auto fire() noexcept;
+    /// Execute the reaction event.
+    auto fire() noexcept;
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -78,46 +78,46 @@ private:
 template<typename Ntw>
 NtwFusion1L<Ntw>::
 NtwFusion1L( Ntw& host )
-	: host {host}
-	, rnd {host.rnd}
-	, mt11 {host.mt11}
-	, mt13 {host.mt13}
-	, mt22 {host.mt22}
+    : host {host}
+    , rnd {host.rnd}
+    , mt11 {host.mt11}
+    , mt13 {host.mt13}
+    , mt22 {host.mt22}
 {}
 
 template<typename Ntw>
 szt NtwFusion1L<Ntw>::
 set_prop() noexcept
 {
-	 populate();
-	 return cnd.size();
+     populate();
+     return cnd.size();
 }
 
 template<typename Ntw>
 void NtwFusion1L<Ntw>::
 populate() noexcept
 {
-	cnd.clear();
-	for (const auto w2 : mt22) {
-		for (const auto w1 : mt11)
-			for (const auto e1 : {szt(1),szt(2)})
-				cnd.add({w1,e1}, w2);		// e2 is 1 by convention
+    cnd.clear();
+    for (const auto w2 : mt22) {
+	    for (const auto w1 : mt11)
+    	    for (const auto e1 : {szt(1),szt(2)})
+	    	    cnd.add({w1,e1}, w2);	    // e2 is 1 by convention
 
-		for (const auto& we1 : mt13)
-			cnd.add(we1, w2);
-	}
+	    for (const auto& we1 : mt13)
+    	    cnd.add(we1, w2);
+    }
 }
 
 template<typename Ntw>
 auto NtwFusion1L<Ntw>::
 fire() noexcept
 {
-	const auto r = rnd.uniform0(cnd.size());
+    const auto r = rnd.uniform0(cnd.size());
 
-	return host.fuse1L(cnd.u[r][0], cnd.u[r][1], cnd.v[r]);
+    return host.fuse1L(cnd.u[r][0], cnd.u[r][1], cnd.v[r]);
 }
 
 
-}	// namespace MitoSim
+}    // namespace MitoSim
 
 #endif // NTW_FUSION1U_H

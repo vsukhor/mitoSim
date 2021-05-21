@@ -49,80 +49,80 @@ namespace MitoSim {
  * @tparam Ntw type of the network
  */
 template<uint D1,
-		 uint D2,
-		 typename Ntw>
+	     uint D2,
+	     typename Ntw>
 class Fusion
-	: public Reaction {
+    : public Reaction {
 
-	friend Gillespie<Reaction,RandFactory>;
+    friend Gillespie<Reaction,RandFactory>;
 
 public:
 
-	/**
-	 * @brief Constructor.
-	 * @param msgr Output message processor.
-	 * @param ind reaction id
-	 * @param netw The network object.
-	 * @param rate rate constant
-	 * @param it iteration counter
-	 * @param time current time
-	 * @param srt reaction name literal
-	 */
-	Fusion( Msgr& msgr,
-			const szt ind,
-			Ntw& netw,
-			const real rate,
-			const ulong& it,		// const ref
-			const real& time,		// const ref
-			const std::string& srt
-		)
-		: Reaction {msgr, ind, rate, it, time, "fusion", srt}
-		, netw {netw}
-		, rnd {netw.rnd}
-	{}
+    /**
+     * @brief Constructor.
+     * @param msgr Output message processor.
+     * @param ind reaction id
+     * @param netw The network object.
+     * @param rate rate constant
+     * @param it iteration counter
+     * @param time current time
+     * @param srt reaction name literal
+     */
+    Fusion( Msgr& msgr,
+    	    const szt ind,
+    	    Ntw& netw,
+    	    const real rate,
+    	    const ulong& it,	    // const ref
+    	    const real& time,	    // const ref
+    	    const std::string& srt
+	    )
+	    : Reaction {msgr, ind, rate, it, time, "fusion", srt}
+	    , netw {netw}
+	    , rnd {netw.rnd}
+    {}
 
-	/**
-	 * @brief Activity status of the reaction.
-	 * @return True if the reaction is used in the current simulation session.
-	 * @param r Pointer to the reaction.
-	 */
-	static constexpr auto is_active(const std::unique_ptr<Reaction>& r);
+    /**
+     * @brief Activity status of the reaction.
+     * @return True if the reaction is used in the current simulation session.
+     * @param r Pointer to the reaction.
+     */
+    static constexpr auto is_active(const std::unique_ptr<Reaction>& r);
 
-	/**
-	 * @brief Populate the vector of reactions that need a score update.
-	 * @details The update is performed after *this has fired
-	 *          and initializes the propensities and effective rate.
-	 * @param rc Vector of unique pointers to all reactions taking part in the simulation.
-	 */
-	void initialize_dependencies(const vup<Reaction>& rc) noexcept override;
+    /**
+     * @brief Populate the vector of reactions that need a score update.
+     * @details The update is performed after *this has fired
+     *          and initializes the propensities and effective rate.
+     * @param rc Vector of unique pointers to all reactions taking part in the simulation.
+     */
+    void initialize_dependencies(const vup<Reaction>& rc) noexcept override;
 
-	/**
-	* @brief Print the parameters.
-	* @param le True if new line after the output.
-	*/
-	void print(const bool le) const override;
+    /**
+    * @brief Print the parameters.
+    * @param le True if new line after the output.
+    */
+    void print(const bool le) const override;
 
 protected:
 
-	using Reaction::msgr;
+    using Reaction::msgr;
 
-	// Convenience references.
-	Ntw&		 		netw;		///< ref: The host network for this reaction.
-	RandFactory& 		rnd;		///< ref: Random number factory.
+    // Convenience references.
+    Ntw&	     	    netw;	    ///< ref: The host network for this reaction.
+    RandFactory& 	    rnd;	    ///< ref: Random number factory.
 
-	std::array<szt,2>	cc;			///< Indices of the clusters.
+    std::array<szt,2>    cc;    	    ///< Indices of the clusters.
 
-	void update_netw_stats() override;
+    void update_netw_stats() override;
 
 private:
 
-	using Reaction::set_score;
-	using Reaction::it;
+    using Reaction::set_score;
+    using Reaction::it;
 
-	std::vector<Reaction*>  dependents;	///< Reactions that need a score update after *this has fired.
+    std::vector<Reaction*>  dependents;    ///< Reactions that need a score update after *this has fired.
 
-	/// Sets this reaction propensity for the whole network.
-	virtual void set_prop() noexcept = 0;
+    /// Sets this reaction propensity for the whole network.
+    virtual void set_prop() noexcept = 0;
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -131,46 +131,46 @@ template<uint D1, uint D2, typename Ntw> constexpr
 auto Fusion<D1,D2,Ntw>::
 is_active( const std::unique_ptr<Reaction>& r )
 {
-	return  r->srt == "fu1L" ||
-			r->srt == "fu11" ||
-			r->srt == "fu12";
+    return  r->srt == "fu1L" ||
+    	    r->srt == "fu11" ||
+    	    r->srt == "fu12";
 }
 
 template<uint D1, uint D2, typename Ntw>
 void Fusion<D1,D2,Ntw>::
 initialize_dependencies( const vup<Reaction>& rc ) noexcept
 {
-	for (const auto& o : rc)
-		if (
-			Fusion<D1,D2,Ntw>::is_active(o) ||
-			Fission<Ntw>::is_active(o)
-			)
-			dependents.push_back(o.get());
+    for (const auto& o : rc)
+	    if (
+    	    Fusion<D1,D2,Ntw>::is_active(o) ||
+    	    Fission<Ntw>::is_active(o)
+    	    )
+    	    dependents.push_back(o.get());
 
-	set_prop();
-	set_score();
+    set_prop();
+    set_score();
 }
 
 template<uint D1, uint D2, typename Ntw>
 void Fusion<D1,D2,Ntw>::
 update_netw_stats()
 {
-	netw.update_books();
-	
-	for (auto& o : dependents) {
-		o->update_prop(cc[0], cc[1]);
-		o->set_score();
-	}
+    netw.update_books();
+    
+    for (auto& o : dependents) {
+	    o->update_prop(cc[0], cc[1]);
+	    o->set_score();
+    }
 }
 
 template<uint D1, uint D2, typename Ntw>
 void Fusion<D1,D2,Ntw>::
 print( const bool le ) const
 {
-	Reaction::print(false);
-	msgr.print<false>(" deg1 %d", D1);
-	msgr.print<false>(" deg2 %d", D2);
-	if (le) msgr.print("");
+    Reaction::print(false);
+    msgr.print<false>(" deg1 %d", D1);
+    msgr.print<false>(" deg2 %d", D2);
+    if (le) msgr.print("");
 }
 
 }

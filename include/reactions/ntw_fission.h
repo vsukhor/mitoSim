@@ -45,51 +45,51 @@ class NtwFission {
 
 public:
 
-	friend Fission<Ntw>;
+    friend Fission<Ntw>;
 
-	explicit NtwFission(Ntw&);		///< Constructor.
+    explicit NtwFission(Ntw&);	    ///< Constructor.
 
-	/// Set this reaction propensity for the whole network.
-	ulong set_prop()  noexcept;
+    /// Set this reaction propensity for the whole network.
+    ulong set_prop()  noexcept;
 
-	/**
-	 * @brief Update this reaction propensity for the whole network.
-	 * 		  This is done after updating it for the cluster indexed.
-	 * @param c Cluster index that triggers the update.
-	 */
-	void update_prop(const szt c) noexcept;
+    /**
+     * @brief Update this reaction propensity for the whole network.
+     * 	      This is done after updating it for the cluster indexed.
+     * @param c Cluster index that triggers the update.
+     */
+    void update_prop(const szt c) noexcept;
 
-	/// prTotal getter.
-	constexpr ulong get_prTotal() const noexcept { return prTotal; }
+    /// prTotal getter.
+    constexpr ulong get_prTotal() const noexcept { return prTotal; }
 
 private:
 
-	Ntw& host;		///< ref: The host network for this reaction.
+    Ntw& host;	    ///< ref: The host network for this reaction.
 
-	// Convenience references to some of the host members
-	typename Ntw::Reticulum&	mt;		///< ref: The segments.
-	const szt&					clnum;	///< ref: Current number fo clusters.
+    // Convenience references to some of the host members
+    typename Ntw::Reticulum&    mt;	    ///< ref: The segments.
+    const szt&    	    	    clnum;    ///< ref: Current number fo clusters.
 
-	// Propensities
-	std::vector<ulong>	pr;				///< Propensities per cluster.
-	ulong				prTotal {};		///< Total propensity.
+    // Propensities
+    std::vector<ulong>    pr;	    	    ///< Propensities per cluster.
+    ulong	    	    prTotal {};	    ///< Total propensity.
 
-	/**
-	 * @brief Set this reaction propensity for the indexed cluster.
-	 * @note Does not update the whole network propensity.
-	 * @param c Index of the cluster that is updateed
-	 */
-	void set_prop(const szt c) noexcept;
+    /**
+     * @brief Set this reaction propensity for the indexed cluster.
+     * @note Does not update the whole network propensity.
+     * @param c Index of the cluster that is updateed
+     */
+    void set_prop(const szt c) noexcept;
 
-	/// Execute the raction event.
-	auto fire() noexcept;
+    /// Execute the raction event.
+    auto fire() noexcept;
 
-	/**
-	 * @brief Find sa random node from those suitable for this reaction.
-	 * @param w Index of random segment.
-	 * @param a Random position inside the segment.
-	 */
-	bool find_random_node(szt& w, szt& a) const noexcept;
+    /**
+     * @brief Find sa random node from those suitable for this reaction.
+     * @param w Index of random segment.
+     * @param a Random position inside the segment.
+     */
+    bool find_random_node(szt& w, szt& a) const noexcept;
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -97,91 +97,91 @@ private:
 template<typename Ntw>
 NtwFission<Ntw>::
 NtwFission( Ntw& host )
-	: host {host}
-	, mt {host.mt}
-	, clnum {host.clnum}
+    : host {host}
+    , mt {host.mt}
+    , clnum {host.clnum}
 {}
 
 template<typename Ntw>
 ulong NtwFission<Ntw>::
 set_prop() noexcept
 {
-	pr.resize(clnum);
-	for (szt ic=0; ic<clnum; ic++)
-		set_prop(ic);
+    pr.resize(clnum);
+    for (szt ic=0; ic<clnum; ic++)
+	    set_prop(ic);
 
-	return std::accumulate(pr.begin(), pr.end(), 0UL);
+    return std::accumulate(pr.begin(), pr.end(), 0UL);
 }
 
 template<typename Ntw>
 void NtwFission<Ntw>::
 set_prop( const szt ic ) noexcept
 {
-	pr[ic] = 0UL;
-	for (const auto w : host.clmt[ic]) {
-		pr[ic] += mt[w].set_end_fin(1) +
-				  mt[w].set_end_fin(2);
-		for (szt a=0; a<mt[w].g.size()-1; a++)
-			pr[ic] += 2UL * mt[w].set_bulk_fin(a);
-	}
+    pr[ic] = 0UL;
+    for (const auto w : host.clmt[ic]) {
+	    pr[ic] += mt[w].set_end_fin(1) +
+	    	      mt[w].set_end_fin(2);
+	    for (szt a=0; a<mt[w].g.size()-1; a++)
+    	    pr[ic] += 2UL * mt[w].set_bulk_fin(a);
+    }
 }
 
 template<typename Ntw>
 void NtwFission<Ntw>::
-update_prop( const szt c ) noexcept		// incremental clnum changes are assumed
+update_prop( const szt c ) noexcept	    // incremental clnum changes are assumed
 {
-	if (pr.size() > clnum) {
-		pr.resize(clnum);
-	}
-	else if (pr.size() < clnum)
-		pr.resize(clnum);
+    if (pr.size() > clnum) {
+	    pr.resize(clnum);
+    }
+    else if (pr.size() < clnum)
+	    pr.resize(clnum);
 
-	if (c < clnum)
-		set_prop(c);
+    if (c < clnum)
+	    set_prop(c);
 
-	prTotal = std::accumulate(pr.begin(), pr.end(), zero<real>);
+    prTotal = std::accumulate(pr.begin(), pr.end(), zero<real>);
 }
 
 template<typename Ntw>
 auto NtwFission<Ntw>::
 fire() noexcept
 {
-	szt w {huge<szt>};
-	szt a {huge<szt>};
+    szt w {huge<szt>};
+    szt a {huge<szt>};
 
-	find_random_node(w, a);
+    find_random_node(w, a);
 
-	return host.fiss(w, a);
+    return host.fiss(w, a);
 }
 
 template<typename Ntw>
 bool NtwFission<Ntw>::
 find_random_node( szt& w, szt& a ) const noexcept
 {
-	auto k = host.rnd.uniform1(prTotal);
-	szt ksum {};
-	for (w=1; w<=host.mtnum; w++) {
-		const auto& g = mt[w].g;
-		a = 0;
-		ksum += g[a].fin[0];
-		if (k <= ksum)
-			return true;
-		for (; a<g.size()-1;) {
-			ksum += g[a].fin[1];
-			a++;
-			ksum += g[a].fin[0];
-			if (k <= ksum)
-				return true;
-		}
-		ksum += g[a].fin[1];
-		if (k <= ksum) {
-			a++;
-			return true;
-		}
-	}
-	return false;
+    auto k = host.rnd.uniform1(prTotal);
+    szt ksum {};
+    for (w=1; w<=host.mtnum; w++) {
+	    const auto& g = mt[w].g;
+	    a = 0;
+	    ksum += g[a].fin[0];
+	    if (k <= ksum)
+    	    return true;
+	    for (; a<g.size()-1;) {
+    	    ksum += g[a].fin[1];
+    	    a++;
+    	    ksum += g[a].fin[0];
+    	    if (k <= ksum)
+	    	    return true;
+	    }
+	    ksum += g[a].fin[1];
+	    if (k <= ksum) {
+    	    a++;
+    	    return true;
+	    }
+    }
+    return false;
 }
 
-}	// namespace MitoSim
+}    // namespace MitoSim
 
 #endif // NTW_FISSION_H

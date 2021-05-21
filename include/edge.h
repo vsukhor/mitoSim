@@ -47,40 +47,40 @@ class Edge {
 
 public:
 
-	szt					ind {huge<szt>};	///< Index network-wide: starts from 0.
-	szt					indcl {huge<szt>};	///< Index cluster-wide: starts from 0.
-	szt					cl {huge<szt>};		///< Current cluster index.
-	std::array<ulong,2>	fin {{}};			///< Contribution to fission propensity at each end.
+    szt    	    	    ind {huge<szt>};    ///< Index network-wide: starts from 0.
+    szt    	    	    indcl {huge<szt>};    ///< Index cluster-wide: starts from 0.
+    szt    	    	    cl {huge<szt>};	    ///< Current cluster index.
+    std::array<ulong,2>    fin {{}};    	    ///< Contribution to fission propensity at each end.
 
-	/**
-	 * @brief Constructor.
-	 * @param ind Index network-wide.
-	 * @param indcl Index cluster-wide.
-	 * @param cl Current cluster index.
-	 */
-	explicit Edge(const szt ind,
-		 const szt indcl,
-		 const szt cl);
+    /**
+     * @brief Constructor.
+     * @param ind Index network-wide.
+     * @param indcl Index cluster-wide.
+     * @param cl Current cluster index.
+     */
+    explicit Edge(const szt ind,
+	     const szt indcl,
+	     const szt cl);
 
 
-	/// Swap the edge ends.
-	void reflect();
+    /// Swap the edge ends.
+    void reflect();
 
-	/**
-	 *@brief Write the edge to a file.
-	 * @param ofs Output file stream.
-	 */
-	void write(std::ofstream& ofs) const;
+    /**
+     *@brief Write the edge to a file.
+     * @param ofs Output file stream.
+     */
+    void write(std::ofstream& ofs) const;
 
-	/**
-	 * @brief Print the edge to a stream.
-	 * @param os Output stream.
-	 * @param a Position inside segment.
-	 * @param endline Flag to end current line.
-	*/
-	void print(std::ostream& os,
-			   const szt a,
-			   const bool endline) const;
+    /**
+     * @brief Print the edge to a stream.
+     * @param os Output stream.
+     * @param a Position inside segment.
+     * @param endline Flag to end current line.
+    */
+    void print(std::ostream& os,
+    	       const szt a,
+    	       const bool endline) const;
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -88,47 +88,47 @@ public:
 template<int ContentT>
 Edge<ContentT>::
 Edge(
-	const szt ind,
-	const szt indcl,
-	const szt cl
-	)
-	: ind {ind}
-	, indcl {indcl}
-	, cl {cl}
+    const szt ind,
+    const szt indcl,
+    const szt cl
+    )
+    : ind {ind}
+    , indcl {indcl}
+    , cl {cl}
 {}
 
 template<int ContentT>
 void Edge<ContentT>::
 reflect()
 {
-	std::swap(fin[0], fin[1]);
+    std::swap(fin[0], fin[1]);
 }
 
 template<int ContentT>
 void Edge<ContentT>::
 write( std::ofstream &ofs ) const
 {
-	ofs.write(reinterpret_cast<const char*>(&ind), sizeof(szt));
-	ofs.write(reinterpret_cast<const char*>(&indcl), sizeof(szt));
-	ofs.write(reinterpret_cast<const char*>(&cl), sizeof(szt));
-	ofs.write(reinterpret_cast<const char*>(&fin[0]), sizeof(ulong));
-	ofs.write(reinterpret_cast<const char*>(&fin[1]), sizeof(ulong));
+    ofs.write(reinterpret_cast<const char*>(&ind), sizeof(szt));
+    ofs.write(reinterpret_cast<const char*>(&indcl), sizeof(szt));
+    ofs.write(reinterpret_cast<const char*>(&cl), sizeof(szt));
+    ofs.write(reinterpret_cast<const char*>(&fin[0]), sizeof(ulong));
+    ofs.write(reinterpret_cast<const char*>(&fin[1]), sizeof(ulong));
 }
 
 template<int ContentT>
 void Edge<ContentT>::
 print( std::ostream& os,
-	   const szt a,
-	   const bool endline ) const
+       const szt a,
+       const bool endline ) const
 {
-	os << "[" << a << "] ";
-	os << " ind " << ind; 
-	os << " indcl " << indcl;
-	os << " fin " << fin[0] << " " << fin[1];
-	if (endline) os << "\n";
+    os << "[" << a << "] ";
+    os << " ind " << ind; 
+    os << " indcl " << indcl;
+    os << " fin " << fin[0] << " " << fin[1];
+    if (endline) os << "\n";
 }
 
-}	// namespace MitoSim
+}    // namespace MitoSim
 
 #endif // EDGE_H
 
