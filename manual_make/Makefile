@@ -54,7 +54,7 @@ TARGET := $(TARGET_DIR)$(TARGET)
 all : $(TARGET)
 
 CC := g++
-CFLAGS = -c -Wall -O3 -msse4 -march=native $(INCDIR) $(CPP_VARS) -std=c++17
+CFLAGS = -c -Wall -O3 -msse4 -march=native $(INCDIR) $(CPP_VARS) -std=c++20
 LFLAGS = -Wall -L$(UTILS_DIR)lib -lpthread -lstdc++ -lutils
 
 $(TARGET) : $(OBJS_FULL)

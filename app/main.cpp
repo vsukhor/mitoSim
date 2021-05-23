@@ -22,6 +22,7 @@
    SOFTWARE.
 ============================================================================== */
 
+#include <span>
 #include <string>
 #include <vector>
 
@@ -44,7 +45,7 @@ namespace MitoSim {
 using namespace Utils::Common;
 using RandFactory = Utils::Random::Boost<real>;
 constexpr bool verbose {};	 ///< Work in verbose mode.
-}
+}   // namespace MitoSim
 
 #include "config.h"
 #include "segment.h"
@@ -58,6 +59,7 @@ int main( int argc, char* argv[] )
 	    return Exceptions::simple(
             "Error: not sufficient configuration data provided");
 
+    auto args = std::span(argv, size_t(argc));
     // Working directory:
     const auto workingDir = std::string(argv[1]);
     // Application-specific suffix of the configuration file:
