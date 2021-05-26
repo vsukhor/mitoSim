@@ -1,15 +1,18 @@
 # IMPOTRANT NOTE: Unless set in the environment,
 # values of the following variables need to be supplied via the command line
-# (1) $(BOOST_DIR)  # default is empty, path to boost library (only the headers will be needed)
-# (2) $(PROCESSOR)  # may take values 0 or 1: to set use of the pseudo-random number generator
- 					# from boost or (in case of cuda availablility) curand respectively; default is 1
+# (1) $(BOOST_DIR)  # default is empty, path to boost library (only the headers
+#                   # will be needed)
+# (2) $(PROCESSOR)  # may take values 0 or 1: to set use of the pseudo-random
+#                   # number generator from boost or (in case of cuda
+ 					# availablility) curand respectively; default is 1
 # You may also need to supply explicitely executables for $(AR), $(AS) and $(CC)
 # to override or supplement the environment variables
 # e.g., the call from the directory where the Makefile is, may look like:
-# make PROCESSOR=0 -B all BOOST_DIR=/path/to/boost_includes AS=/usr/bin/as AR=/usr/bin/ar CC=/usr/local/gcc-9.1.0/bin/gcc-9.1.0
+# make PROCESSOR=0 -B all BOOST_DIR=/path/to/boost_includes AS=/usr/bin/as AR=/usr/bin/ar CC=/usr/local/gcc-10.2.0/bin/gcc-10.2.0
 # Alternatively, hardcode them directly here.
 #
-# The executable is ../app/mitosim_X, where "X" is either "CPU" or "CUDA", depending on the $(PROCESSOR)
+# The executable is ../app/mitosim_X, where "X" is either "CPU" or "CUDA",
+# depending on the $(PROCESSOR)
 #
 # To check the actual value of a variable $(VAR):
 # make print-VAR

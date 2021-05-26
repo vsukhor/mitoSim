@@ -20,8 +20,8 @@
    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
-
-============================================================================== */
+================================================================================
+*/
 
 /**
 * @file segment.h
@@ -69,17 +69,18 @@ class Segment<3> {
 
 public:
 
-    static constexpr szt maxDeg {3};    ///< Maximal node degree allowed.
+    static constexpr szt maxDeg {3};  ///< Maximal node degree allowed.
 
     using EdgeT = Edge<maxDeg>;
     using thisT = Segment<maxDeg>;
 
-    Msgr&	    	    	    	    msgr;	    ///< Output message processor.
-    std::vector<EdgeT>    	    	    g;    	    ///< the edges.
-    szt    	    	    	    	    cl {};	    ///< cluster index.
-    std::array<szt,maxDeg>	    	    nn {{}};    ///< number of neighbours.
-    std::array<std::vector<szt>,maxDeg> neig;	    ///< neighbours.
-    std::array<std::vector<szt>,maxDeg> neen;	    ///< neighbour ends.
+    Msgr&                  msgr;     ///< Output message processor.
+    std::vector<EdgeT>     g;        ///< the edges.
+    szt                    cl {};    ///< cluster index.
+    std::array<szt,maxDeg> nn {{}};  ///< number of neighbours.
+
+    std::array<std::vector<szt>,maxDeg> neig;  ///< neighbours.
+    std::array<std::vector<szt>,maxDeg> neen;  ///< neighbour ends.
 
     /**
      * @brief Constructor
@@ -96,11 +97,11 @@ public:
      * @param msgr Output message processor.
      */
     explicit Segment(
-	      const szt segmass,
-	      const szt cl,
-	      szt& mtmass, 
-	      szt& ei, 
-	      Msgr& msgr );
+        szt segmass,
+        szt cl,
+        szt& mtmass,
+        szt& ei,
+        Msgr& msgr );
 
     /// Reflect the vector containing the segment edges.
     void reflect_g();
@@ -125,10 +126,7 @@ public:
      * @param initind Starting edge index in the current disconnected component.
      * @return The last edge index in the current disconnected network component.
      */
-    szt setCl(
-        const szt newcl,
-        const szt initind
-    );
+    szt setCl(szt newcl, szt initind);
 
     /**
      * @brief Convert segment index to internal position.
@@ -138,7 +136,7 @@ public:
      * @return Internal position.
      * @return The last edge index in the current disconnected component.
      */
-    constexpr szt end2a(const szt e) const;
+    constexpr szt end2a(szt e) const;
 
     /**
      * @brief Determine if the segment has one free end.
@@ -151,14 +149,14 @@ public:
      * @param e Segment end.
       * @return the Neighbour index.
      */
-    szt single_neig_index(const szt e) const;
+    szt single_neig_index(szt e) const;
 
     /**
      * @brief Neigbour indexes at a segment end
      * @param e Segment end.
       * @return the Neighbour indexes.
      */
-    std::vector<szt> double_neig_indexes(const szt e) const;
+    std::vector<szt> double_neig_indexes(szt e) const;
 
 
     /// Report if the segment is looped onto itself.
@@ -169,7 +167,7 @@ public:
      * @param deg Node degree.
      * @return the Number of nodes.
      */
-    szt num_nodes(const szt deg) const;
+    szt num_nodes(szt deg) const;
 
     /**
      * @brief Report the segment length measured in edges.
@@ -187,23 +185,23 @@ public:
      * @brief Set fission-specific factor for a bulk node.
      * @param a In-segment node posiiton.
      */
-    ulong set_bulk_fin(const szt a);
+    ulong set_bulk_fin(szt a);
 
 
     /// Print segment parameters.
     void print(
-        const szt w,
+        szt w,
         const std::string& tag,
-        const szt at=huge<szt>
+        szt at=huge<szt>
     ) const;
 
 
     /// Print segment parameters.
     void print(
         std::ostream& os,
-        const szt w,
+        szt w,
         const std::string& tag,
-        const szt at=huge<szt>
+        szt at=huge<szt>
     ) const;
 
 
@@ -222,7 +220,7 @@ private:
      * @param p Edge to be inserted.
      * @return The pointer to the newly inserted edge.
      */
-    EdgeT* increment_length( const long a, EdgeT p );
+    EdgeT* increment_length(long a, EdgeT p);
 
 
     /// Initialise the neigbour vectors at both ends.
@@ -243,9 +241,9 @@ Segment<3>::
 Segment(
       const szt segmass,
       const szt cl,
-      szt& mtmass, 	    // var ref
-      szt& ei,     	    // var ref
-      Msgr& msgr	    // var ref
+      szt& mtmass,         // var ref
+      szt& ei,             // var ref
+      Msgr& msgr        // var ref
     )
     : msgr {msgr}
     , cl {cl}
@@ -253,7 +251,7 @@ Segment(
     init_ends();
 
     for (szt a=0; a<segmass; a++)
-	    increment_length(long(a-1), EdgeT{ei++, a, cl});
+        increment_length(long(a-1), EdgeT{ei++, a, cl});
 
     mtmass += segmass;
 }
@@ -290,7 +288,7 @@ reflect_g()
 {
     std::reverse(g.begin(), g.end());
     for (auto& o : g)
-	    o.reflect();
+        o.reflect();
 }
 
 
@@ -302,8 +300,8 @@ set_gCl(
 )
 {
     for (szt i=0; i<g.size(); i++) {
-	    g[i].cl = newcl;
-	    g[i].indcl = initind + i;
+        g[i].cl = newcl;
+        g[i].indcl = initind + i;
     }
     
     return initind + (szt)g.size();
@@ -336,7 +334,7 @@ has_one_free_end() const    // return the end index if true
 {
     if (    !nn[1] &&  nn[2]) return 1;
     else if (nn[1] && !nn[2]) return 2;
-    else	    	    	  return 0;
+    else                      return 0;
 }
 
 
@@ -345,9 +343,9 @@ szt Segment<3>::
 single_neig_index( const szt e ) const
 {
     for (szt i=1; i<=nn[e]; i++) 
-	    if (neig[e][i])
-    	    return i;
-    	    
+        if (neig[e][i])
+            return i;
+            
     return huge<szt>;
 }
 
@@ -358,13 +356,13 @@ double_neig_indexes( const szt e ) const
 {
     XASSERT(nn[e] == 2,
             "Error in Mito::double_neig_indexes: nn[e] != 2 in cluster "+
-            STR(cl)+"\n");
+            Utils::Common::STR(cl)+"\n");
 
     std::vector<szt> neigInds(nn[e]);
     szt j {};
     for (szt i=1; i<=nn[e]; i++)
-	    if (neig[e][i])
-    	    neigInds[j++] = i;
+        if (neig[e][i])
+            neigInds[j++] = i;
     
     return neigInds;
 }
@@ -375,29 +373,30 @@ bool Segment<3>::
 is_cycle() const
 {
     return nn[1] == 1 && 
-	       nn[2] == 1 && 
-	       neig[1][single_neig_index(1)] == neig[2][single_neig_index(2)];
+           nn[2] == 1 && 
+           neig[1][single_neig_index(1)] == neig[2][single_neig_index(2)];
 }
 
 
 szt Segment<3>::
-num_nodes( const szt deg ) const	    	    // deg = 1, 2, 3
-{	    	    	    	    	    	    	    
-    if (deg == 1) {	    	    	// count nodes of degree 1
-	    if (      nn[1] &&  nn[2]) return 0;
-	    else if (!nn[1] && !nn[2]) return 2;
-	    else    	    	       return 1;
+num_nodes( const szt deg ) const                // deg = 1, 2, 3
+{                                                        
+    if (deg == 1) {                    // count nodes of degree 1
+        if (      nn[1] &&  nn[2]) return 0;
+        else if (!nn[1] && !nn[2]) return 2;
+        else                       return 1;
     }
     else if (deg == 2)      // count nodes of degree 2
-	    return nn[1] && nn[2] && is_cycle()
+        return nn[1] && nn[2] && is_cycle()
                ? g.size()
                : g.size() - 1;
-    else if (deg == 3) {	 // count nodes of degree 3
-	    if (     nn[1] == 2 && nn[2] == 2) return 2;
-	    else if (nn[1] == 2 || nn[2] == 2) return 1;
-	    else if (nn[1] != 2 && nn[2] != 2) return 0;
+    else if (deg == 3) {     // count nodes of degree 3
+        if (     nn[1] == 2 && nn[2] == 2) return 2;
+        else if (nn[1] == 2 || nn[2] == 2) return 1;
+        else if (nn[1] != 2 && nn[2] != 2) return 0;
     }
-    else msgr.exit("Error in Mito::num_nodes(). Not implemented deg", deg);
+    else msgr.exit("Error in Mito::num_nodes(). Not implemented deg" +
+                    std::to_string(deg));
     return huge<szt>;
 }
 
@@ -444,7 +443,7 @@ print( std::ostream& os,
     else os << "(at " << at << " of ";
     os << g.size() << ") [ ";    
     for (szt i=1; i<=nn[1]; i++) os << neig[1][i] << " ";
-    os << "] { ";	    
+    os << "] { ";        
     for (szt i=1; i<=nn[1]; i++) os << neen[1][i] << " ";    
     os << "} [ ";
     for (szt i=1; i<=nn[2]; i++) os << neig[2][i] << " ";
@@ -454,7 +453,7 @@ print( std::ostream& os,
 #ifdef PRINT_EDGES
     os << std::endl;
     for (szt i=0; i<g.size(); i++) 
-	    g[i].print(os, i, 1);
+        g[i].print(os, i, 1);
 #else
     os << " len " << g.size();
 #endif
@@ -472,18 +471,18 @@ write( std::ofstream& ofs ) const
     ofs.write(reinterpret_cast<const char*>(&nn[1]), sizeof(szt));
     
     for (szt j=1; j<=nn[1]; j++) {
-	    ofs.write(reinterpret_cast<const char*>(&neig[1][j]), sizeof(szt));
-	    ofs.write(reinterpret_cast<const char*>(&neen[1][j]), sizeof(szt));
+        ofs.write(reinterpret_cast<const char*>(&neig[1][j]), sizeof(szt));
+        ofs.write(reinterpret_cast<const char*>(&neen[1][j]), sizeof(szt));
     }
     
     ofs.write(reinterpret_cast<const char*>(&nn[2]), sizeof(int));
     
     for (szt j=1; j<=nn[2]; j++) {
-	    ofs.write(reinterpret_cast<const char*>(&neig[2][j]), sizeof(szt));
-	    ofs.write(reinterpret_cast<const char*>(&neen[2][j]), sizeof(szt));
+        ofs.write(reinterpret_cast<const char*>(&neig[2][j]), sizeof(szt));
+        ofs.write(reinterpret_cast<const char*>(&neen[2][j]), sizeof(szt));
     }
     for (szt j=0; j<len; j++)
-	    g[j].write(ofs);
+        g[j].write(ofs);
 }
 
 }    // namespace MitoSim

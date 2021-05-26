@@ -20,8 +20,8 @@
    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
-
-============================================================================== */
+================================================================================
+*/
 
 /**
 * @file fusion_candidates.h
@@ -37,7 +37,7 @@ namespace MitoSim {
 /**
  * @brief Container for fusion candidate nodes.
  * @note Should be used only the reactions not intended
- *       for fusion to a loop segment.
+ * for fusion to a loop segment.
  */
 struct FusionCandidatesXX {
 
@@ -48,7 +48,7 @@ struct FusionCandidatesXX {
 
     /// Empty the container.
     void clear() noexcept { u.clear();
-    	    	    	    v.clear(); }
+                            v.clear(); }
 
     /**
      * @brief Add a node pair.
@@ -56,10 +56,10 @@ struct FusionCandidatesXX {
      * @param vc Segment and end indexes of the 2nd participant.
      */
     void add(const std::array<szt,2>& uc,
-    	     const std::array<szt,2>& vc )
+             const std::array<szt,2>& vc )
     {
-	    u.emplace_back(uc);
-	    v.emplace_back(vc);
+        u.emplace_back(uc);
+        v.emplace_back(vc);
     }
 
     /**
@@ -72,9 +72,9 @@ struct FusionCandidatesXX {
     /// Print the content out.
     void print()
     {
-	    for(szt i=0; i<size(); i++)
-    	    print(i, false);
-	    std::cout << "\n";
+        for(szt i=0; i<size(); i++)
+            print(i, false);
+        std::cout << "\n";
     }
 
     /**
@@ -83,11 +83,11 @@ struct FusionCandidatesXX {
      * @param nl Bool true is cr is intended.
      */
     void print( const szt i,
-	    	    bool nl=true )
+                bool nl=true )
     {
-	    std::cout << " [" <<  u[i][0] << " " << u[i][1] << " + "
-	    	    	      <<  v[i][0] << " " << v[i][1] << "] ";
-	    if (nl) std::cout << "\n";
+        std::cout << " [" <<  u[i][0] << " " << u[i][1] << " + "
+                          <<  v[i][0] << " " << v[i][1] << "] ";
+        if (nl) std::cout << "\n";
     }
 };
 
@@ -101,7 +101,7 @@ struct FusionCandidatesXU {
     /// Segment and end indexes of the non-looped participant.
     std::vector<std::array<szt,2>>  u;
     /// Segment index of the looped participant.
-    std::vector<szt>         	    v;
+    std::vector<szt>                 v;
 
     /// Empty the container.
     void clear() noexcept { u.clear(); v.clear(); }
@@ -112,10 +112,10 @@ struct FusionCandidatesXU {
      * @param vc Segment index of the looped participant.
     */
     void add(std::array<szt,2> uc,
-    	     szt vc )
+             szt vc )
     {
-	    u.emplace_back(uc);
-	    v.emplace_back(vc);
+        u.emplace_back(uc);
+        v.emplace_back(vc);
     }
 
     /**

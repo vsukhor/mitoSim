@@ -20,8 +20,8 @@
    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
-
-============================================================================== */
+================================================================================
+*/
 
 /**
 * @file ntw_fission.h
@@ -32,7 +32,11 @@
 #ifndef NTW_FISSION_H
 #define NTW_FISSION_H
 
+#include "utils/common/constants.h"
+
 namespace MitoSim {
+
+using Utils::Common::szt;
 
 template<typename> class Fission;
 
@@ -47,14 +51,14 @@ public:
 
     friend Fission<Ntw>;
 
-    explicit NtwFission(Ntw&);	    ///< Constructor.
+    explicit NtwFission(Ntw&);        ///< Constructor.
 
     /// Set this reaction propensity for the whole network.
     ulong set_prop()  noexcept;
 
     /**
      * @brief Update this reaction propensity for the whole network.
-     * 	      This is done after updating it for the cluster indexed.
+     * This is done after updating it for the cluster indexed.
      * @param c Cluster index that triggers the update.
      */
     void update_prop(const szt c) noexcept;
@@ -64,15 +68,15 @@ public:
 
 private:
 
-    Ntw& host;	    ///< ref: The host network for this reaction.
+    Ntw& host;  ///< ref: The host network for this reaction.
 
     // Convenience references to some of the host members
-    typename Ntw::Reticulum&    mt;	    ///< ref: The segments.
-    const szt&    	    	    clnum;    ///< ref: Current number fo clusters.
+    typename Ntw::Reticulum& mt;     ///< ref: The segments.
+    const szt&               clnum;  ///< ref: Current number fo clusters.
 
     // Propensities
-    std::vector<ulong>    pr;	    	    ///< Propensities per cluster.
-    ulong	    	    prTotal {};	    ///< Total propensity.
+    std::vector<ulong>   pr;          ///< Propensities per cluster.
+    Utils::Common::ulong prTotal {};  ///< Total propensity.
 
     /**
      * @brief Set this reaction propensity for the indexed cluster.
@@ -103,12 +107,12 @@ NtwFission( Ntw& host )
 {}
 
 template<typename Ntw>
-ulong NtwFission<Ntw>::
+Utils::Common::ulong NtwFission<Ntw>::
 set_prop() noexcept
 {
     pr.resize(clnum);
     for (szt ic=0; ic<clnum; ic++)
-	    set_prop(ic);
+        set_prop(ic);
 
     return std::accumulate(pr.begin(), pr.end(), 0UL);
 }
@@ -119,27 +123,27 @@ set_prop( const szt ic ) noexcept
 {
     pr[ic] = 0UL;
     for (const auto w : host.clmt[ic]) {
-	    pr[ic] += mt[w].set_end_fin(1) +
-	    	      mt[w].set_end_fin(2);
-	    for (szt a=0; a<mt[w].g.size()-1; a++)
-    	    pr[ic] += 2UL * mt[w].set_bulk_fin(a);
+        pr[ic] += mt[w].set_end_fin(1) +
+                  mt[w].set_end_fin(2);
+        for (szt a=0; a<mt[w].g.size()-1; a++)
+            pr[ic] += 2UL * mt[w].set_bulk_fin(a);
     }
 }
 
 template<typename Ntw>
 void NtwFission<Ntw>::
-update_prop( const szt c ) noexcept	 // incremental clnum changes are assumed
+update_prop( const szt c ) noexcept     // incremental clnum changes are assumed
 {
     if (pr.size() > clnum) {
-	    pr.resize(clnum);
+        pr.resize(clnum);
     }
     else if (pr.size() < clnum)
-	    pr.resize(clnum);
+        pr.resize(clnum);
 
     if (c < clnum)
-	    set_prop(c);
+        set_prop(c);
 
-    prTotal = std::accumulate(pr.begin(), pr.end(), zero<real>);
+    prTotal = std::accumulate(pr.begin(), pr.end(), Utils::Common::zero<real>);
 }
 
 template<typename Ntw>
@@ -161,23 +165,23 @@ find_random_node( szt& w, szt& a ) const noexcept
     auto k = host.rnd.uniform1(prTotal);
     szt ksum {};
     for (w=1; w<=host.mtnum; w++) {
-	    const auto& g = mt[w].g;
-	    a = 0;
-	    ksum += g[a].fin[0];
-	    if (k <= ksum)
-    	    return true;
-	    for (; a<g.size()-1;) {
-    	    ksum += g[a].fin[1];
-    	    a++;
-    	    ksum += g[a].fin[0];
-    	    if (k <= ksum)
-	    	    return true;
-	    }
-	    ksum += g[a].fin[1];
-	    if (k <= ksum) {
-    	    a++;
-    	    return true;
-	    }
+        const auto& g = mt[w].g;
+        a = 0;
+        ksum += g[a].fin[0];
+        if (k <= ksum)
+            return true;
+        for (; a<g.size()-1;) {
+            ksum += g[a].fin[1];
+            a++;
+            ksum += g[a].fin[0];
+            if (k <= ksum)
+                return true;
+        }
+        ksum += g[a].fin[1];
+        if (k <= ksum) {
+            a++;
+            return true;
+        }
     }
     return false;
 }

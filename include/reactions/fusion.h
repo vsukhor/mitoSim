@@ -20,8 +20,8 @@
    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
-
-============================================================================== */
+================================================================================
+*/
 
 /**
 * @file fusion.h
@@ -42,6 +42,8 @@
 
 namespace MitoSim {
 
+using Utils::Common::uint;
+
 /**
  * @brief Base class for fusion reaction classes.
  * @tparam D1 node degree of the 1st fusion participant
@@ -49,12 +51,12 @@ namespace MitoSim {
  * @tparam Ntw type of the network
  */
 template<uint D1,
-	     uint D2,
-	     typename Ntw>
+         uint D2,
+         typename Ntw>
 class Fusion
     : public Reaction {
 
-    friend Gillespie<Reaction,RandFactory>;
+    friend Utils::Common::Gillespie<Reaction,RandFactory>;
 
 public:
 
@@ -68,17 +70,17 @@ public:
      * @param time current time
      * @param srt reaction name literal
      */
-    Fusion( Msgr& msgr,
-    	    const szt ind,
-    	    Ntw& netw,
-    	    const real rate,
-    	    const ulong& it,	    // const ref
-    	    const real& time,	    // const ref
-    	    const std::string& srt
-	    )
-	    : Reaction {msgr, ind, rate, it, time, "fusion", srt}
-	    , netw {netw}
-	    , rnd {netw.rnd}
+    Fusion( Utils::Common::Msgr& msgr,
+            const szt ind,
+            Ntw& netw,
+            const real rate,
+            const ulong& it,        // const ref
+            const real& time,        // const ref
+            const std::string& srt
+        )
+        : Reaction {msgr, ind, rate, it, time, "fusion", srt}
+        , netw {netw}
+        , rnd {netw.rnd}
     {}
 
     /**
@@ -108,8 +110,8 @@ protected:
     using Reaction::msgr;
 
     // Convenience references.
-    Ntw&	     netw;	    ///< ref: The host network for this reaction.
-    RandFactory& rnd;	    ///< ref: Random number factory.
+    Ntw&         netw;        ///< ref: The host network for this reaction.
+    RandFactory& rnd;        ///< ref: Random number factory.
 
     std::array<szt,2> cc;   ///< Indices of the clusters.
 
@@ -134,8 +136,8 @@ auto Fusion<D1,D2,Ntw>::
 is_active( const std::unique_ptr<Reaction>& r )
 {
     return  r->srt == "fu1L" ||
-    	    r->srt == "fu11" ||
-    	    r->srt == "fu12";
+            r->srt == "fu11" ||
+            r->srt == "fu12";
 }
 
 
@@ -144,11 +146,11 @@ void Fusion<D1,D2,Ntw>::
 initialize_dependencies( const vup<Reaction>& rc ) noexcept
 {
     for (const auto& o : rc)
-	    if (
-    	    Fusion<D1,D2,Ntw>::is_active(o) ||
-    	    Fission<Ntw>::is_active(o)
-    	    )
-    	    dependents.push_back(o.get());
+        if (
+            Fusion<D1,D2,Ntw>::is_active(o) ||
+            Fission<Ntw>::is_active(o)
+            )
+            dependents.push_back(o.get());
 
     set_prop();
     set_score();
@@ -162,8 +164,8 @@ update_netw_stats()
     netw.update_books();
     
     for (auto& o : dependents) {
-	    o->update_prop(cc[0], cc[1]);
-	    o->set_score();
+        o->update_prop(cc[0], cc[1]);
+        o->set_score();
     }
 }
 
@@ -173,8 +175,8 @@ void Fusion<D1,D2,Ntw>::
 print( const bool le ) const
 {
     Reaction::print(false);
-    msgr.print<false>(" deg1 %d", D1);
-    msgr.print<false>(" deg2 %d", D2);
+    msgr.print<false>(" deg1 " + std::to_string(D1));
+    msgr.print<false>(" deg2 " + std::to_string(D2));
     if (le) msgr.print("");
 }
 

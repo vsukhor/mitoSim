@@ -20,8 +20,8 @@
    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
-
-============================================================================== */
+================================================================================
+*/
 
 /**
 * @file fission.h
@@ -40,7 +40,11 @@
 #include "reaction.h"
 
 namespace MitoSim {
-using namespace Utils;
+
+using Utils::Common::szt;
+using Utils::Common::uint;
+using Utils::Common::ulong;
+using Utils::Common::vup;
 
 template<uint, uint, typename>
 class Fusion;
@@ -53,7 +57,7 @@ template<typename Ntw>
 class Fission
     : public Reaction {
 
-    friend Gillespie<Reaction,RandFactory>;
+    friend Utils::Common::Gillespie<Reaction,RandFactory>;
 
 public:
 
@@ -67,15 +71,15 @@ public:
      * @param time Current time.
      */
     Fission( Msgr& msgr,
-    	     const szt ind,
-    	     Ntw& netw,
-    	     const real rate,
-    	     const ulong& it,    // const ref
-    	     const real& time    // const ref
-	    )
-	    : Reaction {msgr, ind, rate, it, time, "fission", name}
-	    , netw {netw}
-	    , rnd {netw.rnd}
+             const szt ind,
+             Ntw& netw,
+             const real rate,
+             const ulong& it,    // const ref
+             const real& time    // const ref
+        )
+        : Reaction {msgr, ind, rate, it, time, "fission", name}
+        , netw {netw}
+        , rnd {netw.rnd}
     {}
 
     /// Set the Gillespie score for this reaction.
@@ -128,7 +132,7 @@ private:
     using Reaction::msgr;
 
     // Convenience references
-    Ntw&    	  netw;    ///< ref: The network.
+    Ntw&          netw;    ///< ref: The network.
     RandFactory&  rnd;    ///< ref: Random number factory.
 
     std::array<szt,2> cc;
@@ -137,7 +141,7 @@ private:
     real* score {};
 
     /// Number of times this reaction was fired.
-    szt	eventCount {};
+    szt    eventCount {};
 
     /// Reactions that need a score update after *this has fired.
     std::vector<Reaction*> dependents;
@@ -174,12 +178,12 @@ void Fission<Ntw>::
 initialize_dependencies( const vup<Reaction>& rc ) noexcept 
 {
     for (const auto& o : rc) {
-	    if (
-    	    Fusion<1,1,Ntw>::is_active(o) ||
-    	    Fusion<1,2,Ntw>::is_active(o) ||
-    	    Fission<Ntw>::is_active(o)
-    	    )
-    	    dependents.push_back(o.get());
+        if (
+            Fusion<1,1,Ntw>::is_active(o) ||
+            Fusion<1,2,Ntw>::is_active(o) ||
+            Fission<Ntw>::is_active(o)
+            )
+            dependents.push_back(o.get());
     }
     set_prop();
     set_score();
@@ -208,7 +212,7 @@ update_prop( szt c0, szt c1 ) noexcept
 {
     netw.fis.update_prop(c0);
     if (c1 != c0 && c1 != huge<szt>)
-	    netw.fis.update_prop(c1);
+        netw.fis.update_prop(c1);
 }
 
 
@@ -217,8 +221,8 @@ void Fission<Ntw>::
 update_netw_stats()
 {
     for(auto& o : dependents) {
-	    o->update_prop(cc[0], cc[1]);
-	    o->set_score();
+        o->update_prop(cc[0], cc[1]);
+        o->set_score();
     }
 }
 
@@ -242,8 +246,8 @@ void Fission<Ntw>::
 print( const bool le ) const
 {
     Reaction::print(false);
-    msgr.print<false>(" score %f", *score);
-    msgr.print<false>(" eventCount %d", eventCount);
+    msgr.print<false>(" score " + std::to_string(*score));
+    msgr.print<false>(" eventCount " + std::to_string(eventCount));
     if (le) msgr.print("\n");
 }
 

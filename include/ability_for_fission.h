@@ -20,9 +20,8 @@
    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
-
-
-============================================================================== */
+================================================================================
+*/
 
 /**
 * @file ability_for_fission.h
@@ -48,7 +47,7 @@ template<typename> class Fission;
 /**
  * @brief The AbilityForFission class template.
  * @details Adds node type-specific fission capability
- *          and updates the network for it.
+ * and updates the network for it.
  * @tparam Mt Type of the Edge forming the network.
  */
 template<typename Mt>
@@ -85,30 +84,21 @@ public:
      * @param w Segment index.
      * @param a Division positon inside the segment.
      */
-    std::array<szt,2> fiss(
-        const szt w,
-        const szt a
-    );
+    std::array<szt,2> fiss(szt w, szt a);
 
     /**
      * @brief Divide the segment at a node of degree 2.
      * @param w Global segment index.
      * @param a The node position inside the segment.
      */
-    std::array<szt,2> fiss2(
-        const szt w,
-        const szt a
-    );
+    std::array<szt,2> fiss2(szt w, szt a);
 
     /**
      * @brief Divide the segment at a node of degree 3.
      * @param w Global segment index.
      * @param a The node position inside the segment.
      */
-    std::array<szt,2> fiss3(
-        const szt w,
-        const szt a
-    );
+    std::array<szt,2> fiss3(szt w, szt a);
 
 private:
 
@@ -118,14 +108,11 @@ private:
     /**
      * @brief Update network component for changes resulting from its division.
      * @return A flag indicating if the division produces a pair
-     *         of disconnected components.
+     * of disconnected components.
      * @param w Segment index.
      * @param e Segment end.
      */
-    bool update_cl_fiss(
-        const szt w,
-        const szt e
-    ) noexcept;
+    bool update_cl_fiss(szt w, szt e) noexcept;
 
     /**
      * @brief Depth-first search of the network graph.
@@ -135,7 +122,7 @@ private:
      * @param e2 Final segment end.
      * @return True if there is a connection between {w1,e1} and {w2,e2}.
      */
-    bool dfs(const szt w1, const szt e1, const szt w2, const szt e2);
+    bool dfs(szt w1, szt e1, szt w2, szt e2);
 };
 
 
@@ -144,7 +131,7 @@ private:
 template<typename Mt>
 AbilityForFission<Mt>::
 AbilityForFission(
-	    Msgr& msgr
+        Msgr& msgr
     )
     : CoreTransformer<Mt> {msgr}
 {}
@@ -165,11 +152,11 @@ update_cl_fiss(
 
     const bool is_cycle = dfs(w, e, w, oe);
     if (!is_cycle) {
-	    clnum++;
-	    szt clind {};
-	    for (szt i=1; i<=mtnum; i++)
-    	    if (vis[i])
-	    	    clind = mt[i].setCl(clnum-1, clind);
+        clnum++;
+        szt clind {};
+        for (szt i=1; i<=mtnum; i++)
+            if (vis[i])
+                clind = mt[i].setCl(clnum-1, clind);
     }
     return is_cycle;
 }
@@ -182,20 +169,20 @@ dfs( const szt w1, const szt e1,
 )
 {
     for (szt i=1; i<=mt[w1].nn[e1]; i++) {
-	    const auto cn = mt[w1].neig[e1][i];
-	    const auto ce = mt[w1].neen[e1][i];
-	    if (cn == w2) {
-    	    if(ce == e2)
-	    	    return true;
-	    }
-	    else {
-    	    if(!vis[cn]) {
-	    	    vis[cn] = 1;
-	    	    const szt ne {(ce == 1) ? szt(2) : szt(1)};
-	    	    if (dfs(cn, ne, w2, e2))
-    	    	    return true;
-    	    }
-	    }    
+        const auto cn = mt[w1].neig[e1][i];
+        const auto ce = mt[w1].neen[e1][i];
+        if (cn == w2) {
+            if(ce == e2)
+                return true;
+        }
+        else {
+            if(!vis[cn]) {
+                vis[cn] = 1;
+                const szt ne {(ce == 1) ? szt(2) : szt(1)};
+                if (dfs(cn, ne, w2, e2))
+                    return true;
+            }
+        }    
     }
     return false;
 }
@@ -206,16 +193,16 @@ template<typename Mt>
 std::array<szt,2> AbilityForFission<Mt>::
 fiss(
     const szt w,
-        const szt a )
+    const szt a )
 {
     // node 3 -> nodes 2+1 and node 2 -> nodes 1+1 in pure loops
-    if (        a && a < mt[w].g.size())
-	    return fiss2(w, a);
+    if (a && a < mt[w].g.size())
+        return fiss2(w, a);
 
     // node 2 -> nodes 1+1; cuts between g[a-1] and g[a]
     else if ((!a && mt[w].nn[1] <= 2) ||
-    	     (a == mt[w].g.size() && mt[w].nn[2] <= 2))
-	    return fiss3(w, a);
+             (a == mt[w].g.size() && mt[w].nn[2] <= 2))
+        return fiss3(w, a);
 
     else msgr.exit("ERROR: Attempt of an unpropriate fission!");
 
@@ -235,7 +222,7 @@ fiss2(
 )
 {
     if constexpr (verbose)
-	    mt[w].print(w, "fission2:  ", a);	 // cuts between g[a-1] and g[a]
+        mt[w].print(w, "fission2:  ", a);     // cuts between g[a-1] and g[a]
 
     const auto clini = mt[w].cl;
 
@@ -244,7 +231,7 @@ fiss2(
 
     bool inCycle {};
     mt[w].nn[2] ? (inCycle = update_cl_fiss(w, 2))
-	    	    : clnum++;
+                : clnum++;
 
     mt.emplace_back(msgr);
     ++mtnum;
@@ -260,32 +247,32 @@ fiss2(
     this->copy_neigs(w, 2, mtnum, 2);
 
     mt[mtnum].cl = inCycle
-	    	     ? mt[w].cl
-	    	     : clnum - 1;
+                 ? mt[w].cl
+                 : clnum - 1;
 
     if (!inCycle) {
         // Renumber Edge::indcl of the remaining part of the original cluster.
-	    update_gIndcl(mt[w].cl);
+        update_gIndcl(mt[w].cl);
         // Renumber Edge::indcl of the newly formed cluster.
-	    update_gIndcl(clnum-1);
+        update_gIndcl(clnum-1);
     }
 
     mt[w].nn[2] = 0;
 
     [[maybe_unused]] bool isSelfLooped {};
     if (1 == mt[w].nn[1] &&
-	    1 == mt[mtnum].nn[2] && 
-	    w == mt[mtnum].neig[2][mt[mtnum].single_neig_index(2)] && 
-	    mtnum == mt[w].neig[1][mt[w].single_neig_index(1)]) {
+        1 == mt[mtnum].nn[2] && 
+        w == mt[mtnum].neig[2][mt[mtnum].single_neig_index(2)] && 
+        mtnum == mt[w].neig[1][mt[w].single_neig_index(1)]) {
         // Before fission 'w' was looped into itself.
-	    isSelfLooped = true;
-	    if constexpr (verbose) {
-    	    mt[w].print(w, "       transiently producing ", -1);
-    	    mt[mtnum].print(mtnum, "             and ", -1);
-    	    std::cout << std::endl;
-	    }
-	    update_neigs(w, 1, 1, 1, -1, -1, true);
-	    fuse_parallel(w, mtnum);
+        isSelfLooped = true;
+        if constexpr (verbose) {
+            mt[w].print(w, "       transiently producing ", -1);
+            mt[mtnum].print(mtnum, "             and ", -1);
+            std::cout << std::endl;
+        }
+        update_neigs(w, 1, 1, 1, -1, -1, true);
+        fuse_parallel(w, mtnum);
     }
 
     basic_update();
@@ -295,11 +282,11 @@ fiss2(
     XASSERT(mt[w1].cl == clini || mt[w2].cl == clini,
             "Error in fiss3: mt[w1].cl != clini && mt[w2].cl != clini\n");
     if constexpr (verbose) {
-	    mt[w1].print(w1, "       producing ");
-	    if (isSelfLooped)
-    	    msgr.print("from a segment looped into itself");
-	    else mt[w2].print(w2, "             and ");
-	    std::cout << std::endl;
+        mt[w1].print(w1, "       producing ");
+        if (isSelfLooped)
+            msgr.print("from a segment looped into itself");
+        else mt[w2].print(w2, "             and ");
+        std::cout << std::endl;
     }
 
     return {mt[w].cl, mt[mtnum].cl};
@@ -317,7 +304,7 @@ fiss3(
 )
 {
     if constexpr (verbose)
-	    mt[w].print(w, "fission3:  ", a);
+        mt[w].print(w, "fission3:  ", a);
 
     const auto clini = mt[w].cl;
     bool inCycle {};
@@ -326,134 +313,134 @@ fiss3(
     auto ind1 = huge<szt>;
     auto ind2 = huge<szt>;
     if (!a) {  // at end 1
-	    ind1 = mt[w].g.front().ind;
-	    ind2 = mt[mt[w].neig[1][1]].g[mt[mt[w].neig[1][1]].end2a(mt[w].neen[1][1])].ind;
-	    if (mt[w].nn[1] == 2) {
-    	    const auto ninds = mt[w].double_neig_indexes(1);
-    	    f = true;
-    	    for (int j=0; j<2; j++) {
-	    	    n[j] = mt[w].neig[1][ninds[j]];
-	    	    e[j] = mt[w].neen[1][ninds[j]];
-    	    }
-	    }
-	    else if (mt[w].nn[1] == 1)
-    	    n[0] = mt[w].neig[1][1];
+        ind1 = mt[w].g.front().ind;
+        ind2 = mt[mt[w].neig[1][1]].g[mt[mt[w].neig[1][1]].end2a(mt[w].neen[1][1])].ind;
+        if (mt[w].nn[1] == 2) {
+            const auto ninds = mt[w].double_neig_indexes(1);
+            f = true;
+            for (int j=0; j<2; j++) {
+                n[j] = mt[w].neig[1][ninds[j]];
+                e[j] = mt[w].neen[1][ninds[j]];
+            }
+        }
+        else if (mt[w].nn[1] == 1)
+            n[0] = mt[w].neig[1][1];
 
-	    // If not a cycle, this increments clnum and forms a new cluster
+        // If not a cycle, this increments clnum and forms a new cluster
         // from w's end 1 neigs and beyond (excluding w itself).
-	    inCycle = update_cl_fiss(w, 1);
-	    if(!inCycle)
+        inCycle = update_cl_fiss(w, 1);
+        if(!inCycle)
             // Renumber Edge::indcl of the remaining part of the original cluster.
-    	    update_gIndcl(clini);
+            update_gIndcl(clini);
 
-	    update_neigs(w, 1, 1, mt[w].nn[1], -1, -1, true);
+        update_neigs(w, 1, 1, mt[w].nn[1], -1, -1, true);
 
-	    if (f && n[0] != n[1]) {
-    	    if (mt[n[0]].nn[e[0]] == 1 && 
-    	        mt[n[1]].nn[e[1]] == 1) {
+        if (f && n[0] != n[1]) {
+            if (mt[n[0]].nn[e[0]] == 1 && 
+                mt[n[1]].nn[e[1]] == 1) {
 
-	    	    const auto indneig0 = mt[n[0]].single_neig_index(e[0]);
-	    	    const auto indneig1 = mt[n[1]].single_neig_index(e[1]);
+                const auto indneig0 = mt[n[0]].single_neig_index(e[0]);
+                const auto indneig1 = mt[n[1]].single_neig_index(e[1]);
 
-	    	    if (mt[n[0]].neig[e[0]][indneig0] == n[1] && 
-	    	        mt[n[0]].neen[e[0]][indneig0] == e[1] && 
-	    	        mt[n[1]].neig[e[1]][indneig1] == n[0] && 
-	    	        mt[n[1]].neen[e[1]][indneig1] == e[0]) {
+                if (mt[n[0]].neig[e[0]][indneig0] == n[1] && 
+                    mt[n[0]].neen[e[0]][indneig0] == e[1] && 
+                    mt[n[1]].neig[e[1]][indneig1] == n[0] && 
+                    mt[n[1]].neen[e[1]][indneig1] == e[0]) {
 
-    	    	    update_neigs(n[0], e[0], 1, 1, -1, -1, true);
+                    update_neigs(n[0], e[0], 1, 1, -1, -1, true);
 
-    	    	    if (e[0] == e[1])
-	    	    	    fuse_antiparallel(e[0], n[0], n[1]);
-    	    	    else
-	    	    	    (e[0] == 1 && e[1] == 2) ? fuse_parallel(n[0], n[1])
-	    	    	    	    	    	     : fuse_parallel(n[1], n[0]);
-	    	    }
-    	    }
-    	    else if (mt[n[0]].nn[e[0]] == 0 && 
-    	    	     mt[n[1]].nn[e[1]] == 1) {
-	    	    mt[w].print( w, "       w ", -1 );
-	    	    mt[n[0]].print(n[0], "       n[0] ", -1);
-	    	    mt[n[1]].print(n[1], "       n[1] ", -1);
-	    	    msgr.exit("mt[n[0]].nn[e[0]] == 0 && mt[n[1]].nn[e[1]] == 1");
-    	    }
-    	    else if (mt[n[0]].nn[e[0]] == 1 && 
-    	    	     mt[n[1]].nn[e[1]] == 0) {
-	    	    mt[w].print(w, "       w ", -1);
-	    	    mt[n[0]].print(n[0], "       n[0] ", -1);
-	    	    mt[n[1]].print(n[1], "       n[1] ", -1);
-	    	    msgr.exit("mt[n[0]].nn[e[0]] == 1 && mt[n[1]].nn[e[1]] == 0");
-    	    }
-    	    else if (mt[n[0]].nn[e[0]] == 0 && 
-    	    	     mt[n[1]].nn[e[1]] == 0) {
-	    	    mt[w].print(w, "       w ", -1);
-	    	    mt[n[0]].print( n[0], "       n[0] ", -1 );
-	    	    mt[n[1]].print( n[1], "       n[1] ", -1 );
-	    	    msgr.exit("mt[n[0]].nn[e[0]] == 0 && mt[n[1]].nn[e[1]] == 0");
-    	    }
-	    }
+                    if (e[0] == e[1])
+                        fuse_antiparallel(e[0], n[0], n[1]);
+                    else
+                        (e[0] == 1 && e[1] == 2) ? fuse_parallel(n[0], n[1])
+                                                 : fuse_parallel(n[1], n[0]);
+                }
+            }
+            else if (mt[n[0]].nn[e[0]] == 0 && 
+                     mt[n[1]].nn[e[1]] == 1) {
+                mt[w].print( w, "       w ", -1 );
+                mt[n[0]].print(n[0], "       n[0] ", -1);
+                mt[n[1]].print(n[1], "       n[1] ", -1);
+                msgr.exit("mt[n[0]].nn[e[0]] == 0 && mt[n[1]].nn[e[1]] == 1");
+            }
+            else if (mt[n[0]].nn[e[0]] == 1 && 
+                     mt[n[1]].nn[e[1]] == 0) {
+                mt[w].print(w, "       w ", -1);
+                mt[n[0]].print(n[0], "       n[0] ", -1);
+                mt[n[1]].print(n[1], "       n[1] ", -1);
+                msgr.exit("mt[n[0]].nn[e[0]] == 1 && mt[n[1]].nn[e[1]] == 0");
+            }
+            else if (mt[n[0]].nn[e[0]] == 0 && 
+                     mt[n[1]].nn[e[1]] == 0) {
+                mt[w].print(w, "       w ", -1);
+                mt[n[0]].print( n[0], "       n[0] ", -1 );
+                mt[n[1]].print( n[1], "       n[1] ", -1 );
+                msgr.exit("mt[n[0]].nn[e[0]] == 0 && mt[n[1]].nn[e[1]] == 0");
+            }
+        }
     }
-    else if (a == mt[w].g.size()) {	    	    	    	    // at end 2
-	    ind1 = mt[w].g.back().ind;
-	    ind2 = mt[mt[w].neig[2][1]].g[mt[mt[w].neig[2][1]].end2a(mt[w].neen[2][1])].ind;
-	    if (mt[w].nn[2] == 2) {
-    	    const auto ninds = mt[w].double_neig_indexes(2);
-    	    f = true;
-    	    for (int j=0; j<2; j++) {
-	    	    n[j] = mt[w].neig[2][ninds[j]];
-	    	    e[j] = mt[w].neen[2][ninds[j]];
-    	    }
-	    }
-	    else if(mt[w].nn[2] == 1)
-    	    n[0] = mt[w].neig[2][1];
+    else if (a == mt[w].g.size()) {                                // at end 2
+        ind1 = mt[w].g.back().ind;
+        ind2 = mt[mt[w].neig[2][1]].g[mt[mt[w].neig[2][1]].end2a(mt[w].neen[2][1])].ind;
+        if (mt[w].nn[2] == 2) {
+            const auto ninds = mt[w].double_neig_indexes(2);
+            f = true;
+            for (int j=0; j<2; j++) {
+                n[j] = mt[w].neig[2][ninds[j]];
+                e[j] = mt[w].neen[2][ninds[j]];
+            }
+        }
+        else if(mt[w].nn[2] == 1)
+            n[0] = mt[w].neig[2][1];
 
-	    // If not a cycle, this increments clnum and forms a new cluster
+        // If not a cycle, this increments clnum and forms a new cluster
         // from w's end 2 neigs and beyond (excluding w itself).
-	    inCycle = update_cl_fiss(w, 2);
-	    if(!inCycle)
+        inCycle = update_cl_fiss(w, 2);
+        if(!inCycle)
             // Renumber Edge::indcl of the remaining part of the original cluster.
-    	    update_gIndcl(clini);
+            update_gIndcl(clini);
 
-	    update_neigs(w, 2, 1, mt[w].nn[2], -1, -1, true);
+        update_neigs(w, 2, 1, mt[w].nn[2], -1, -1, true);
 
-	    if (f && n[0] != n[1]) {
-    	    if (mt[n[0]].nn[e[0]] == 1 && 
-	    	    mt[n[1]].nn[e[1]] == 1 ) {
-	    	    const auto indneig0 = mt[n[0]].single_neig_index(e[0]);
-	    	    const auto indneig1 = mt[n[1]].single_neig_index(e[1]);
-	    	    if (mt[n[0]].neig[e[0]][indneig0] == n[1] && 
-	    	        mt[n[0]].neen[e[0]][indneig0] == e[1] && 
-	    	        mt[n[1]].neig[e[1]][indneig1] == n[0] && 
-	    	        mt[n[1]].neen[e[1]][indneig1] == e[0]) {
-    	    	    update_neigs(n[0], e[0], 1, 1, -1, -1, true);
-    	    	    if (e[0] == e[1])
-	    	    	    fuse_antiparallel(e[0], n[0], n[1]);
-    	    	    else
-	    	    	    (e[0] == 1 && e[1] == 2) ? fuse_parallel(n[0], n[1])
-	    	    	    	    	    	     : fuse_parallel(n[1], n[0]);
-	    	    }
-    	    }
-    	    else if (mt[n[0]].nn[e[0]] == 0 && 
-    	    	     mt[n[1]].nn[e[1]] == 1) {
-	    	    mt[w].print(w, "       w ", -1);
-	    	    mt[n[0]].print(n[0], "       n[0] ", -1);
-	    	    mt[n[1]].print(n[1], "       n[1] ", -1);
-	    	    msgr.exit("mt[n[0]].nn[e[0]] == 0 && mt[n[1]].nn[e[1]] == 1");
-    	    }
-    	    else if (mt[n[0]].nn[e[0]] == 1 && 
-    	    	     mt[n[1]].nn[e[1]] == 0) {
-	    	    mt[w].print(w, "       w ", -1);
-	    	    mt[n[0]].print(n[0], "       n[0] ", -1);
-	    	    mt[n[1]].print(n[1], "       n[1] ", -1);
-	    	    msgr.exit("mt[n[0]].nn[e[0]] == 1 && mt[n[1]].nn[e[1]] == 0");
-    	    }
-    	    else if (mt[n[0]].nn[e[0]] == 0 && 
-    	    	     mt[n[1]].nn[e[1]] == 0) {
-	    	    mt[w].print( w, "       w ", -1 );
-	    	    mt[n[0]].print(n[0], "       n[0] ", -1);
-	    	    mt[n[1]].print(n[1], "       n[1] ", -1);
-	    	    msgr.exit("mt[n[0]].nn[e[0]] == 0 && mt[n[1]].nn[e[1]] == 0");
-    	    }
-	    }
+        if (f && n[0] != n[1]) {
+            if (mt[n[0]].nn[e[0]] == 1 && 
+                mt[n[1]].nn[e[1]] == 1 ) {
+                const auto indneig0 = mt[n[0]].single_neig_index(e[0]);
+                const auto indneig1 = mt[n[1]].single_neig_index(e[1]);
+                if (mt[n[0]].neig[e[0]][indneig0] == n[1] && 
+                    mt[n[0]].neen[e[0]][indneig0] == e[1] && 
+                    mt[n[1]].neig[e[1]][indneig1] == n[0] && 
+                    mt[n[1]].neen[e[1]][indneig1] == e[0]) {
+                    update_neigs(n[0], e[0], 1, 1, -1, -1, true);
+                    if (e[0] == e[1])
+                        fuse_antiparallel(e[0], n[0], n[1]);
+                    else
+                        (e[0] == 1 && e[1] == 2) ? fuse_parallel(n[0], n[1])
+                                                 : fuse_parallel(n[1], n[0]);
+                }
+            }
+            else if (mt[n[0]].nn[e[0]] == 0 && 
+                     mt[n[1]].nn[e[1]] == 1) {
+                mt[w].print(w, "       w ", -1);
+                mt[n[0]].print(n[0], "       n[0] ", -1);
+                mt[n[1]].print(n[1], "       n[1] ", -1);
+                msgr.exit("mt[n[0]].nn[e[0]] == 0 && mt[n[1]].nn[e[1]] == 1");
+            }
+            else if (mt[n[0]].nn[e[0]] == 1 && 
+                     mt[n[1]].nn[e[1]] == 0) {
+                mt[w].print(w, "       w ", -1);
+                mt[n[0]].print(n[0], "       n[0] ", -1);
+                mt[n[1]].print(n[1], "       n[1] ", -1);
+                msgr.exit("mt[n[0]].nn[e[0]] == 1 && mt[n[1]].nn[e[1]] == 0");
+            }
+            else if (mt[n[0]].nn[e[0]] == 0 && 
+                     mt[n[1]].nn[e[1]] == 0) {
+                mt[w].print( w, "       w ", -1 );
+                mt[n[0]].print(n[0], "       n[0] ", -1);
+                mt[n[1]].print(n[1], "       n[1] ", -1);
+                msgr.exit("mt[n[0]].nn[e[0]] == 0 && mt[n[1]].nn[e[1]] == 0");
+            }
+        }
     }
     basic_update();
     const auto w1 = glm[ind1];
@@ -462,9 +449,9 @@ fiss3(
             mt[w2].cl == clini,
             "Error in fiss3: mt[w1].cl != clini && mt[w2].cl != clini\n");
     if constexpr (verbose) {
-	    mt[w1].print(w1, "       producing ");
-	    if (w1 != w2) mt[w2].print(w2, "             and ");
-	    std::cout << std::endl;
+        mt[w1].print(w1, "       producing ");
+        if (w1 != w2) mt[w2].print(w2, "             and ");
+        std::cout << std::endl;
     }
     return {mt[w1].cl, mt[w2].cl};
 }

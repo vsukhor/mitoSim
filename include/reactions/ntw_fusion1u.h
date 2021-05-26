@@ -20,8 +20,8 @@
    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
-
-============================================================================== */
+================================================================================
+*/
 
 /**
 * @file ntw_fusion1u.h
@@ -51,7 +51,7 @@ class NtwFusion1L {
 
 public:
 
-    explicit NtwFusion1L(Ntw&);	    ///< Constructor.
+    explicit NtwFusion1L(Ntw&);        ///< Constructor.
 
     /// Set this reaction propensity for the whole network.
     szt set_prop() noexcept;
@@ -61,12 +61,12 @@ private:
     Ntw& host;    ///< ref: the host network for this reaction.
 
     // Convenience references to some of the host members.
-    RandFactory&    	    	    	  rnd;
-    const std::vector<szt>&    	    	  mt11;
+    RandFactory&                          rnd;
+    const std::vector<szt>&               mt11;
     const std::vector<std::array<szt,2>>& mt13;
-    const std::vector<szt>&    	    	  mt22;
+    const std::vector<szt>&               mt22;
 
-    FusionCandidatesXU cnd;    ///< node pairs suitable for this type of fusion.
+    FusionCandidatesXU cnd; ///< node pairs suitable for this type of fusion.
 
     /// Populate the vector of node pairs suitable for this type of fusion.
     void populate() noexcept;
@@ -101,12 +101,12 @@ populate() noexcept
 {
     cnd.clear();
     for (const auto w2 : mt22) {
-	    for (const auto w1 : mt11)
-    	    for (const auto e1 : {szt(1),szt(2)})
-	    	    cnd.add({w1,e1}, w2);	    // e2 is 1 by convention
+        for (const auto w1 : mt11)
+            for (const auto e1 : {szt(1),szt(2)})
+                cnd.add({w1,e1}, w2);        // e2 is 1 by convention
 
-	    for (const auto& we1 : mt13)
-    	    cnd.add(we1, w2);
+        for (const auto& we1 : mt13)
+            cnd.add(we1, w2);
     }
 }
 

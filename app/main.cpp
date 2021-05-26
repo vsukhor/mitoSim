@@ -20,14 +20,14 @@
    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
-============================================================================== */
+================================================================================
+*/
 
-#include <span>
 #include <string>
 #include <vector>
 
-#define FP32    	   // comment this to switch to a double precision.
-#define _DEBUG    	   // toggles XASSERTs.
+#define FP32           // comment this to switch to a double precision.
+#define _DEBUG           // toggles XASSERTs.
 //#define PRINT_EDGES  // comment this to avoid printing detailed edge info.
 
 #ifdef FP32
@@ -36,15 +36,16 @@
     using real = double;
 #endif
 
+#include "utils/common/constants.h"
 #include "utils/common/misc.h"
 #include "utils/common/msgr.h"
 #include "utils/common/stop_watch.h"
 #include "utils/random/with_boost.h"
 
 namespace MitoSim {
-using namespace Utils::Common;
 using RandFactory = Utils::Random::Boost<real>;
-constexpr bool verbose {};	 ///< Work in verbose mode.
+constexpr bool verbose {};     ///< Work in verbose mode.
+
 }   // namespace MitoSim
 
 #include "config.h"
@@ -53,13 +54,14 @@ constexpr bool verbose {};	 ///< Work in verbose mode.
 
 int main( int argc, char* argv[] )
 {
-    using namespace MitoSim;
+    using Utils::Common::STR;
+    using Utils::Common::szt;
+    using Utils::Common::file_exists;
 
     if (argc < 5)
-	    return Exceptions::simple(
-            "Error: not sufficient configuration data provided");
+        return Utils::Common::Exceptions::simple(
+            "Error: not sufficient configuration data provided", nullptr);
 
-    auto args = std::span(argv, size_t(argc));
     // Working directory:
     const auto workingDir = std::string(argv[1]);
     // Application-specific suffix of the configuration file:
@@ -73,31 +75,33 @@ int main( int argc, char* argv[] )
     const auto workingDirOut = workingDir;   // directory for the output
 
     for (szt ii=runIni; ii<=runEnd; ii++) {
-	    StopWatch stopwatch;
-	    stopwatch.start();
+        Utils::Common::StopWatch stopwatch;
+        stopwatch.start();
 
-	    std::ofstream logfile {workingDirOut+"log_m_"+STR(ii)+".txt"};
-	    Msgr msgr {&std::cout, &logfile};
-	    msgr.print("Run "+STR(ii)+" started: "+stopwatch.start.str);
-	    msgr.print("workingDirOut = "+workingDirOut);
-	    msgr.print("runIni = %d ", runIni);
-	    msgr.print("runEnd = %d ", runEnd);
+        std::ofstream logfile {workingDirOut+"log_m_"+STR(ii)+".txt"};
+        Utils::Common::Msgr msgr {&std::cout, &logfile, 6};
+        msgr.print("Run "+STR(ii)+" started: "+stopwatch.start.str);
+        msgr.print("workingDirOut = "+workingDirOut);
+        msgr.print("runIni = " + std::to_string(runIni));
+        msgr.print("runEnd = " + std::to_string(runEnd));
 
-	    MitoSim::Config cfg {workingDirOut, configSuffix, STR(ii), msgr};
+        MitoSim::Config cfg {workingDirOut, configSuffix, STR(ii), msgr};
 
-	    const auto seedFileName = workingDirIn+"seeds";
-	    if (!file_exists(seedFileName))
-    	    RandFactory::make_seed(seedFileName, &msgr);
+        const auto seedFileName = workingDirIn+"seeds";
+        if (!file_exists(seedFileName))
+            MitoSim::RandFactory::make_seed(seedFileName, &msgr);
 
-	    auto rnd = std::make_unique<RandFactory>(seedFileName, ii, msgr);
-	    const auto network =
-            std::make_unique<Network<Segment<3>>>(cfg, ii, *rnd, msgr);
+        auto rnd = std::make_unique<MitoSim::RandFactory>(seedFileName, ii, msgr);
+        const auto network =
+            std::make_unique<
+                MitoSim::Network<MitoSim::Segment<3>>
+                    >(cfg, ii, *rnd, msgr);
 
-	    stopwatch.stop();
-	    msgr.print("Run "+STR(ii)+
+        stopwatch.stop();
+        msgr.print("Run "+STR(ii)+
                    " finished: "+stopwatch.stop.str+
                    " after "+stopwatch.duration()+" sec\n");
-	    
+
     }
 
     return EXIT_SUCCESS;

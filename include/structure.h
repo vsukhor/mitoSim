@@ -20,8 +20,8 @@
    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
-
-============================================================================== */
+================================================================================
+*/
 
 /**
 * @file structure.h
@@ -52,7 +52,7 @@ public:
     using Reticulum = std::vector<Mt>;
 
     /// Edge adjacency_lists per cluster.
-    vec3<szt> clagl;
+    Utils::Common::vec3<szt> clagl;
 
     /// Mapping of the edge indexes to segment indexes.
     std::vector<szt>  glm;
@@ -73,7 +73,7 @@ public:
     szt mtmass {};
 
     /// Segment indices segregated into clusters: clmt - total.
-    vec2<szt>    	 clmt;
+    Utils::Common::vec2<szt> clmt;
     /// Cluster sizes measured in edges.
     std::vector<szt> cls;
 
@@ -92,12 +92,12 @@ public:
     /// Indexes of segments between nodes of degree 3 and 3: all together.
     std::vector<szt> mt33;
     /// Indexes of segments between nodes of degree 3 and 3: sorted into clusters.
-    vec2<szt>	     mtc33;
+    Utils::Common::vec2<szt> mtc33;
 
     /// {index,end} Pairs for segments between nodes of degs. 1 and 3 together.
     std::vector<std::array<szt,2>> mt13;
     /// {index,end} Pairs for segments between nodes of degs. 1 and 3: sorted into clusters.
-    vec2<std::array<szt,2>>    	   mtc13;
+    Utils::Common::vec2<std::array<szt,2>> mtc13;
 
     /// Output message processor.
     Msgr& msgr;
@@ -128,7 +128,10 @@ public:
      * @param ic Disconnected network component index.
      * @param a The adjacency list.
      */
-    void make_adjacency_list_edges( const szt ic, vec2<szt>& a ) noexcept;
+    void make_adjacency_list_edges(
+        szt ic,
+        Utils::Common::vec2<szt>& a
+    ) noexcept;
 
     /// Populates 'mt??', 'mtc??', 'nn' and 'clmt' vectors
     void populate_cluster_vectors() noexcept;
@@ -137,7 +140,7 @@ public:
      * Update 'nn' for the specific node degree.
      * @param deg Node degree to consider.
      */
-    void update_nn(const szt deg) noexcept;
+    void update_nn(szt deg) noexcept;
 
     /// Update 'nn' for all node degrese.
     void update_nn() noexcept;
@@ -156,7 +159,7 @@ public:
 
 private:
 
-    vec2<bool> clvisited;    ///< Temporary auxiliary field.
+    Utils::Common::vec2<bool> clvisited;    ///< Temporary auxiliary field.
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -164,7 +167,7 @@ private:
 template<typename Mt>
 Structure<Mt>::
 Structure(
-	    Msgr& msgr
+        Msgr& msgr
     )
     : msgr {msgr}
 {}
@@ -174,11 +177,11 @@ void Structure<Mt>::
 update_adjacency() noexcept
 {
     if (clagl.size() < clnum) {
-	    clagl.resize(clnum);
-	    clvisited.resize(clnum);
+        clagl.resize(clnum);
+        clvisited.resize(clnum);
     }
     for (szt c=0; c<clnum; c++)
-	    make_adjacency_list_edges(c, clagl[c]);
+        make_adjacency_list_edges(c, clagl[c]);
 }
 
 template<typename Mt> inline
@@ -204,20 +207,24 @@ make_indma() noexcept
     cls.resize(clnum);
     std::fill(cls.begin(), cls.end(), 0);    // cluster size, # of edges
     for (szt j=1; j<=mtnum; j++)
-	    cls[mt[j].cl] += mt[j].g.size();    
+        cls[mt[j].cl] += mt[j].g.size();    
 
     glm.resize(mtmass);
     gla.resize(mtmass);
     for (szt j=1; j<=mtnum; j++)
-	    for (szt k=0; k<mt[j].g.size(); k++) {
-    	    const auto& g = mt[j].g[k];
-    	    glm[g.ind] = j;
-    	    gla[g.ind] = k;
-	    }
+        for (szt k=0; k<mt[j].g.size(); k++) {
+            const auto& g = mt[j].g[k];
+            glm[g.ind] = j;
+            gla[g.ind] = k;
+        }
 }
+
 template<typename Mt>
 void Structure<Mt>::
-make_adjacency_list_edges( const szt c, vec2<szt>& a ) noexcept
+make_adjacency_list_edges(
+    const szt c,
+    Utils::Common::vec2<szt>& a
+) noexcept
 {
     clvisited[c].resize(cls[c]);
 
@@ -225,96 +232,96 @@ make_adjacency_list_edges( const szt c, vec2<szt>& a ) noexcept
     for (auto& o : a) o.clear();
 
     for (const auto& j : clmt[c])
-	    for (szt k=0; k<mt[j].g.size(); k++) {
-    	    const auto ind = mt[j].g[k].indcl;
-    	    if (k == 0) {
+        for (szt k=0; k<mt[j].g.size(); k++) {
+            const auto ind = mt[j].g[k].indcl;
+            if (k == 0) {
                 // Connection backwards: only other segments might be found.
-	    	    for (szt e=1; e<=mt[j].nn[1]; e++) {
-    	    	    const auto w2 = mt[j].neig[1][e];
-    	    	    const auto a2 = mt[w2].end2a(mt[j].neen[1][e]);
-    	    	    a[ind].push_back(mt[w2].g[a2].indcl);
-	    	    }
-	    	    if (mt[j].g.size() == 1)
+                for (szt e=1; e<=mt[j].nn[1]; e++) {
+                    const auto w2 = mt[j].neig[1][e];
+                    const auto a2 = mt[w2].end2a(mt[j].neen[1][e]);
+                    a[ind].push_back(mt[w2].g[a2].indcl);
+                }
+                if (mt[j].g.size() == 1)
                     // Connection forwards: to other segment.
-    	    	    for (szt e=1; e<=mt[j].nn[2]; e++) {
-	    	    	    const auto w2 = mt[j].neig[2][e];
-	    	    	    const auto a2 = mt[w2].end2a(mt[j].neen[2][e]);
-	    	    	    a[ind].push_back(mt[w2].g[a2].indcl);
-    	    	    }
-	    	    else {
+                    for (szt e=1; e<=mt[j].nn[2]; e++) {
+                        const auto w2 = mt[j].neig[2][e];
+                        const auto a2 = mt[w2].end2a(mt[j].neen[2][e]);
+                        a[ind].push_back(mt[w2].g[a2].indcl);
+                    }
+                else {
                     // Connection forwards: to the same segment.
-    	    	    a[ind].push_back(mt[j].g[k+1].indcl);
-	    	    }
-    	    }
-    	    else if (k == mt[j].g.size()-1) {
+                    a[ind].push_back(mt[j].g[k+1].indcl);
+                }
+            }
+            else if (k == mt[j].g.size()-1) {
             // but not  a1 == 0  =>  mt[m1].g.size() > 1
                 // Connection backwards: to the same segment.
-	    	    a[ind].push_back(mt[j].g[k-1].indcl);
+                a[ind].push_back(mt[j].g[k-1].indcl);
                 // Connection forwards: to other segment.
-	    	    for (szt e=1; e<=mt[j].nn[2]; e++) {
-    	    	    const auto w2 = mt[j].neig[2][e];
-    	    	    const auto a2 = mt[w2].end2a(mt[j].neen[2][e]);
-    	    	    a[ind].push_back(mt[w2].g[a2].indcl);
-	    	    }
-    	    }
-    	    else {
+                for (szt e=1; e<=mt[j].nn[2]; e++) {
+                    const auto w2 = mt[j].neig[2][e];
+                    const auto a2 = mt[w2].end2a(mt[j].neen[2][e]);
+                    a[ind].push_back(mt[w2].g[a2].indcl);
+                }
+            }
+            else {
             // edge in the bulk: a1 != 1 && a1 != mt[m1].g.size()
                 // Connection backwards: to the same segment.
-	    	    a[ind].push_back(mt[j].g[k-1].indcl);
+                a[ind].push_back(mt[j].g[k-1].indcl);
                  // Connection forwards: to the same segment.
-	    	    a[ind].push_back(mt[j].g[k+1].indcl);
-    	    }
-	    }
+                a[ind].push_back(mt[j].g[k+1].indcl);
+            }
+        }
 }
 
 template<typename Mt>
 void Structure<Mt>::
 populate_cluster_vectors() noexcept
 {
-    mt11.clear();    mtc11.resize(clnum);	std::fill(mtc11.begin(),  mtc11.end(),  huge<szt>);
-    mt22.clear();    mtc22.resize(clnum);	std::fill(mtc22.begin(),  mtc22.end(),  huge<szt>);
-    mt33.clear();    mtc33.resize(clnum);	for (auto& o : mtc33) o.clear();
-    mt13.clear();    mtc13.resize(clnum);	for (auto& o : mtc13) o.clear();
+    mt11.clear();    mtc11.resize(clnum);    std::fill(mtc11.begin(),  mtc11.end(),  huge<szt>);
+    mt22.clear();    mtc22.resize(clnum);    std::fill(mtc22.begin(),  mtc22.end(),  huge<szt>);
+    mt33.clear();    mtc33.resize(clnum);    for (auto& o : mtc33) o.clear();
+    mt13.clear();    mtc13.resize(clnum);    for (auto& o : mtc13) o.clear();
 
-    nn = {{zero<szt>}};
+    nn = {{Utils::Common::zero<szt>}};
     clmt.resize(clnum);
-    for (auto& o : clmt) o.clear();	// # of segments
+    for (auto& o : clmt) o.clear();    // # of segments
     
     for (szt j=1; j<=mtnum; j++) {
-	    const auto& m = mt[j];
-	    clmt[m.cl].push_back(j);	// mitochondrial indexes clusterwise
-	    nn[1] += m.num_nodes(2);
+        const auto& m = mt[j];
+        clmt[m.cl].push_back(j);    // mitochondrial indexes clusterwise
+        nn[1] += m.num_nodes(2);
 
-	    const auto e = m.has_one_free_end();
-	    if (e) {
-    	    const szt oe {e == 1 ? static_cast<szt>(2) : static_cast<szt>(1)};
-    	    nn[0]++;
-    	    if (m.nn[oe] == 2) {
-	    	    const std::array<szt,2> je {j, e};
-	    	    mtc13[m.cl].emplace_back(je);   // segment index, free end index
-	    	    mt13.emplace_back(je);
-	    	    nn[2]++;
-    	    }
-	    }
-	    else if (m.nn[1] == 0 && m.nn[2] == 0) {
-    	    mtc11[m.cl] = j;    // it is a separate segment since it has two free ends
-    	    mt11.push_back(j);  // it is a separate segment since it has two free ends
-    	    nn[0] += 2;
-	    }
-	    else if (m.is_cycle()) {
-    	    mtc22[m.cl] = j;
-    	    mt22.push_back(j);  // it is a separate segment since it has two free ends
-	    }
-	    else if (m.nn[1] == 2 && m.nn[2] == 2) {
-    	    mtc33[m.cl].push_back(j);
-    	    mt33.push_back(j);
-    	    nn[2] += 2;
-	    }
-	    else {
-    	    ; XASSERT(false,
+        const auto e = m.has_one_free_end();
+        if (e) {
+            const szt oe {e == 1 ? static_cast<szt>(2) : static_cast<szt>(1)};
+            nn[0]++;
+            if (m.nn[oe] == 2) {
+                const std::array<szt,2> je {j, e};
+                mtc13[m.cl].emplace_back(je);   // segment index, free end index
+                mt13.emplace_back(je);
+                nn[2]++;
+            }
+        }
+        else if (m.nn[1] == 0 && m.nn[2] == 0) {
+            mtc11[m.cl] = j;    // it is a separate segment since it has two free ends
+            mt11.push_back(j);  // it is a separate segment since it has two free ends
+            nn[0] += 2;
+        }
+        else if (m.is_cycle()) {
+            mtc22[m.cl] = j;
+            mt22.push_back(j);  // it is a separate segment since it has two free ends
+        }
+        else if (m.nn[1] == 2 && m.nn[2] == 2) {
+            mtc33[m.cl].push_back(j);
+            mt33.push_back(j);
+            nn[2] += 2;
+        }
+        else {
+            ; XASSERT(false,
                       "Error in populate_cluster_vectors: failed classification for "
-                      +STR(j)+"\n");
-	    }
+                      +Utils::Common::STR(j)+"\n");
+        }
     }
     nn[2] /= 3;
 }
@@ -324,11 +331,11 @@ void Structure<Mt>::
 update_nn( const szt deg ) noexcept
 {
     auto count_nodes = [&](const szt deg) noexcept    {
-	    szt k {};
-	    for (szt i=1; i<=mtnum; i++)
-    	    k += mt[i].num_nodes(deg);
-	    if (deg == 3) return k/3;
-	    else	      return k;
+        szt k {};
+        for (szt i=1; i<=mtnum; i++)
+            k += mt[i].num_nodes(deg);
+        if (deg == 3) return k/3;
+        else          return k;
     };
 
     nn[deg-1] = count_nodes(deg);
@@ -348,7 +355,7 @@ void Structure<Mt>::
 print_mitos( const std::string& tag ) const
 {
     for (szt j=1; j<=mtnum; j++)
-	    mt[j].print(j, tag, -1);
+        mt[j].print(j, tag, -1);
     msgr.print("");
 }
 template<typename Mt>
@@ -357,14 +364,14 @@ print( std::ostream& ofs ) const
 {
     ofs << " X ";
     for (const auto o : nn)
-	    ofs << o << " ";
+        ofs << o << " ";
     ofs <<  "m11 " << mt11.size()
-	    << " m22 " << mt22.size()
-	    << " m33 " << mt33.size()
-	    << " m13 " << mt13.size()
-	    << " mtm " << mtmass
-	    << " mtn " << mtnum
-	    << " cln " << clnum;
+        << " m22 " << mt22.size()
+        << " m33 " << mt33.size()
+        << " m13 " << mt13.size()
+        << " mtm " << mtmass
+        << " mtn " << mtnum
+        << " cln " << clnum;
 }
 
 }    // namespace MitoSim

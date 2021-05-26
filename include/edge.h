@@ -20,8 +20,8 @@
    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
-
-============================================================================== */
+================================================================================
+*/
 
 /**
 * @file edge.h
@@ -51,7 +51,7 @@ public:
 
     szt ind {huge<szt>};    ///< Index network-wide: starts from 0.
     szt indcl {huge<szt>};  ///< Index cluster-wide: starts from 0.
-    szt cl {huge<szt>};	    ///< Current cluster index.
+    szt cl {huge<szt>};        ///< Current cluster index.
 
     /// Contribution to fission propensity at each end.
     std::array<ulong,2> fin {{}};
@@ -63,9 +63,9 @@ public:
      * @param cl Current cluster index.
      */
     explicit Edge(
-        const szt ind,
-        const szt indcl,
-        const szt cl
+        szt ind,
+        szt indcl,
+        szt cl
     );
 
 
@@ -86,8 +86,8 @@ public:
     */
     void print(
         std::ostream& os,
-        const szt a,
-        const bool endline
+        szt a,
+        bool endline
     ) const;
 };
 

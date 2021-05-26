@@ -20,8 +20,8 @@
    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
-
-============================================================================== */
+================================================================================
+*/
 
 /**
 * @file reaction.h
@@ -50,11 +50,11 @@ public:    // Only constant parameters are public.
     const real rate {};
 
     // Convenience references
-    const ulong& it;	  ///< ref: Internal network iteration counter.
+    const ulong& it;      ///< ref: Internal network iteration counter.
     const real&  time;    ///< ref: Internal network time.
 
     const std::string shortName;   ///< Reaction name.
-    const std::string srt;	       ///< Reaction name abbreviation.
+    const std::string srt;           ///< Reaction name abbreviation.
 
     /**
      * @brief Constructor.
@@ -67,20 +67,20 @@ public:    // Only constant parameters are public.
      * @param srt Reaction name abbreviated.
      */
     Reaction( Msgr& msgr,
-    	      const szt ind,
-    	      const real rate,
-    	      const ulong& it,	    // const ref
-    	      const real& time,	    // const ref
-    	      const std::string& shortName,
-    	      const std::string& srt
-	    )
-	    : ind {ind}
-	    , rate {rate}
-	    , it {it}
-	    , time {time}
-	    , shortName {shortName}
-	    , srt {srt}
-	    , msgr {msgr}
+              const szt ind,
+              const real rate,
+              const ulong& it,        // const ref
+              const real& time,        // const ref
+              const std::string& shortName,
+              const std::string& srt
+        )
+        : ind {ind}
+        , rate {rate}
+        , it {it}
+        , time {time}
+        , shortName {shortName}
+        , srt {srt}
+        , msgr {msgr}
     {}
 
 
@@ -100,7 +100,10 @@ public:    // Only constant parameters are public.
      * @param c1 Index of the 1st component to update.
      * @param c2 Index of the 2nd component to update.
      */
-    virtual void update_prop(const szt c1, const szt c2) noexcept = 0;
+    virtual void update_prop(
+        const szt c1,
+        const szt c2
+    ) noexcept = 0;
     
 
     /// Execute the raction event.
@@ -120,7 +123,9 @@ public:    // Only constant parameters are public.
      * @param rc Vector of unique pointers to all reactions taking part in
      *        the simulation.
      */
-    virtual void initialize_dependencies(const vup<Reaction>& rc) noexcept = 0;
+    virtual void initialize_dependencies(
+        const Utils::Common::vup<Reaction>& rc
+    ) noexcept = 0;
 
     /**
      * @brief The number of times this reaction was fired.
@@ -134,15 +139,15 @@ public:    // Only constant parameters are public.
      */
     virtual    void print( const bool le ) const
     {
-	    msgr.print<false>(" it %d", it);
-	    msgr.print<false>(" srt "+srt);
-	    msgr.print<false>(" rate %f", rate);
-	    if (le) msgr.print("\n");
+        msgr.print<false>(" it " + std::to_string(it));
+        msgr.print<false>(" srt " + srt);
+        msgr.print<false>(" rate " + std::to_string(rate));
+        if (le) msgr.print("\n");
     }
 
 protected:
 
-    Msgr& msgr;	  ///< ref: Output message processor.
+    Utils::Common::Msgr& msgr;  ///< ref: Output message processor.
 
     /** All necessary updates after the given reaction event was executed.
      * @details Pure virtual function: Network and reaction updates necessary

@@ -20,8 +20,8 @@
    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
-
-============================================================================== */
+================================================================================
+*/
 
 /**
 * @file ntw_fusion12.h
@@ -51,7 +51,7 @@ public:
 
     friend Fusion12<Ntw>;
 
-    explicit NtwFusion12(Ntw&);	    ///< Constructor.
+    explicit NtwFusion12(Ntw&); ///< Constructor.
 
     /// Set this reaction propensity for the whole network.
     szt set_prop() noexcept;
@@ -63,13 +63,13 @@ private:
     // Convenience references to some of the host members.
     RandFactory& rnd;
 
-    const typename Ntw::Reticulum& mt;
-    const std::vector<szt>&    	    	  mt11;
+    const typename Ntw::Reticulum&        mt;
+    const std::vector<szt>&               mt11;
     const std::vector<std::array<szt,2>>& mt13;
-    const std::vector<szt>&    	    	  mt22;
-    const std::vector<szt>&    	    	  mt33;
+    const std::vector<szt>&               mt22;
+    const std::vector<szt>&               mt33;
 
-    FusionCandidatesXX cnd;   ///< node pairs suitable for this type of fusion.
+    FusionCandidatesXX cnd;  ///< node pairs suitable for this type of fusion.
 
     /// Populate the vector of node pairs suitable for this type of fusion.
     void populate() noexcept;
@@ -106,53 +106,53 @@ populate() noexcept
 {
     constexpr auto minLL = Structure<typename Ntw::ST>::minLoopLength;
     cnd.clear();
-    for (const auto w1 : mt11) 	    	    	    	    // 11 ends to ...
-	    for (const auto e1 : {szt(1),szt(2)}) {
-    	    const std::array<szt,2> we1 {w1,e1};
-    	    for (const auto w2 : mt11)	    	    	    // ... 11 bulk
-	    	    for (szt i=1; i<mt[w2].g.size(); i++) {
-    	    	    const auto skip = w1 == w2 && (
+    for (const auto w1 : mt11)                                 // 11 ends to ...
+        for (const auto e1 : {szt(1),szt(2)}) {
+            const std::array<szt,2> we1 {w1,e1};
+            for (const auto w2 : mt11)                        // ... 11 bulk
+                for (szt i=1; i<mt[w2].g.size(); i++) {
+                    const auto skip = w1 == w2 && (
                                     (e1 == 1 && i < minLL) ||
                                     (e1 == 2 && mt[w2].g.size()-i < minLL));
-    	    	    if (!skip) {
-	    	    	    cnd.add(we1, {w2,i});
-	    	    	    cnd.add(we1, {w2,i});
-    	    	    }
-	    	    }
-    	    for (const auto& we2 : mt13)     	    	    // ... 13 bulk
-	    	    for (szt i=1; i<mt[we2[0]].g.size(); i++)
-    	    	    cnd.add(we1, {we2[0],i});
+                    if (!skip) {
+                        cnd.add(we1, {w2,i});
+                        cnd.add(we1, {w2,i});
+                    }
+                }
+            for (const auto& we2 : mt13)                     // ... 13 bulk
+                for (szt i=1; i<mt[we2[0]].g.size(); i++)
+                    cnd.add(we1, {we2[0],i});
 
-    	    for (const auto w2 : mt33)	    	    	    // ... 33 bulk
-	    	    for (szt i=1; i<mt[w2].g.size(); i++)
-    	    	    cnd.add(we1, {w2,i});
+            for (const auto w2 : mt33)                        // ... 33 bulk
+                for (szt i=1; i<mt[w2].g.size(); i++)
+                    cnd.add(we1, {w2,i});
 
-    	    for (const auto w2 : mt22)	    	    	    // ... 22 bulk
-	    	    for (szt i=1; i<mt[w2].g.size(); i++)
-    	    	    cnd.add(we1, {w2,i});
-	    }
+            for (const auto w2 : mt22)                        // ... 22 bulk
+                for (szt i=1; i<mt[w2].g.size(); i++)
+                    cnd.add(we1, {w2,i});
+        }
 
-    for (const auto& we1 : mt13) {    	    	    	    // a free end of 13 to ...
-	    for (const auto w2 : mt11)    	    	    	    // ... 11 bulk
-    	    for (szt i=1; i<mt[w2].g.size(); i++)
-	    	    cnd.add(we1, {w2,i});
+    for (const auto& we1 : mt13) {                            // a free end of 13 to ...
+        for (const auto w2 : mt11)                            // ... 11 bulk
+            for (szt i=1; i<mt[w2].g.size(); i++)
+                cnd.add(we1, {w2,i});
 
-	    for (const auto& we2 : mt13) {	    	    	    // ... 13 bulk
-    	    for (szt i=1; i<mt[we2[0]].g.size(); i++) {
-	    	    const auto skip = we1[0] == we2[0] &&
-	    	    	    	     ((we1[1] == 1 && i < minLL) ||
-	    	    	    	      (we1[1] == 2 && mt[we2[0]].g.size()-i < minLL));
-	    	    if (!skip)
-    	    	    cnd.add(we1, {we2[0],i});
-    	    }
-	    }
-	    for (const auto w2 : mt33)    	    	    	    // ... 33 bulk
-    	    for (szt i=1; i<mt[w2].g.size(); i++)
-	    	    cnd.add(we1, {w2,i});
+        for (const auto& we2 : mt13) {                        // ... 13 bulk
+            for (szt i=1; i<mt[we2[0]].g.size(); i++) {
+                const auto skip = we1[0] == we2[0] &&
+                                 ((we1[1] == 1 && i < minLL) ||
+                                  (we1[1] == 2 && mt[we2[0]].g.size()-i < minLL));
+                if (!skip)
+                    cnd.add(we1, {we2[0],i});
+            }
+        }
+        for (const auto w2 : mt33)                            // ... 33 bulk
+            for (szt i=1; i<mt[w2].g.size(); i++)
+                cnd.add(we1, {w2,i});
 
-	    for (const auto w2 : mt22)    	    	    	    // ... 22 bulk
-    	    for (szt i=1; i<mt[w2].g.size(); i++)
-	    	    cnd.add(we1, {w2,i});
+        for (const auto w2 : mt22)                            // ... 22 bulk
+            for (szt i=1; i<mt[w2].g.size(); i++)
+                cnd.add(we1, {w2,i});
     }
 }
 

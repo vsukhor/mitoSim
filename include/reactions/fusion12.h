@@ -20,8 +20,8 @@
    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
-
-============================================================================== */
+================================================================================
+*/
 
 /**
 * @file fusion12.h
@@ -47,7 +47,7 @@ template<typename Ntw>
 class Fusion12
     : public Fusion<1,2,Ntw> {
     
-    friend Gillespie<Reaction,RandFactory>;
+    friend Utils::Common::Gillespie<Reaction,RandFactory>;
 
 public:
 
@@ -61,14 +61,14 @@ public:
      * @param time Current time.
      */
     Fusion12(
-    	    Msgr& msgr,
-    	    const szt ind,
-    	    Ntw& netw,
-    	    const real rate,
-    	    const ulong& it,	    // const ref
-    	    const real& time	    // const ref
-	    )
-	    : Fusion<1,2,Ntw>{msgr, ind, netw, rate, it, time, name}
+            Msgr& msgr,
+            const szt ind,
+            Ntw& netw,
+            const real rate,
+            const ulong& it,        // const ref
+            const real& time        // const ref
+        )
+        : Fusion<1,2,Ntw>{msgr, ind, netw, rate, it, time, name}
     {}
 
     /// Set the Gillespie score for this reaction.
@@ -118,11 +118,11 @@ private:
     using Fusion<1,2,Ntw>::print;
 
     static const std::string name;    ///< Reaction name constant.
-    real* score {};    	    ///< Current rate as seen by the Gillespie reactor.
-    szt	  eventCount {};	///< Number of times this reaction was fired.
+    real* score {};            ///< Current rate as seen by the Gillespie reactor.
+    szt      eventCount {};    ///< Number of times this reaction was fired.
 
     ///< Total propensity for this reaction over all network components.
-    szt	propTotal {};
+    szt    propTotal {};
 
     /// Set this reaction propensity for the whole network.
     void set_prop() noexcept final;
@@ -185,6 +185,8 @@ template<typename Ntw>
 void Fusion12<Ntw>::
 print( const bool le ) const
 {
+    using Utils::Common::STR;
+    
     Reaction::print(false);
     msgr.template print<false>(" score "+STR(*score));
     msgr.template print<false>(" eventCount "+STR(eventCount));

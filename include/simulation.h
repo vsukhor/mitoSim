@@ -20,8 +20,8 @@
    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
-
-============================================================================== */
+================================================================================
+*/
 
 /**
 * @file simulation.h
@@ -52,6 +52,8 @@ namespace MitoSim {
 template<typename Ntw>
 class Simulation {
 
+    using Msgr = Utils::Common::Msgr;
+
 public:
 
     /**
@@ -63,11 +65,11 @@ public:
      * @param msgr Output message processor.
      */
     explicit Simulation(
-	    Ntw& netw,
-	    RandFactory& rnd,
-	    double& time,
-	    ulong& it,
-	    Msgr& msgr
+        Ntw& netw,
+        RandFactory& rnd,
+        double& time,
+        ulong& it,
+        Msgr& msgr
     );
 
     void operator()();   ///< Runs the simulation.
@@ -77,17 +79,17 @@ private:
     Ntw& netw;    ///< ref: Simulated network.
 
     // Convenience references to some data fields of the network.
-    Msgr&    	 msgr;	    ///< ref: Output message processor.
-    RandFactory& rnd;	    ///< ref: random number factory.
-    double&    	 time;	    ///< ref: current time.
-    ulong&    	 it;    	///< ref: iteration counter.
+    Msgr&        msgr;      ///< ref: Output message processor.
+    RandFactory& rnd;       ///< ref: random number factory.
+    double&      time;      ///< ref: current time.
+    ulong&       it;        ///< ref: iteration counter.
 
     // Output parameters
-    szt	logFrequency;    ///< Frequency of short output to a log line.
-    szt	saveFrequency;   ///< Frequency of detailed output to flie.
+    szt    logFrequency;    ///< Frequency of short output to a log line.
+    szt    saveFrequency;   ///< Frequency of detailed output to flie.
 
     /// Gillespie reactor controlling the simulation.
-    Gillespie<RandFactory,Reaction> gsp;
+    Utils::Common::Gillespie<RandFactory,Reaction> gsp;
 
     void populateRc();    ///< Add reactions to the Gillespie simulator.
 
@@ -99,8 +101,8 @@ private:
     void terminate(const std::string& s);
 
     // Logging
-    void update_log();    	    	  ///< Output status summary to a log file.
-    void update_log(std::ostream&);	  ///< Output status summary to a log file.
+    void update_log();               ///< Output status summary to a log file.
+    void update_log(std::ostream&);  ///< Output status summary to a log file.
 };
 
 
@@ -109,11 +111,11 @@ private:
 template<typename Ntw>
 Simulation<Ntw>::
 Simulation(
-	    Ntw& netw,
-	    RandFactory& rnd,
-	    double& time,
-	    ulong& it,
-	    Msgr& msgr
+        Ntw& netw,
+        RandFactory& rnd,
+        double& time,
+        ulong& it,
+        Msgr& msgr
     )
     : netw {netw}
     , msgr {msgr}
@@ -147,37 +149,37 @@ operator()()
 {
     netw.update_nn();
     netw.update_books();
-    netw.save_mitos(true, false, 0, zero<real>);
+    netw.save_mitos(true, false, 0, Utils::Common::zero<real>);
     if (it % logFrequency == 0)
-	    update_log();
+        update_log();
 
     // main loop
     while (time < netw.cfg.timeTotal) {
-	    it++;
-	    if (!gsp.set_asum()) {
-    	    terminate(std::string("\nNo reaction left! ") +
+        it++;
+        if (!gsp.set_asum()) {
+            terminate(std::string("\nNo reaction left! ") +
                       "Termination due to reaction *score == 0 for all reactions used.");
-    	    break; 
-	    }
-	    XASSERT(!std::isnan(gsp.tau()), "Tau is nan\n");
-	    
-	    gsp.fire(time);
+            break; 
+        }
+        XASSERT(!std::isnan(gsp.tau()), "Tau is nan\n");
+        
+        gsp.fire(time);
 
-	    if (it % saveFrequency == 0) {
-    	    netw.save_mitos(false, false, it, time);	    // appended
-	    }
-	    if (it % logFrequency == 0)
-    	    update_log();
-	    if (!netw.mtnum) {
-    	    terminate("No segments left! Termination due to chondriome exhaustion.");
-    	    break;
-	    };
+        if (it % saveFrequency == 0) {
+            netw.save_mitos(false, false, it, time);        // appended
+        }
+        if (it % logFrequency == 0)
+            update_log();
+        if (!netw.mtnum) {
+            terminate("No segments left! Termination due to chondriome exhaustion.");
+            break;
+        };
     }
 
     msgr.print("\nFinal state:");
     update_log();
-    netw.save_mitos(true, true, it, time);	    // only the last snapshot
-    msgr.print("Final mtnum: %d\n", netw.mtnum);
+    netw.save_mitos(true, true, it, time);        // only the last snapshot
+    msgr.print("Final mtnum: " + std::to_string(netw.mtnum) + "\n");
 }
 
 
