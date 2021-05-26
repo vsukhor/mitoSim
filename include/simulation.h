@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
    Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann,
    Helmholtz Center for Infection Research (Braunschweig, Germany).
    All Rights Reserved.
@@ -32,9 +32,9 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
 
+#include "utils/common/gillespie.h"
 #include "utils/common/misc.h"
 #include "utils/common/msgr.h"
-#include "utils/common/gillespie.h"
 
 #include "reactions/fission.h"
 #include "reactions/fusion11.h"
@@ -72,26 +72,26 @@ public:
         Msgr& msgr
     );
 
-    void operator()();   ///< Runs the simulation.
+    void operator()();  ///< Runs the simulation.
 
 private:
 
-    Ntw& netw;    ///< ref: Simulated network.
+    Ntw& netw;  ///< ref: Simulated network.
 
     // Convenience references to some data fields of the network.
-    Msgr&        msgr;      ///< ref: Output message processor.
-    RandFactory& rnd;       ///< ref: random number factory.
-    double&      time;      ///< ref: current time.
-    ulong&       it;        ///< ref: iteration counter.
+    Msgr&        msgr;   ///< ref: Output message processor.
+    RandFactory& rnd;    ///< ref: random number factory.
+    double&      time;   ///< ref: current time.
+    ulong&       it;     ///< ref: iteration counter.
 
     // Output parameters
-    szt    logFrequency;    ///< Frequency of short output to a log line.
-    szt    saveFrequency;   ///< Frequency of detailed output to flie.
+    szt logFrequency;   ///< Frequency of short output to a log line.
+    szt saveFrequency;  ///< Frequency of detailed output to flie.
 
     /// Gillespie reactor controlling the simulation.
     Utils::Common::Gillespie<RandFactory,Reaction> gsp;
 
-    void populateRc();    ///< Add reactions to the Gillespie simulator.
+    void populateRc();  ///< Add reactions to the Gillespie simulator.
 
 
     /**
@@ -136,10 +136,21 @@ void Simulation<Ntw>::
 populateRc()
 {
     szt ind {};
-    if (netw.cfg.use_fission  ) gsp.add_reaction(std::make_unique<Fission <Ntw>>(msgr, ind++, netw, netw.cfg.rate_fission, it, time));
-    if (netw.cfg.use_11_fusion) gsp.add_reaction(std::make_unique<Fusion11<Ntw>>(msgr, ind++, netw, netw.cfg.fusion_rate_11, it, time));
-    if (netw.cfg.use_12_fusion) gsp.add_reaction(std::make_unique<Fusion12<Ntw>>(msgr, ind++, netw, netw.cfg.fusion_rate_12, it, time));
-    if (netw.cfg.use_1L_fusion) gsp.add_reaction(std::make_unique<Fusion1U<Ntw>>(msgr, ind++, netw, netw.cfg.fusion_rate_1L, it, time));
+    if (netw.cfg.use_fission  )
+        gsp.add_reaction(std::make_unique<Fission <Ntw>>(
+            msgr, ind++, netw, netw.cfg.rate_fission, netw.rnd, it, time));
+
+    if (netw.cfg.use_11_fusion)
+        gsp.add_reaction(std::make_unique<Fusion11<Ntw>>(
+            msgr, ind++, netw, netw.cfg.fusion_rate_11, netw.rnd, it, time));
+
+    if (netw.cfg.use_12_fusion)
+        gsp.add_reaction(std::make_unique<Fusion12<Ntw>>(
+            msgr, ind++, netw, netw.cfg.fusion_rate_12, netw.rnd, it, time));
+
+    if (netw.cfg.use_1L_fusion)
+        gsp.add_reaction(std::make_unique<Fusion1U<Ntw>>(
+            msgr, ind++, netw, netw.cfg.fusion_rate_1L, netw.rnd, it, time));
 }
 
 
@@ -147,7 +158,7 @@ template<typename Ntw>
 void Simulation<Ntw>::
 operator()()
 {
-    netw.update_nn();
+    netw.update_node_numbers();
     netw.update_books();
     netw.save_mitos(true, false, 0, Utils::Common::zero<real>);
     if (it % logFrequency == 0)
@@ -187,7 +198,7 @@ template<typename Ntw>
 void Simulation<Ntw>::
 terminate( const std::string& s )
 {
-    netw.update_nn();
+    netw.update_node_numbers();
     update_log();
     msgr.print(s);
 }

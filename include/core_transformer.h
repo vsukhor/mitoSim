@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
    Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann,
    Helmholtz Center for Infection Research (Braunschweig, Germany).
    All Rights Reserved.
@@ -55,12 +55,14 @@ template<typename Mt>
 class CoreTransformer
     : public Structure<Mt> {
 
-public:
+protected:
 
     using Structure<Mt>::msgr;
     using Structure<Mt>::mt;
     using Structure<Mt>::mtnum;
     using Structure<Mt>::clnum;
+
+public:
 
     /**
      * @brief Constructor,
@@ -73,63 +75,50 @@ public:
      * @param w1 Index of the 1st participant segment.
      * @param w2 Index of the 2nd participant segment.
      */
-    constexpr void update_mtcl_fuse(
-        const szt w1,
-        const szt w2) noexcept;
+    constexpr void update_mtcl_fuse(szt w1, szt w2) noexcept;
 
     /**
      * @brief Update the structure of diaconnected components produced by fusion.
      * @param c1 Index of the 1st participant component.
      * @param c2 Index of the 2nd participant component.
      */
-    constexpr void update_cl_fuse(
-        const szt c1,
-        const szt c2) noexcept;
+    constexpr void update_cl_fuse(szt c1, szt c2) noexcept;
 
     /**
      * @brief Update the diaconnected component indexes.
      * @param cf Initial index.
      * @param ct Final index.
      */
-    constexpr void update_cl(
-        const szt cf,
-        const szt ct) noexcept;
+    constexpr void update_cl(szt cf, szt ct) noexcept;
 
     /**
      * @brief Update the diaconnected component indexes.
      * @param c Initial index.
      */
-    constexpr void update_gIndcl(const szt c) noexcept;
+    constexpr void update_gIndcl(szt c) noexcept;
 
 protected:
 
     /**
      * @brief Perform fusion of two antiparallel oriented segments.
      * @details Antiparallel orientation is defined as
-     *             fusion of end 1 of the 1st segment to to end 1 of the 2nd segment, or
-     *             fusion of end 2 of the 1st segment to to end 2 of the 2nd segment.
+     * fusion of end 1 of the 1st segment to to end 1 of the 2nd segment, or
+     * fusion of end 2 of the 1st segment to to end 2 of the 2nd segment.
      * @param end End index at the fusion position.
      * @param w1 Index of the 1st segment.
      * @param w2 Index of the 2nd segment.
      */
-    std::array<szt,2> fuse_antiparallel(
-        const szt end,
-        const szt w1,
-        const szt w2
-    ) noexcept;
+    std::array<szt,2> fuse_antiparallel(szt end, szt w1, szt w2) noexcept;
 
     /**
      * @brief Perform fusion of two parallel oriented segments.
      * @details Parallel orientation is defined as
-     *             fusion of end 1 of the 1st segment to to end 2 of the 2nd segment, or
-     *             fusion of end 2 of the 1st segment to to end 1 of the 2nd segment.
+     * fusion of end 1 of the 1st segment to to end 2 of the 2nd segment, or
+     * fusion of end 2 of the 1st segment to to end 1 of the 2nd segment.
      * @param w1 Index of the 1st segment.
      * @param w2 Index of the 2nd segment.
      */
-    std::array<szt,2> fuse_parallel(
-        const szt w1,
-        const szt w2
-    ) noexcept;
+    std::array<szt,2> fuse_parallel(szt w1, szt w2) noexcept;
 
     /**
      * @brief Update network segment indexes.
@@ -138,12 +127,7 @@ protected:
      * @param f Source segment index.
      * @param t Target segment index.
     */
-    void rename_mito(
-        const szt f,
-        const szt t
-    );
-
-protected:
+    void rename_mito(szt f, szt t);
 
     /**
      * @brief Copy connection partners to a new segment.
@@ -152,12 +136,7 @@ protected:
      * @param t Target segment index.
      * @param et Target segment end.
     */
-    void copy_neigs(
-        const szt f,
-        const szt ef,
-        const szt t,
-        const szt et
-    ) noexcept;
+    void copy_neigs(szt f, szt ef, szt t, szt et) noexcept;
 
     /**
      * @brief Update segment neighbours.
@@ -169,10 +148,10 @@ protected:
      * @param nend New neighbour segment end.
      * @param removefromneigs Flag if the neighbouring segments should be removed.
     */
-    void update_neigs(const szt oldn, const szt oend,
-                      const szt n1, const szt n2,
-                      const szt newn, const szt nend,
-                      const bool removefromneigs
+    void update_neigs(szt oldn, szt oend,
+                      szt n1, szt n2,
+                      szt newn, szt nend,
+                      bool removefromneigs
     ) noexcept;
 
 };
@@ -230,7 +209,7 @@ update_neigs( const szt oldn, const szt oend,
         const auto ce = mt[oldn].neen[oend][j];  // our neig currently processed
 
         szt i1 {};
-        while (1) {
+        while (true) {
             ++i1;
             XASSERT(i1 <= mt[cn].nn[ce],
                     "A neig was not found: "+

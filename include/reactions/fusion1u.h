@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
    Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann,
    Helmholtz Center for Infection Research (Braunschweig, Germany).
    All Rights Reserved.
@@ -64,10 +64,11 @@ public:
               const szt ind,
               Ntw& netw,
               const real rate,
+              RandFactory& rnd,
               const ulong& it,        // const ref
               const real& time        // const ref
             )
-        : Fusion<1,2,Ntw> {msgr, ind, netw, rate, it, time, name}
+        : Fusion<1,2,Ntw> {msgr, ind, netw, rate, rnd, it, time, name}
     {}
 
     /// Set the Gillespie score for this reaction.
@@ -87,10 +88,7 @@ public:
      * @param c1 Index of the 1st component to update.
      * @param c2 Index of the 2nd component to update.
      */
-    void update_prop(
-        const szt c1,
-        const szt c2
-    ) noexcept final;
+    void update_prop(szt c1, szt c2) noexcept final;
 
 
     /// Execute the raction event.
@@ -109,21 +107,22 @@ public:
      * @brief Print the parameters.
      * @param le True if new line after the output.
      */
-    void print(const bool le) const override;
+    void print(bool le) const override;
 
 private:
 
-    using Reaction::rate;
-    using Reaction::msgr;
     using Fusion<1,2,Ntw>::cc;
     using Fusion<1,2,Ntw>::netw;
+    using Fusion<1,2,Ntw>::print;
     using Fusion<1,2,Ntw>::rnd;
     using Fusion<1,2,Ntw>::update_netw_stats;
-    using Fusion<1,2,Ntw>::print;
+    using Reaction::msgr;
+    using Reaction::rate;
 
-    static const std::string name;    ///< Reaction name constant.
-    real* score {};            ///< Current rate as seen by the Gillespie reactor.
-    szt      eventCount {};    ///< Number of times this reaction was fired.
+    static const std::string name;  ///< Reaction name constant.
+    
+    real* score {};          ///< Current rate as seen by the Gillespie reactor.
+    szt      eventCount {};  ///< Number of times this reaction was fired.
 
     ///< Total propensity for this reaction over all network components.
     szt    propTotal {};
@@ -134,7 +133,7 @@ private:
     /**
     * @brief Attach this score to the Gillespie mechanism.
     * @param a Placeholder in the Gillespie object responsible for this
-    *         reaction score.
+    * reaction score.
     */
     void attach_score_pointer(real* a) noexcept final
     {
@@ -165,7 +164,7 @@ set_prop() noexcept
 
 template<typename Ntw>
 void Fusion1U<Ntw>::
-update_prop( const szt, const szt ) noexcept
+update_prop( const szt  /*unused*/, const szt  /*unused*/ ) noexcept
 {
     set_prop();
 }

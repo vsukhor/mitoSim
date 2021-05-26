@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
    Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann,
    Helmholtz Center for Infection Research (Braunschweig, Germany).
    All Rights Reserved.
@@ -27,8 +27,8 @@
 #include <vector>
 
 #define FP32           // comment this to switch to a double precision.
-#define _DEBUG           // toggles XASSERTs.
-//#define PRINT_EDGES  // comment this to avoid printing detailed edge info.
+// #define USE_UTILS_XASSERT   // toggles XASSERTs.
+// #define PRINT_EDGES  // comment this to avoid printing detailed edge info.
 
 #ifdef FP32
     using real = float;
@@ -44,21 +44,22 @@
 
 namespace MitoSim {
 using RandFactory = Utils::Random::Boost<real>;
-constexpr bool verbose {1};     ///< Work in verbose mode.
+constexpr bool verbose {};   ///< Work in verbose mode.
 
 }   // namespace MitoSim
 
 #include "config.h"
-#include "segment.h"
 #include "network.h"
+#include "segment.h"
 
 int main( int argc, char* argv[] )
 {
+    using Utils::Common::file_exists;
     using Utils::Common::STR;
     using Utils::Common::szt;
-    using Utils::Common::file_exists;
 
-    if (argc < 5)
+    constexpr const int MIN_ARGC = 5;
+    if (argc < MIN_ARGC)
         return Utils::Common::Exceptions::simple(
             "Error: not sufficient configuration data provided", nullptr);
 
@@ -79,7 +80,8 @@ int main( int argc, char* argv[] )
         stopwatch.start();
 
         std::ofstream logfile {workingDirOut+"log_m_"+STR(ii)+".txt"};
-        Utils::Common::Msgr msgr {&std::cout, &logfile, 6};
+        constexpr const int PRINT_PRECISION = 6;
+        Utils::Common::Msgr msgr {&std::cout, &logfile, PRINT_PRECISION};
         msgr.print("Run "+STR(ii)+" started: "+stopwatch.start.str);
         msgr.print("workingDirOut = "+workingDirOut);
         msgr.print("runIni = " + STR(runIni));
@@ -92,10 +94,11 @@ int main( int argc, char* argv[] )
             MitoSim::RandFactory::make_seed(seedFileName, &msgr);
 
         auto rnd = std::make_unique<MitoSim::RandFactory>(seedFileName, ii, msgr);
+        constexpr const int MAX_NODE_DEGREE = 3;
         const auto network =
             std::make_unique<
-                MitoSim::Network<MitoSim::Segment<3>>
-                    >(cfg, ii, *rnd, msgr);
+                MitoSim::Network<MitoSim::Segment<MAX_NODE_DEGREE>>
+                    >(cfg, *rnd, msgr);
 
         stopwatch.stop();
         msgr.print("Run "+STR(ii)+

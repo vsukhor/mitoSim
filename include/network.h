@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
    Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann,
    Helmholtz Center for Infection Research (Braunschweig, Germany).
    All Rights Reserved.
@@ -35,8 +35,8 @@
 #include "utils/common/misc.h"
 #include "utils/common/msgr.h"
 
-#include "config.h"
 #include "ability_for_fusion.h"
+#include "config.h"
 #include "ntw_fission.h"
 #include "ntw_fusion11.h"
 #include "ntw_fusion12.h"
@@ -56,42 +56,54 @@ class Network
     :  public AbilityForFusion<SegmentT> {
 
 public:
-    
+
     using thisT = Network<SegmentT>;
     using ST = SegmentT;
 
-    using Structure<SegmentT>::mt;
-    using Structure<SegmentT>::mtnum;
     using Structure<SegmentT>::clnum;
-    using Structure<SegmentT>::mtmass;
-    using Structure<SegmentT>::nn;
     using Structure<SegmentT>::glm;
     using Structure<SegmentT>::msgr;
+    using Structure<SegmentT>::mt;
+    using Structure<SegmentT>::mtmass;
+    using Structure<SegmentT>::mtnum;
+    using Structure<SegmentT>::nn;
 
-    const Config& cfg;   ///< Configuration.
+    friend Fission<thisT>;
+    friend Fusion<1,1,thisT>;
+    friend Fusion<1,2,thisT>;
+    friend Fusion11<thisT>;
+    friend Fusion12<thisT>;
+    friend Fusion1U<thisT>;
+    friend NtwFission<thisT>;
+    friend NtwFusion11<thisT>;
+    friend NtwFusion12<thisT>;
+    friend NtwFusion1L<thisT>;
+    friend Simulation<thisT>;
+
     RandFactory&  rnd;   ///< Random number factory.
     double        time;  ///< Current time.
     ulong         it;    ///< Iteration counter.
+    const Config& cfg;   ///< Configuration.
 
     // Reaction slots:
     NtwFission<thisT>  fis;   ///< Slot for fission reaction.
-    NtwFusion11<thisT> fu11;  ///< Slot for fusion raction of nodes with degrees 1 and 1.
-    NtwFusion12<thisT> fu12;  ///< Slot for fusion action of nodes with degrees 1 and 2.
-    NtwFusion1L<thisT> fu1L;  ///< Slot for fusion raction of nodes with degrees 1 and a loop.
+    NtwFusion11<thisT> fu11;  ///< Slot for fusion raction of nodes degrees 1 + 1.
+    NtwFusion12<thisT> fu12;  ///< Slot for fusion reaction of nodes degrees 1 + 2.
+    NtwFusion1L<thisT> fu1L;  ///< Slot for fusion raction of nodes degrees 1 and a loop.
 
     /**
      * @brief Constructor.
      * @param cfg Configuration object.
-     * @param runIndex Run index.
      * @param rnd Random number factory.
      * @param msgr Output message processor.
      */
     explicit Network(
             const Config& cfg,
-            szt runIndex,
             RandFactory& rnd,
             Msgr& msgr
-        );
+    );
+
+private:
 
     /// Generate the network components
     void generate_mitos();
@@ -121,15 +133,14 @@ template<typename SegmentT>
 Network<SegmentT>::
 Network(
         const Config& cfg,
-        szt runIndex,
         RandFactory& rnd,
         Msgr& msgr
     )
     : AbilityForFusion<SegmentT> {msgr}
-    , cfg {cfg}
     , rnd {rnd}
     , time {Utils::Common::zero<double>}
     , it {}
+    , cfg {cfg}
     , fis {*this}
     , fu11 {*this}
     , fu12 {*this}
@@ -182,7 +193,7 @@ save_mitos(
 ) const
 {
     const auto fname = (last) ? cfg.workingDirOut+"mitos_last_"+cfg.runName
-                              : cfg.workingDirOut+"mitos_"       +cfg.runName;
+                              : cfg.workingDirOut+"mitos_"     +cfg.runName;
     const auto flags = (startnew) ? std::ios::binary | std::ios::trunc
                                   : std::ios::binary | std::ios::app;
     std::ofstream ofs {fname, flags};
@@ -192,7 +203,9 @@ save_mitos(
     ofs.write((char*) &t, sizeof(real));
     ofs.write((char*) &mtnum, sizeof(szt));
 
-    static szt mtnummax, nn1max, nn2max;
+    static szt mtnummax;
+    static szt nn1max;
+    static szt nn2max;
     if (!last) {
         if (startnew) {
             mtnummax = 0;
@@ -213,10 +226,9 @@ save_mitos(
     ofs.write(reinterpret_cast<const char*>(&nn1max), sizeof(szt));
     ofs.write(reinterpret_cast<const char*>(&nn2max), sizeof(szt));
 
-    szt nst2save;
-    nst2save = last
-             ? szt{}
-             : szt(itr/cfg.saveFrequency);
+    szt nst2save = last
+                 ? szt{}
+                 : szt(itr/cfg.saveFrequency);
     ofs.write(reinterpret_cast<const char*>(&nst2save), sizeof(szt));
 }
 

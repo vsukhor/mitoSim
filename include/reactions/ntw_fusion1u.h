@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
    Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann,
    Helmholtz Center for Infection Research (Braunschweig, Germany).
    All Rights Reserved.
@@ -41,7 +41,7 @@ template<typename> class Fusion1U;
 /**
  * @brief Reaction slot for fusion of a degree 1 node with a looped segment.
  * @details Network-specific reaction slot for fusion of a degree 1 node with
- *          a looped segment.
+ * a looped segment.
  * @tparam Ntw Type of the network.
  */
 template<typename Ntw>
@@ -51,14 +51,14 @@ class NtwFusion1L {
 
 public:
 
-    explicit NtwFusion1L(Ntw&);        ///< Constructor.
+    explicit NtwFusion1L(Ntw&);  ///< Constructor.
 
     /// Set this reaction propensity for the whole network.
     szt set_prop() noexcept;
 
 private:
 
-    Ntw& host;    ///< ref: the host network for this reaction.
+    Ntw& host;  ///< ref: the host network for this reaction.
 
     // Convenience references to some of the host members.
     RandFactory&                          rnd;

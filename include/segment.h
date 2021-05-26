@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
    Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann,
    Helmholtz Center for Infection Research (Braunschweig, Germany).
    All Rights Reserved.
@@ -174,9 +174,9 @@ public:
 
     /**
      * @brief Set fission-specific factor for an end node.
-     * @param a In-segment node posiiton.
+     * @param e In-segment node posiiton.
      */
-    ulong set_end_fin(const szt a);
+    ulong set_end_fin(szt e);
 
     /**
      * @brief Set fission-specific factor for a bulk node.
@@ -329,9 +329,9 @@ constexpr
 szt Segment<3>::
 has_one_free_end() const    // return the end index if true
 {
-    if (    !nn[1] &&  nn[2]) return 1;
-    else if (nn[1] && !nn[2]) return 2;
-    else                      return 0;
+    if (!nn[1] &&  nn[2]) return 1;
+    if ( nn[1] && !nn[2]) return 2;
+    /* else */            return 0;
 }
 
 
@@ -376,23 +376,26 @@ is_cycle() const
 
 
 szt Segment<3>::
-num_nodes( const szt deg ) const                // deg = 1, 2, 3
+num_nodes( const szt deg ) const   // deg = 1, 2, 3
 {                                                        
-    if (deg == 1) {                    // count nodes of degree 1
-        if (      nn[1] &&  nn[2]) return 0;
-        else if (!nn[1] && !nn[2]) return 2;
-        else                       return 1;
+    if (deg == 1) {    // count nodes of degree 1
+        if ( nn[1] &&  nn[2]) return 0;
+        if (!nn[1] && !nn[2]) return 2;
+        /* else */            return 1;
     }
-    else if (deg == 2)      // count nodes of degree 2
+
+    if (deg == 2)      // count nodes of degree 2
         return nn[1] && nn[2] && is_cycle()
                ? g.size()
                : g.size() - 1;
-    else if (deg == 3) {     // count nodes of degree 3
-        if (     nn[1] == 2 && nn[2] == 2) return 2;
-        else if (nn[1] == 2 || nn[2] == 2) return 1;
-        else if (nn[1] != 2 && nn[2] != 2) return 0;
+
+    if (deg == 3) {     // count nodes of degree 3
+        if (nn[1] == 2 && nn[2] == 2) return 2;
+        if (nn[1] == 2 || nn[2] == 2) return 1;
+        if (nn[1] != 2 && nn[2] != 2) return 0;
     }
-    else msgr.exit("Error in Mito::num_nodes(). Not implemented deg" +
+
+    msgr.exit("Error in Mito::num_nodes(). Not implemented deg" +
                     std::to_string(deg));
     return huge<szt>;
 }

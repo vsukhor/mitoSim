@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
    Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann,
    Helmholtz Center for Infection Research (Braunschweig, Germany).
    All Rights Reserved.
@@ -50,7 +50,7 @@ using Utils::Common::zerohuge;
 /**
  * @brief Encapsulates and reads configuration parameters.
  * @details Reads from a file and stores initial configuration
- *          parameters for the hole modeling session.
+ * parameters for the hole modeling session.
  */
 class Config {
 

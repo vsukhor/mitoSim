@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
    Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann,
    Helmholtz Center for Infection Research (Braunschweig, Germany).
    All Rights Reserved.
@@ -25,7 +25,7 @@
 
 /**
 * @file ntw_fusion12.h
-* @brief Contains class encapsulating slot on the graph which enables tip-to-side fusion.
+* @brief Class encapsulating slot on the graph which enables tip-to-side fusion.
 * @author Valerii Sukhorukov
 */
 
@@ -58,7 +58,7 @@ public:
 
 private:
 
-    Ntw& host;    ///< ref: the host network for this reaction.
+    Ntw& host;  ///< ref: the host network for this reaction.
     
     // Convenience references to some of the host members.
     RandFactory& rnd;
@@ -106,10 +106,10 @@ populate() noexcept
 {
     constexpr auto minLL = Structure<typename Ntw::ST>::minLoopLength;
     cnd.clear();
-    for (const auto w1 : mt11)                                 // 11 ends to ...
+    for (const auto w1 : mt11)                           // 11 ends to ...
         for (const auto e1 : {szt(1),szt(2)}) {
             const std::array<szt,2> we1 {w1,e1};
-            for (const auto w2 : mt11)                        // ... 11 bulk
+            for (const auto w2 : mt11)                   // ... 11 bulk
                 for (szt i=1; i<mt[w2].g.size(); i++) {
                     const auto skip = w1 == w2 && (
                                     (e1 == 1 && i < minLL) ||
@@ -119,25 +119,25 @@ populate() noexcept
                         cnd.add(we1, {w2,i});
                     }
                 }
-            for (const auto& we2 : mt13)                     // ... 13 bulk
+            for (const auto& we2 : mt13)                 // ... 13 bulk
                 for (szt i=1; i<mt[we2[0]].g.size(); i++)
                     cnd.add(we1, {we2[0],i});
 
-            for (const auto w2 : mt33)                        // ... 33 bulk
+            for (const auto w2 : mt33)                    // ... 33 bulk
                 for (szt i=1; i<mt[w2].g.size(); i++)
                     cnd.add(we1, {w2,i});
 
-            for (const auto w2 : mt22)                        // ... 22 bulk
+            for (const auto w2 : mt22)                    // ... 22 bulk
                 for (szt i=1; i<mt[w2].g.size(); i++)
                     cnd.add(we1, {w2,i});
         }
 
-    for (const auto& we1 : mt13) {                            // a free end of 13 to ...
-        for (const auto w2 : mt11)                            // ... 11 bulk
+    for (const auto& we1 : mt13) {                        // a free end of 13 to ...
+        for (const auto w2 : mt11)                        // ... 11 bulk
             for (szt i=1; i<mt[w2].g.size(); i++)
                 cnd.add(we1, {w2,i});
 
-        for (const auto& we2 : mt13) {                        // ... 13 bulk
+        for (const auto& we2 : mt13) {                    // ... 13 bulk
             for (szt i=1; i<mt[we2[0]].g.size(); i++) {
                 const auto skip = we1[0] == we2[0] &&
                                  ((we1[1] == 1 && i < minLL) ||
@@ -146,11 +146,11 @@ populate() noexcept
                     cnd.add(we1, {we2[0],i});
             }
         }
-        for (const auto w2 : mt33)                            // ... 33 bulk
+        for (const auto w2 : mt33)                       // ... 33 bulk
             for (szt i=1; i<mt[w2].g.size(); i++)
                 cnd.add(we1, {w2,i});
 
-        for (const auto w2 : mt22)                            // ... 22 bulk
+        for (const auto w2 : mt22)                       // ... 22 bulk
             for (szt i=1; i<mt[w2].g.size(); i++)
                 cnd.add(we1, {w2,i});
     }
@@ -166,6 +166,6 @@ fire() noexcept
                        cnd.v[r][0], cnd.v[r][1]);
 }
 
-}    // namespace MitoSim
+}  // namespace MitoSim
 
 #endif // NTW_FUSION12_H

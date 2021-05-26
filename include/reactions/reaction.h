@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
    Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann,
    Helmholtz Center for Infection Research (Braunschweig, Germany).
    All Rights Reserved.
@@ -45,7 +45,7 @@ class Reaction {
 public:    // Only constant parameters are public.
 
     /// Index in Simulation::rc, i.e. index among all used and not used reactions.
-    const szt  ind {};
+    const szt ind {};
     /// Reaction rate constant.
     const real rate {};
 
@@ -71,21 +71,21 @@ public:    // Only constant parameters are public.
               const real rate,
               const ulong& it,        // const ref
               const real& time,        // const ref
-              const std::string& shortName,
-              const std::string& srt
+              const std::string shortName,  // value + move
+              const std::string srt   // value + move
         )
         : ind {ind}
         , rate {rate}
         , it {it}
         , time {time}
-        , shortName {shortName}
-        , srt {srt}
+        , shortName {std::move(shortName)}
+        , srt {std::move(srt)}
         , msgr {msgr}
     {}
 
 
     /// Virtual destructor.
-    virtual ~Reaction() {};
+    virtual ~Reaction() = default;
 
 
     /// Set the Gillespie score for this reaction.
@@ -100,14 +100,12 @@ public:    // Only constant parameters are public.
      * @param c1 Index of the 1st component to update.
      * @param c2 Index of the 2nd component to update.
      */
-    virtual void update_prop(
-        const szt c1,
-        const szt c2
-    ) noexcept = 0;
-    
+    virtual void update_prop(szt c1, szt c2) noexcept = 0;
+
 
     /// Execute the raction event.
     virtual void fire() noexcept = 0;
+
 
     /**
      * @brief Attach this score to the Gillespie mechanism.
@@ -115,6 +113,7 @@ public:    // Only constant parameters are public.
      *        reaction score.
      */
     virtual void attach_score_pointer(real* a) noexcept = 0;
+
 
     /**
      * @brief Populate the vector of reactions that need a score update.
@@ -126,6 +125,7 @@ public:    // Only constant parameters are public.
     virtual void initialize_dependencies(
         const Utils::Common::vup<Reaction>& rc
     ) noexcept = 0;
+
 
     /**
      * @brief The number of times this reaction was fired.

@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
    Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann,
    Helmholtz Center for Infection Research (Braunschweig, Germany).
    All Rights Reserved.
@@ -37,6 +37,7 @@
 
 #include "utils/common/misc.h"
 #include "utils/common/msgr.h"
+
 #include "reaction.h"
 
 namespace MitoSim {
@@ -74,12 +75,13 @@ public:
              const szt ind,
              Ntw& netw,
              const real rate,
+             RandFactory& rnd,
              const ulong& it,    // const ref
              const real& time    // const ref
         )
         : Reaction {msgr, ind, rate, it, time, "fission", name}
         , netw {netw}
-        , rnd {netw.rnd}
+        , rnd {rnd}
     {}
 
     /// Set the Gillespie score for this reaction.
@@ -93,7 +95,7 @@ public:
 
 
     /// Updatee propensity for two network components indexed in the parameters.
-    void update_prop(szt,szt) noexcept override;
+    void update_prop(szt c1, szt c2) noexcept override;
 
 
     /// Execute the raction event.
@@ -123,13 +125,13 @@ public:
      * @brief Print the parameters.
      * @param le True if new line after the output.
      */
-    void print(const bool le) const override;
+    void print(bool le) const override;
 
 private:
 
-    using Reaction::srt;
-     using Reaction::rate;
     using Reaction::msgr;
+    using Reaction::rate;
+    using Reaction::srt;
 
     // Convenience references
     Ntw&          netw;    ///< ref: The network.

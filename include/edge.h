@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
    Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann,
    Helmholtz Center for Infection Research (Braunschweig, Germany).
    All Rights Reserved.
@@ -36,6 +36,8 @@
 
 namespace MitoSim {
 
+template <szt> class Segment;
+
 /**
  * @brief The Network Edge class.
  * @details Edge is a minimal structural unit of the network.
@@ -47,14 +49,16 @@ namespace MitoSim {
 template<int ContentT>
 class Edge {
 
-public:
+    friend Segment<3>;
 
     szt ind {huge<szt>};    ///< Index network-wide: starts from 0.
     szt indcl {huge<szt>};  ///< Index cluster-wide: starts from 0.
-    szt cl {huge<szt>};        ///< Current cluster index.
+    szt cl {huge<szt>};     ///< Current cluster index.
 
     /// Contribution to fission propensity at each end.
     std::array<ulong,2> fin {{}};
+
+public:
 
     /**
      * @brief Constructor.
@@ -68,6 +72,8 @@ public:
         szt cl
     );
 
+    auto get_ind() const noexcept { return ind; }
+    auto get_fin(const int i) const noexcept { return fin[i]; }
 
     /// Swap the edge ends.
     void reflect();
@@ -84,11 +90,7 @@ public:
      * @param a Position inside segment.
      * @param endline Flag to end current line.
     */
-    void print(
-        std::ostream& os,
-        szt a,
-        bool endline
-    ) const;
+    void print(std::ostream& os, szt a, bool endline) const;
 };
 
 

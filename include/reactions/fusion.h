@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
    Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann,
    Helmholtz Center for Infection Research (Braunschweig, Germany).
    All Rights Reserved.
@@ -74,13 +74,14 @@ public:
             const szt ind,
             Ntw& netw,
             const real rate,
+            RandFactory& rnd,
             const ulong& it,        // const ref
             const real& time,        // const ref
             const std::string& srt
         )
         : Reaction {msgr, ind, rate, it, time, "fusion", srt}
         , netw {netw}
-        , rnd {netw.rnd}
+        , rnd {rnd}
     {}
 
     /**
@@ -103,7 +104,7 @@ public:
     * @brief Print the parameters.
     * @param le True if new line after the output.
     */
-    void print(const bool le) const override;
+    void print(bool le) const override;
 
 protected:
 
@@ -119,8 +120,8 @@ protected:
 
 private:
 
-    using Reaction::set_score;
     using Reaction::it;
+    using Reaction::set_score;
 
     /// Reactions that need a score update after *this has fired.
     std::vector<Reaction*>  dependents;
@@ -180,6 +181,6 @@ print( const bool le ) const
     if (le) msgr.print("");
 }
 
-}
+}  // namespace MitoSim
 
 #endif // FUSION_h

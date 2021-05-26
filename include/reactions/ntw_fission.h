@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
    Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann,
    Helmholtz Center for Infection Research (Braunschweig, Germany).
    All Rights Reserved.
@@ -51,7 +51,7 @@ public:
 
     friend Fission<Ntw>;
 
-    explicit NtwFission(Ntw&);        ///< Constructor.
+    explicit NtwFission(Ntw& host);  ///< Constructor.
 
     /// Set this reaction propensity for the whole network.
     ulong set_prop()  noexcept;
@@ -61,7 +61,7 @@ public:
      * This is done after updating it for the cluster indexed.
      * @param c Cluster index that triggers the update.
      */
-    void update_prop(const szt c) noexcept;
+    void update_prop(szt c) noexcept;
 
     /// prTotal getter.
     constexpr ulong get_prTotal() const noexcept { return prTotal; }
@@ -83,7 +83,7 @@ private:
      * @note Does not update the whole network propensity.
      * @param c Index of the cluster that is updateed
      */
-    void set_prop(const szt c) noexcept;
+    void set_prop(szt c) noexcept;
 
     /// Execute the raction event.
     auto fire() noexcept;
@@ -132,8 +132,9 @@ set_prop( const szt ic ) noexcept
 
 template<typename Ntw>
 void NtwFission<Ntw>::
-update_prop( const szt c ) noexcept     // incremental clnum changes are assumed
+update_prop( const szt c ) noexcept
 {
+    // We assume ncremental clnum changes.
     if (pr.size() > clnum) {
         pr.resize(clnum);
     }
@@ -167,17 +168,17 @@ find_random_node( szt& w, szt& a ) const noexcept
     for (w=1; w<=host.mtnum; w++) {
         const auto& g = mt[w].g;
         a = 0;
-        ksum += g[a].fin[0];
+        ksum += g[a].get_fin(0);
         if (k <= ksum)
             return true;
         for (; a<g.size()-1;) {
-            ksum += g[a].fin[1];
+            ksum += g[a].get_fin(1);
             a++;
-            ksum += g[a].fin[0];
+            ksum += g[a].get_fin(0);
             if (k <= ksum)
                 return true;
         }
-        ksum += g[a].fin[1];
+        ksum += g[a].get_fin(1);
         if (k <= ksum) {
             a++;
             return true;
@@ -186,6 +187,6 @@ find_random_node( szt& w, szt& a ) const noexcept
     return false;
 }
 
-}    // namespace MitoSim
+}  // namespace MitoSim
 
 #endif // NTW_FISSION_H

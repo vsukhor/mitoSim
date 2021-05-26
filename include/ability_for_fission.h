@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
    Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann,
    Helmholtz Center for Infection Research (Braunschweig, Germany).
    All Rights Reserved.
@@ -32,8 +32,8 @@
 #ifndef ABILITY_FOR_FISSION_H
 #define ABILITY_FOR_FISSION_H
 
-#include <vector>
 #include <algorithm>
+#include <vector>
 
 #include "utils/common/misc.h"
 #include "utils/common/msgr.h"
@@ -54,30 +54,31 @@ template<typename Mt>
 class AbilityForFission
     : public CoreTransformer<Mt> {
 
-public:
-
     using thisT = AbilityForFission<Mt>;
     using ThisFission = Fission<thisT>;
+
+protected:
 
     using Structure<Mt>::msgr;
     using Structure<Mt>::mt;
     using Structure<Mt>::mtnum;
     using Structure<Mt>::clnum;
     using Structure<Mt>::glm;
-    using Structure<Mt>::basic_update;
     using CoreTransformer<Mt>::copy_neigs;
     using CoreTransformer<Mt>::update_neigs;
     using CoreTransformer<Mt>::fuse_antiparallel;
     using CoreTransformer<Mt>::fuse_parallel;
     using CoreTransformer<Mt>::update_gIndcl;
 
+    using Structure<Mt>::basic_update;
+
+public:
+
     /**
      * @brief Constructor.
      * @param msgr Output message processor.
      */
-    explicit AbilityForFission(
-        Msgr& msgr
-    );
+    explicit AbilityForFission(Msgr& msgr);
 
     /**
      * @brief Perform fission of a segment.
@@ -103,7 +104,7 @@ public:
 private:
 
     /// Auxiliary, indicating visited status of segments during the graph search.
-    std::vector<szt>  vis;
+    std::vector<szt>  vis {};
 
     /**
      * @brief Update network component for changes resulting from its division.
@@ -139,14 +140,12 @@ AbilityForFission(
 
 template<typename Mt>
 bool AbilityForFission<Mt>::
-update_cl_fiss(
-    const szt w,
-    const szt e
-) noexcept
+update_cl_fiss( const szt w,
+                const szt e ) noexcept
 {
-    vis.resize(mtnum+2);
+    vis.resize(mtnum + 2);
     // Nothing is visited in the beginning of the search.
-    std::fill(vis.begin()+1, vis.begin()+mtnum+1, 0);
+    std::fill(vis.begin() + 1, vis.begin()+mtnum + 1, 0);
 
     const szt oe {(e == 1) ? szt(2) : szt(1)};
 
@@ -156,7 +155,7 @@ update_cl_fiss(
         szt clind {};
         for (szt i=1; i<=mtnum; i++)
             if (vis[i])
-                clind = mt[i].setCl(clnum-1, clind);
+                clind = mt[i].setCl(clnum - 1, clind);
     }
     return is_cycle;
 }
@@ -165,8 +164,7 @@ update_cl_fiss(
 template<typename Mt>
 bool AbilityForFission<Mt>::
 dfs( const szt w1, const szt e1,
-     const szt w2, const szt e2
-)
+     const szt w2, const szt e2 )
 {
     for (szt i=1; i<=mt[w1].nn[e1]; i++) {
         const auto cn = mt[w1].neig[e1][i];
@@ -191,20 +189,19 @@ dfs( const szt w1, const szt e1,
 // 'a' is counted from 1 and is the last element to remain in the old segment.
 template<typename Mt>
 std::array<szt,2> AbilityForFission<Mt>::
-fiss(
-    const szt w,
-    const szt a )
+fiss( const szt w,
+      const szt a )
 {
     // node 3 -> nodes 2+1 and node 2 -> nodes 1+1 in pure loops
     if (a && a < mt[w].g.size())
         return fiss2(w, a);
 
     // node 2 -> nodes 1+1; cuts between g[a-1] and g[a]
-    else if ((!a && mt[w].nn[1] <= 2) ||
+    if ((!a && mt[w].nn[1] <= 2) ||
              (a == mt[w].g.size() && mt[w].nn[2] <= 2))
         return fiss3(w, a);
 
-    else msgr.exit("ERROR: Attempt of an unpropriate fission!");
+    msgr.exit("ERROR: Attempt of an unpropriate fission!");
 
     return {huge<szt>, huge<szt>};
 }
@@ -216,18 +213,16 @@ fiss(
 // 'a' is counted from 1 and is the last element to remain in the original segment
 template<typename Mt>
 std::array<szt,2> AbilityForFission<Mt>::
-fiss2(
-    const szt w,
-    const szt a
-)
+fiss2( const szt w,
+       const szt a )
 {
     if constexpr (verbose)
         mt[w].print(w, "fission2:  ", a);     // cuts between g[a-1] and g[a]
 
     [[maybe_unused]] const auto clini = mt[w].cl;
 
-    const auto ind1 = mt[w].g[a-1].ind;
-    const auto ind2 = mt[w].g[a].ind;
+    const auto ind1 = mt[w].g[a-1].get_ind();
+    const auto ind2 = mt[w].g[a].get_ind();
 
     bool inCycle {};
     mt[w].nn[2] ? (inCycle = update_cl_fiss(w, 2))
@@ -298,10 +293,8 @@ fiss2(
 // 'at' is counted from 1 and is the last element to remain in the original segment
 template<typename Mt>
 std::array<szt,2> AbilityForFission<Mt>::
-fiss3(
-    const szt w,
-    const szt a
-)
+fiss3( const szt w,
+       const szt a )
 {
     if constexpr (verbose)
         mt[w].print(w, "fission3:  ", a);
@@ -313,8 +306,10 @@ fiss3(
     auto ind1 = huge<szt>;
     auto ind2 = huge<szt>;
     if (!a) {  // at end 1
-        ind1 = mt[w].g.front().ind;
-        ind2 = mt[mt[w].neig[1][1]].g[mt[mt[w].neig[1][1]].end2a(mt[w].neen[1][1])].ind;
+        ind1 = mt[w].g.front().get_ind();
+        ind2 = mt[mt[w].neig[1][1]]
+                .g[mt[mt[w].neig[1][1]].end2a(mt[w].neen[1][1])]
+                .get_ind();
         if (mt[w].nn[1] == 2) {
             const auto ninds = mt[w].double_neig_indexes(1);
             f = true;
@@ -379,9 +374,11 @@ fiss3(
             }
         }
     }
-    else if (a == mt[w].g.size()) {                                // at end 2
-        ind1 = mt[w].g.back().ind;
-        ind2 = mt[mt[w].neig[2][1]].g[mt[mt[w].neig[2][1]].end2a(mt[w].neen[2][1])].ind;
+    else if (a == mt[w].g.size()) {    // at end 2
+        ind1 = mt[w].g.back().get_ind();
+        ind2 = mt[mt[w].neig[2][1]]
+                .g[mt[mt[w].neig[2][1]].end2a(mt[w].neen[2][1])]
+                .get_ind();
         if (mt[w].nn[2] == 2) {
             const auto ninds = mt[w].double_neig_indexes(2);
             f = true;

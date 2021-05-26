@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
    Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann,
    Helmholtz Center for Infection Research (Braunschweig, Germany).
    All Rights Reserved.
@@ -138,12 +138,13 @@ public:
 
     /**
      * Update 'nn' for the specific node degree.
-     * @param deg Node degree to consider.
+     * @tparam I Node degree to consider.
      */
-    void update_nn(szt deg) noexcept;
+    template<int I>
+    void update_nn() noexcept;
 
     /// Update 'nn' for all node degrese.
-    void update_nn() noexcept;
+    void update_node_numbers() noexcept;
 
     /**
      * Print the network components using prefix specified.
@@ -214,8 +215,8 @@ make_indma() noexcept
     for (szt j=1; j<=mtnum; j++)
         for (szt k=0; k<mt[j].g.size(); k++) {
             const auto& g = mt[j].g[k];
-            glm[g.ind] = j;
-            gla[g.ind] = k;
+            glm[g.get_ind()] = j;
+            gla[g.get_ind()] = k;
         }
 }
 
@@ -327,27 +328,27 @@ populate_cluster_vectors() noexcept
 }
 
 template<typename Mt>
+template<int I>
 void Structure<Mt>::
-update_nn( const szt deg ) noexcept
+update_nn() noexcept
 {
     auto count_nodes = [&](const szt deg) noexcept    {
         szt k {};
         for (szt i=1; i<=mtnum; i++)
             k += mt[i].num_nodes(deg);
-        if (deg == 3) return k/3;
-        else          return k;
+        return (deg == 3) ? k/3 : k;
     };
 
-    nn[deg-1] = count_nodes(deg);
+    nn[I-1] = count_nodes(I);
 }
 
 template<typename Mt>
 void Structure<Mt>::
-update_nn() noexcept
+update_node_numbers() noexcept
 {
-    update_nn(1);
-    update_nn(2);
-    update_nn(3);
+    update_nn<1>();
+    update_nn<2>();
+    update_nn<3>();
 }
 
 template<typename Mt>

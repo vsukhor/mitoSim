@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
    Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann,
    Helmholtz Center for Infection Research (Braunschweig, Germany).
    All Rights Reserved.
@@ -39,16 +39,21 @@ namespace MitoSim {
  * @note Should be used only the reactions not intended
  * for fusion to a loop segment.
  */
-struct FusionCandidatesXX {
+struct alignas(8) FusionCandidatesXX {
+
+    static constexpr int MIN_ALIGNMENT = 8;
 
     /// Segment and end indexes of the 1st participant.
-    std::vector<std::array<szt,2>> u;
+    alignas(MIN_ALIGNMENT) std::vector<std::array<szt,2>> u;
     ///< Segment and end indexes of the 2nd participant.
-    std::vector<std::array<szt,2>> v;
+    alignas(MIN_ALIGNMENT) std::vector<std::array<szt,2>> v;
 
     /// Empty the container.
-    void clear() noexcept { u.clear();
-                            v.clear(); }
+    void clear() noexcept
+    {
+        u.clear();
+        v.clear();
+    }
 
     /**
      * @brief Add a node pair.
@@ -69,26 +74,6 @@ struct FusionCandidatesXX {
     szt size() const noexcept { return u.size(); }
 
 
-    /// Print the content out.
-    void print()
-    {
-        for(szt i=0; i<size(); i++)
-            print(i, false);
-        std::cout << "\n";
-    }
-
-    /**
-     * @brief Print a particular element.
-     * @param i Element index inside the container.
-     * @param nl Bool true is cr is intended.
-     */
-    void print( const szt i,
-                bool nl=true )
-    {
-        std::cout << " [" <<  u[i][0] << " " << u[i][1] << " + "
-                          <<  v[i][0] << " " << v[i][1] << "] ";
-        if (nl) std::cout << "\n";
-    }
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -96,23 +81,28 @@ struct FusionCandidatesXX {
  * @brief Container for fusion candidate nodes.
  * @note Should be used only the reactions intended for fusion to a loop segment.
  */
-struct FusionCandidatesXU {
+struct alignas(8) FusionCandidatesXU {
+
+    static constexpr int MIN_ALIGNMENT = 8;
 
     /// Segment and end indexes of the non-looped participant.
-    std::vector<std::array<szt,2>>  u;
-    /// Segment index of the looped participant.
-    std::vector<szt>                 v;
+    alignas(MIN_ALIGNMENT) std::vector<std::array<szt,2>> u;
+    alignas(MIN_ALIGNMENT) /// Segment index of the looped participant.
+    std::vector<szt>               v;
 
     /// Empty the container.
-    void clear() noexcept { u.clear(); v.clear(); }
+    void clear() noexcept
+    {
+        u.clear();
+        v.clear();
+    }
 
     /**
      * @brief Add a node pair.
      * @param uc Segment and end indexes of the non-looped participant.
      * @param vc Segment index of the looped participant.
     */
-    void add(std::array<szt,2> uc,
-             szt vc )
+    void add(std::array<szt,2> uc, szt vc )
     {
         u.emplace_back(uc);
         v.emplace_back(vc);

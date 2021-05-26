@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
    Copyright (C) 2015 Valerii Sukhorukov & Michael Meyer-Hermann,
    Helmholtz Center for Infection Research (Braunschweig, Germany).
    All Rights Reserved.
@@ -37,9 +37,9 @@
 #include "utils/common/misc.h"
 #include "utils/common/msgr.h"
 
-#include "structure.h"
-#include "core_transformer.h"
 #include "ability_for_fission.h"
+#include "core_transformer.h"
+#include "structure.h"
 
 namespace MitoSim {
 
@@ -53,7 +53,7 @@ template<typename Mt>
 class AbilityForFusion
     : public AbilityForFission<Mt> {
 
-public:
+protected:
 
     using Structure<Mt>::mt;
     using Structure<Mt>::mtnum;
@@ -62,6 +62,8 @@ public:
     using CoreTransformer<Mt>::fuse_antiparallel;
     using CoreTransformer<Mt>::fuse_parallel;
     using AbilityForFission<Mt>::fiss2;
+
+public:
 
     /**
      * @brief Constructor.
@@ -128,10 +130,10 @@ fuse11(
     const szt e2
 ) noexcept
 {
-    if (     w2 == w1) return fuse_to_loop(w1);
-    else if (e1 == e2) return fuse_antiparallel(e1, w1, w2);
-    else if (e1 == 1 ) return fuse_parallel(w1, w2);
-    else               return fuse_parallel(w2, w1);
+    if (w2 == w1) return fuse_to_loop(w1);
+    if (e1 == e2) return fuse_antiparallel(e1, w1, w2);
+    if (e1 == 1 ) return fuse_parallel(w1, w2);
+    /* else */    return fuse_parallel(w2, w1);
 }
 
 
@@ -295,6 +297,6 @@ fuse_to_loop( const szt w ) noexcept
     return {mt[w].cl, mt[w].cl};
 }
 
-}    // namespace MitoSim
+}  // namespace MitoSim
 
 #endif // ABILITY_FOR_FUSION_H
