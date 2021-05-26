@@ -224,7 +224,7 @@ fiss2(
     if constexpr (verbose)
         mt[w].print(w, "fission2:  ", a);     // cuts between g[a-1] and g[a]
 
-    const auto clini = mt[w].cl;
+    [[maybe_unused]] const auto clini = mt[w].cl;
 
     const auto ind1 = mt[w].g[a-1].ind;
     const auto ind2 = mt[w].g[a].ind;
