@@ -137,7 +137,7 @@ public:    // Only constant parameters are public.
      * @brief Print the parameters common to all reactions.
      * @param le True if new line after the output.
      */
-    virtual    void print( const bool le ) const
+    virtual void print( const bool le ) const
     {
         msgr.print<false>(" it " + std::to_string(it));
         msgr.print<false>(" srt " + srt);

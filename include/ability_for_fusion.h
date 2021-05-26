@@ -128,10 +128,10 @@ fuse11(
     const szt e2
 ) noexcept
 {
-    if (     w2 == w1)  return fuse_to_loop(w1);
-    else if (e1 == e2)  return fuse_antiparallel(e1, w1, w2);
-    else if (e1 == 1 )  return fuse_parallel(w1, w2);
-    else                return fuse_parallel(w2, w1);
+    if (     w2 == w1) return fuse_to_loop(w1);
+    else if (e1 == e2) return fuse_antiparallel(e1, w1, w2);
+    else if (e1 == 1 ) return fuse_parallel(w1, w2);
+    else               return fuse_parallel(w2, w1);
 }
 
 
@@ -145,8 +145,11 @@ fuse12(
 ) noexcept
 {
     if constexpr (verbose) {
-        msgr.print("Fusion12: %d(of %d e %d) with %d(of %d at %d)\n",
-                   w1, mt[w1].g.size(), end, w2, mt[w2].g.size(), a2);
+        using Utils::Common::STR;
+        msgr.print(STR("Fusion12:  ")+
+                   STR(w1)+"(of "+STR(mt[w1].g.size())+" e "+
+                   STR(end)+") with "+STR(w2)+"(of "+
+                   STR(mt[w2].g.size())+" at "+STR(a2)+")\n");
         mt[w1].print(w1, "     before s: ");
         mt[w2].print(w2, "     before s: ");
     }
@@ -227,8 +230,10 @@ fuse1L(
 ) noexcept
 {
     if constexpr (verbose) {
-        msgr.print("Fusion1U: %d(of %d e %d) with a CYCLE %d(of %d)\n",
-                   w1, mt[w1].g.size(), e1, w2, mt[w2].g.size());
+        using Utils::Common::STR;
+        msgr.print(STR("Fusion1U:  ")+
+                   STR(w1)+"(of "+STR(mt[w1].g.size())+" e "+STR(e1)+
+                   ") with a CYCLE "+STR(w2)+"(of "+STR(mt[w2].g.size())+")\n");
         mt[w1].print( w1, "     before s: " );
         mt[w2].print( w2, "     before s: " );
     }
@@ -273,7 +278,9 @@ fuse_to_loop( const szt w ) noexcept
             "Error: attempt to fuse_toLoop a not separate segment.\n");
 
     if constexpr (verbose) {
-        msgr.print("Fused to cycle %d of length %d", w, mt[w].g.size());
+        using Utils::Common::STR;
+        msgr.print(STR("Fused to cycle: ")+
+                   STR(w)+" of length "+STR(mt[w].g.size()));
         mt[w].print(w, "Before ", 0);
     }
 

@@ -113,10 +113,7 @@ public:
      * @param newcl New disconnected component index.
      * @param initind Starting edge index in the current disconnected component.
      */
-    szt set_gCl(
-        const szt newcl,
-        const szt initind
-    );
+    szt set_gCl(szt newcl, szt initind);
 
     /**
      * @brief Changecluster index.

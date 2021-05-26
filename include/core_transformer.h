@@ -270,8 +270,10 @@ fuse_antiparallel(
     const auto cl2 = mt[w2].cl;
 
     if constexpr (verbose) {
-        msgr.print("Fusion11a: %d(of %d) with %d(of %d) at end %d",
-                   w1, len1, w2, len2, end);
+        using Utils::Common::STR;
+        msgr.print(STR("Fusion11a:  ")+
+                   STR(w1)+"(of "+STR(len1)+") with "+
+                   STR(w2)+"(of "+STR(len2)+") at end "+STR(end));
         mt[w1].print(w1, "     before a: ");
         mt[w2].print(w2, "     before a: ");
     }
@@ -340,7 +342,10 @@ fuse_parallel(
     const auto cl2 = mt[w2].cl;
 
     if constexpr (verbose) {
-        msgr.print("Fusion11p: %d(of %d) with %d(of %d)", w1, len1, w2, len2);
+        using Utils::Common::STR;
+        msgr.print(STR("Fusion11p:  ")+
+                   STR(w1)+"(of "+STR(len1)+") with "+
+                   STR(w2)+"(of "+STR(len2)+")");
         mt[w1].print(w1, "     before p: ");
         mt[w2].print(w2, "     before p: ");
     }

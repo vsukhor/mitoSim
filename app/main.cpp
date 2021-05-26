@@ -44,7 +44,7 @@
 
 namespace MitoSim {
 using RandFactory = Utils::Random::Boost<real>;
-constexpr bool verbose {};     ///< Work in verbose mode.
+constexpr bool verbose {1};     ///< Work in verbose mode.
 
 }   // namespace MitoSim
 
@@ -82,8 +82,8 @@ int main( int argc, char* argv[] )
         Utils::Common::Msgr msgr {&std::cout, &logfile, 6};
         msgr.print("Run "+STR(ii)+" started: "+stopwatch.start.str);
         msgr.print("workingDirOut = "+workingDirOut);
-        msgr.print("runIni = " + std::to_string(runIni));
-        msgr.print("runEnd = " + std::to_string(runEnd));
+        msgr.print("runIni = " + STR(runIni));
+        msgr.print("runEnd = " + STR(runEnd));
 
         MitoSim::Config cfg {workingDirOut, configSuffix, STR(ii), msgr};
 

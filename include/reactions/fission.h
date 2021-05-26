@@ -245,9 +245,11 @@ template<typename Ntw>
 void Fission<Ntw>::
 print( const bool le ) const
 {
+    using Utils::Common::STR;
+
     Reaction::print(false);
-    msgr.print<false>(" score " + std::to_string(*score));
-    msgr.print<false>(" eventCount " + std::to_string(eventCount));
+    msgr.print<false>(" score " + STR(*score));
+    msgr.print<false>(" eventCount " + STR(eventCount));
     if (le) msgr.print("\n");
 }
 
