@@ -21,7 +21,8 @@
    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 
-============================================================================== */
+================================================================================
+*/
 
 /**
 * @file core_transformer.h
@@ -36,10 +37,10 @@
 
 #include <vector>
 
+#include "utils/common/constants.h"
 #include "utils/common/misc.h"
 #include "utils/common/msgr.h"
 
-#include "structure.h"
 #include "structure.h"
 
 namespace MitoSim {
@@ -47,7 +48,7 @@ namespace MitoSim {
 /**
  * @brief The CoreTransformer class.
  * @details Encapsulates a elementary dynamics and updates the network for it.
- *     	    Forms base for clases adding more specific tapes of dynamics.
+ * Forms base for clases adding more specific tapes of dynamics.
  * @tparam Mt type of the network Edge.
  */
 template<typename Mt>
@@ -105,8 +106,8 @@ protected:
     /**
      * @brief Perform fusion of two antiparallel oriented segments.
      * @details Antiparallel orientation is defined as
-     *     	    fusion of end 1 of the 1st segment to to end 1 of the 2nd segment, or
-     *     	    fusion of end 2 of the 1st segment to to end 2 of the 2nd segment.
+     *             fusion of end 1 of the 1st segment to to end 1 of the 2nd segment, or
+     *             fusion of end 2 of the 1st segment to to end 2 of the 2nd segment.
      * @param end End index at the fusion position.
      * @param w1 Index of the 1st segment.
      * @param w2 Index of the 2nd segment.
@@ -120,8 +121,8 @@ protected:
     /**
      * @brief Perform fusion of two parallel oriented segments.
      * @details Parallel orientation is defined as
-     *     	    fusion of end 1 of the 1st segment to to end 2 of the 2nd segment, or
-     *     	    fusion of end 2 of the 1st segment to to end 1 of the 2nd segment.
+     *             fusion of end 1 of the 1st segment to to end 2 of the 2nd segment, or
+     *             fusion of end 2 of the 1st segment to to end 1 of the 2nd segment.
      * @param w1 Index of the 1st segment.
      * @param w2 Index of the 2nd segment.
      */
@@ -169,9 +170,9 @@ protected:
      * @param removefromneigs Flag if the neighbouring segments should be removed.
     */
     void update_neigs(const szt oldn, const szt oend,
-    	    	      const szt n1, const szt n2,
-    	    	      const szt newn, const szt nend,
-    	    	      const bool removefromneigs
+                      const szt n1, const szt n2,
+                      const szt newn, const szt nend,
+                      const bool removefromneigs
     ) noexcept;
 
 };
@@ -182,7 +183,7 @@ protected:
 template<typename Mt>
 CoreTransformer<Mt>::
 CoreTransformer(
-	    Msgr& msgr
+        Msgr& msgr
     )
     : Structure<Mt> {msgr}
 {}
@@ -207,8 +208,8 @@ copy_neigs(
 ) noexcept
 {
     for (szt j=1; j<=mt[f].nn[ef]; j++) {
-	    mt[t].neig[et][j] = mt[f].neig[ef][j];
-	    mt[t].neen[et][j] = mt[f].neen[ef][j];
+        mt[t].neig[et][j] = mt[f].neig[ef][j];
+        mt[t].neen[et][j] = mt[f].neen[ef][j];
     }
     mt[t].nn[et] = mt[f].nn[ef];
 
@@ -220,34 +221,37 @@ copy_neigs(
 template<typename Mt>
 void CoreTransformer<Mt>::
 update_neigs( const szt oldn, const szt oend,
-    	      const szt n1, const szt n2,
-    	      const szt newn, const szt nend,
-    	      const bool removefromneigs ) noexcept
+              const szt n1, const szt n2,
+              const szt newn, const szt nend,
+              const bool removefromneigs ) noexcept
 {
     for (szt j=n1; j<=n2; j++) {
-	    const auto cn = mt[oldn].neig[oend][j];  // our neig currently processed
-	    const auto ce = mt[oldn].neen[oend][j];  // our neig currently processed
+        const auto cn = mt[oldn].neig[oend][j];  // our neig currently processed
+        const auto ce = mt[oldn].neen[oend][j];  // our neig currently processed
 
-	    szt i1 {};
-	    while (1) {
-    	    XASSERT(++i1 <= mt[cn].nn[ce],
-                    "A neig was not found: "+STR(oldn)+" "+STR(cn)+"\n");
-    	    if (mt[cn].neig[ce][i1] == oldn &&
-	    	    mt[cn].neen[ce][i1] == oend)
-	    	    break;
-	    }
-	    if (removefromneigs) {
-    	    // Remove oldn from the neig list of its j-th neig
-    	    mt[cn].neig[ce][i1] = mt[cn].neig[ce][mt[cn].nn[ce]];
-    	    mt[cn].neen[ce][i1] = mt[cn].neen[ce][mt[cn].nn[ce]--];
-    	    // Remove the j-th neig from the oldn's list of neigs
-    	    mt[oldn].neig[oend][j] = mt[oldn].neig[oend][mt[oldn].nn[oend]];
-    	    mt[oldn].neen[oend][j] = mt[oldn].neen[oend][mt[oldn].nn[oend]--];
-	    }
-	    else {
-    	    mt[cn].neig[ce][i1] = newn;
-    	    mt[cn].neen[ce][i1] = nend;
-	    }
+        szt i1 {};
+        while (1) {
+            ++i1;
+            XASSERT(i1 <= mt[cn].nn[ce],
+                    "A neig was not found: "+
+                    Utils::Common::STR(oldn)+" "+
+                    Utils::Common::STR(cn)+"\n");
+            if (mt[cn].neig[ce][i1] == oldn &&
+                mt[cn].neen[ce][i1] == oend)
+                break;
+        }
+        if (removefromneigs) {
+            // Remove oldn from the neig list of its j-th neig
+            mt[cn].neig[ce][i1] = mt[cn].neig[ce][mt[cn].nn[ce]];
+            mt[cn].neen[ce][i1] = mt[cn].neen[ce][mt[cn].nn[ce]--];
+            // Remove the j-th neig from the oldn's list of neigs
+            mt[oldn].neig[oend][j] = mt[oldn].neig[oend][mt[oldn].nn[oend]];
+            mt[oldn].neen[oend][j] = mt[oldn].neen[oend][mt[oldn].nn[oend]--];
+        }
+        else {
+            mt[cn].neig[ce][i1] = newn;
+            mt[cn].neen[ce][i1] = nend;
+        }
     }
 }
 
@@ -266,10 +270,10 @@ fuse_antiparallel(
     const auto cl2 = mt[w2].cl;
 
     if constexpr (verbose) {
-	    msgr.print("Fusion11a: %d(of %d) with %d(of %d) at end %d",
+        msgr.print("Fusion11a: %d(of %d) with %d(of %d) at end %d",
                    w1, len1, w2, len2, end);
-	    mt[w1].print(w1, "     before a: ");
-	    mt[w2].print(w2, "     before a: ");
+        mt[w1].print(w1, "     before a: ");
+        mt[w2].print(w2, "     before a: ");
     }
     XASSERT(w1 != w2,
             "Error during antiparallel fusion: w1 == w2: fuse_toLoop should be used instead.\n");
@@ -280,11 +284,11 @@ fuse_antiparallel(
 
     const szt opend = (end==2) ? 1 : 2;
     if (end == 1)
-	    copy_neigs(w1, 2, w1, 1);	// copy w1's 1-end neigs to its 0-end
-    copy_neigs(w2, opend, w1, 2);	// copy w2's 1-end neigs to w1's 1-end
+        copy_neigs(w1, 2, w1, 1);    // copy w1's 1-end neigs to its 0-end
+    copy_neigs(w2, opend, w1, 2);    // copy w2's 1-end neigs to w1's 1-end
 
     if (mt[w2].cl != mt[w1].cl)
-	    update_mtcl_fuse(w1, w2);
+        update_mtcl_fuse(w1, w2);
 
     if (end == 1)
         // Edge::a takes values [1:g.size()];
@@ -299,21 +303,21 @@ fuse_antiparallel(
     mt[w2].g.clear();
 
     if (w2 != mtnum)
-	    rename_mito(mtnum, w2);
+        rename_mito(mtnum, w2);
     mt.pop_back();
     mtnum--;
 
     update_gIndcl(cl1);
     if (cl1 != cl2)
-	    update_gIndcl(cl2);
+        update_gIndcl(cl2);
 
     if constexpr (verbose) {
-	    if (w1 == mtnum+1) {
+        if (w1 == mtnum+1) {
             mt[w2].print(w2, "       producing ");
             if (msgr.so) *msgr.so << std::endl;
             if (msgr.sl) *msgr.sl << std::endl;
         }
-	    else {
+        else {
             mt[w1].print(w1, "       producing ");
             if (msgr.so) *msgr.so << std::endl;
             if (msgr.sl) *msgr.sl << std::endl;
@@ -336,9 +340,9 @@ fuse_parallel(
     const auto cl2 = mt[w2].cl;
 
     if constexpr (verbose) {
-	    msgr.print("Fusion11p: %d(of %d) with %d(of %d)", w1, len1, w2, len2);
-	    mt[w1].print(w1, "     before p: ");
-	    mt[w2].print(w2, "     before p: ");
+        msgr.print("Fusion11p: %d(of %d) with %d(of %d)", w1, len1, w2, len2);
+        mt[w1].print(w1, "     before p: ");
+        mt[w2].print(w2, "     before p: ");
     }
     XASSERT(w1 != w2,
             "Error during parallel fusion: w1 == w2: fuse_toLoop should be used instead.\n");
@@ -349,27 +353,27 @@ fuse_parallel(
 
     copy_neigs(w2, 1, w1, 1);
     if(mt[w2].cl != mt[w1].cl)
-	    update_mtcl_fuse(w1, w2);
+        update_mtcl_fuse(w1, w2);
 
     std::move(mt[w1].g.begin(), mt[w1].g.end(), std::back_inserter(mt[w2].g));
     mt[w1].g = std::move(mt[w2].g);
 
     if (w2 != mtnum)
-	    rename_mito(mtnum, w2);
+        rename_mito(mtnum, w2);
     mt.pop_back();
     mtnum--;
 
     update_gIndcl(cl1);
     if (cl1 != cl2)
-	    update_gIndcl(cl2);
+        update_gIndcl(cl2);
 
     if constexpr (verbose) {
-	    if (w1 == mtnum+1) {
+        if (w1 == mtnum+1) {
             mt[w2].print(w2, "       producing ");
             if (msgr.so) *msgr.so << std::endl;
             if (msgr.sl) *msgr.sl << std::endl;
         }
-	    else {
+        else {
             mt[w1].print(w1, "       producing ");
             if (msgr.so) *msgr.so << std::endl;
             if (msgr.sl) *msgr.sl << std::endl;
@@ -391,13 +395,13 @@ update_mtcl_fuse(
     const auto w2cl = mt[w2].cl;
 
     for (szt i=1; i<=mtnum; i++)
-	    if (mt[i].cl == w2cl)
-    	    mt[i].cl = w1cl;
+        if (mt[i].cl == w2cl)
+            mt[i].cl = w1cl;
 
     if (w2cl != clnum-1)
-	    for(szt i=1; i<=mtnum; i++)
-    	    if(mt[i].cl == clnum-1)
-	    	    mt[i].cl = w2cl;
+        for(szt i=1; i<=mtnum; i++)
+            if(mt[i].cl == clnum-1)
+                mt[i].cl = w2cl;
     clnum--;
 }
 
@@ -411,7 +415,7 @@ update_cl_fuse(
 {
     update_cl(c2, c1);
     if (c2 != clnum - 1)
-	    update_cl(clnum-1, c2);
+        update_cl(clnum-1, c2);
     clnum--;
 }
 
@@ -421,11 +425,11 @@ void CoreTransformer<Mt>::
 update_cl(
     const szt cf,
     const szt ct
-) noexcept    	// args by value
+) noexcept        // args by value
 {
     for (szt i=1; i<=mtnum; i++)
-	    if (mt[i].cl == cf)
-    	    mt[i].cl = ct;
+        if (mt[i].cl == cf)
+            mt[i].cl = ct;
 
     update_gIndcl(ct);
 }
@@ -437,8 +441,8 @@ update_gIndcl( const szt cl ) noexcept
 {
     szt indcl {};
     for (szt j=1; j<=mtnum; j++)
-	    if (mt[j].cl == cl)
-    	    indcl = mt[j].set_gCl(cl, indcl);
+        if (mt[j].cl == cl)
+            indcl = mt[j].set_gCl(cl, indcl);
 }
 
 }    // namespace MitoSim
