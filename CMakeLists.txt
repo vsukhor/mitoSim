@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 
 project(mitosim
-    VERSION 0.73
+    VERSION 0.76.0
     DESCRIPTION "Simulator of mitochoondria reticulum"
     LANGUAGES CXX)
 
