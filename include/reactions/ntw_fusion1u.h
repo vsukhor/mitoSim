@@ -34,7 +34,7 @@
 
 #include "../fusion_candidates.h"
 
-namespace MitoSim {
+namespace mitosim {
 
 template<typename> class Fusion1U;
 
@@ -121,6 +121,6 @@ fire() noexcept
 }
 
 
-}    // namespace MitoSim
+}    // namespace mitosim
 
 #endif // NTW_FUSION1U_H

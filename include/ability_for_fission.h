@@ -40,7 +40,7 @@
 
 #include "core_transformer.h"
 
-namespace MitoSim {
+namespace mitosim {
 
 template<typename> class Fission;
 
@@ -453,6 +453,6 @@ fiss3( const szt w,
     return {mt[w1].cl, mt[w2].cl};
 }
 
-}    // namespace MitoSim
+}    // namespace mitosim
 
 #endif //  ABILITY_FOR_FISSION_H

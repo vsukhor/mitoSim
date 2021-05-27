@@ -41,7 +41,7 @@
 #include "core_transformer.h"
 #include "structure.h"
 
-namespace MitoSim {
+namespace mitosim {
 
 /**
  * @brief The AbilityForFusion class.
@@ -147,7 +147,7 @@ fuse12(
 ) noexcept
 {
     if constexpr (verbose) {
-        using Utils::Common::STR;
+        using utils::common::STR;
         msgr.print(STR("Fusion12:  ")+
                    STR(w1)+"(of "+STR(mt[w1].g.size())+" e "+
                    STR(end)+") with "+STR(w2)+"(of "+
@@ -232,7 +232,7 @@ fuse1L(
 ) noexcept
 {
     if constexpr (verbose) {
-        using Utils::Common::STR;
+        using utils::common::STR;
         msgr.print(STR("Fusion1U:  ")+
                    STR(w1)+"(of "+STR(mt[w1].g.size())+" e "+STR(e1)+
                    ") with a CYCLE "+STR(w2)+"(of "+STR(mt[w2].g.size())+")\n");
@@ -280,7 +280,7 @@ fuse_to_loop( const szt w ) noexcept
             "Error: attempt to fuse_toLoop a not separate segment.\n");
 
     if constexpr (verbose) {
-        using Utils::Common::STR;
+        using utils::common::STR;
         msgr.print(STR("Fused to cycle: ")+
                    STR(w)+" of length "+STR(mt[w].g.size()));
         mt[w].print(w, "Before ", 0);
@@ -297,6 +297,6 @@ fuse_to_loop( const szt w ) noexcept
     return {mt[w].cl, mt[w].cl};
 }
 
-}  // namespace MitoSim
+}  // namespace mitosim
 
 #endif // ABILITY_FOR_FUSION_H

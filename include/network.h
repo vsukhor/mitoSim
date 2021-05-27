@@ -43,7 +43,7 @@
 #include "ntw_fusion1u.h"
 #include "simulation.h"
 
-namespace MitoSim {
+namespace mitosim {
 
 /**
  * @brief The Network class template.
@@ -138,7 +138,7 @@ Network(
     )
     : AbilityForFusion<SegmentT> {msgr}
     , rnd {rnd}
-    , time {Utils::Common::zero<double>}
+    , time {utils::common::zero<double>}
     , it {}
     , cfg {cfg}
     , fis {*this}
@@ -232,6 +232,6 @@ save_mitos(
     ofs.write(reinterpret_cast<const char*>(&nst2save), sizeof(szt));
 }
 
-}    // namespace MitoSim
+}    // namespace mitosim
 
 #endif // NETWORK_H

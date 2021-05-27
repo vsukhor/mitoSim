@@ -40,12 +40,12 @@
 
 #include "reaction.h"
 
-namespace MitoSim {
+namespace mitosim {
 
-using Utils::Common::szt;
-using Utils::Common::uint;
-using Utils::Common::ulong;
-using Utils::Common::vup;
+using utils::common::szt;
+using utils::common::uint;
+using utils::common::ulong;
+using utils::common::vup;
 
 template<uint, uint, typename>
 class Fusion;
@@ -58,7 +58,7 @@ template<typename Ntw>
 class Fission
     : public Reaction {
 
-    friend Utils::Common::Gillespie<Reaction,RandFactory>;
+    friend utils::common::Gillespie<Reaction,RandFactory>;
 
 public:
 
@@ -247,7 +247,7 @@ template<typename Ntw>
 void Fission<Ntw>::
 print( const bool le ) const
 {
-    using Utils::Common::STR;
+    using utils::common::STR;
 
     Reaction::print(false);
     msgr.print<false>(" score " + STR(*score));
@@ -255,6 +255,6 @@ print( const bool le ) const
     if (le) msgr.print("\n");
 }
 
-}    // namespace MitoSim
+}    // namespace mitosim
 
 #endif // FISSION_H

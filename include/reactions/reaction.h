@@ -37,7 +37,7 @@
 #include "utils/common/misc.h"
 #include "utils/common/msgr.h"
 
-namespace MitoSim {
+namespace mitosim {
 
 /// An abstract base class for all the reactions
 class Reaction {
@@ -123,7 +123,7 @@ public:    // Only constant parameters are public.
      *        the simulation.
      */
     virtual void initialize_dependencies(
-        const Utils::Common::vup<Reaction>& rc
+        const utils::common::vup<Reaction>& rc
     ) noexcept = 0;
 
 
@@ -147,7 +147,7 @@ public:    // Only constant parameters are public.
 
 protected:
 
-    Utils::Common::Msgr& msgr;  ///< ref: Output message processor.
+    utils::common::Msgr& msgr;  ///< ref: Output message processor.
 
     /** All necessary updates after the given reaction event was executed.
      * @details Pure virtual function: Network and reaction updates necessary
@@ -157,6 +157,6 @@ protected:
 
 };
 
-}    // namespace MitoSim
+}    // namespace mitosim
 
 #endif // REACTION_H

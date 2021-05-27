@@ -38,7 +38,7 @@
 
 #include "edge.h"
 
-namespace MitoSim {
+namespace mitosim {
 
 /**
  * @brief Class template for the Network Segments.
@@ -353,7 +353,7 @@ double_neig_indexes( const szt e ) const
 {
     XASSERT(nn[e] == 2,
             "Error in Mito::double_neig_indexes: nn[e] != 2 in cluster "+
-            Utils::Common::STR(cl)+"\n");
+            utils::common::STR(cl)+"\n");
 
     std::vector<szt> neigInds(nn[e]);
     szt j {};
@@ -485,6 +485,6 @@ write( std::ofstream& ofs ) const
         g[j].write(ofs);
 }
 
-}    // namespace MitoSim
+}    // namespace mitosim
 
 #endif // SEGMENT_H

@@ -35,7 +35,7 @@
 #include "utils/common/misc.h"
 #include "utils/common/msgr.h"
 
-namespace MitoSim {
+namespace mitosim {
 
 /**
  * @brief The Structure class.
@@ -52,7 +52,7 @@ public:
     using Reticulum = std::vector<Mt>;
 
     /// Edge adjacency_lists per cluster.
-    Utils::Common::vec3<szt> clagl;
+    utils::common::vec3<szt> clagl;
 
     /// Mapping of the edge indexes to segment indexes.
     std::vector<szt>  glm;
@@ -73,7 +73,7 @@ public:
     szt mtmass {};
 
     /// Segment indices segregated into clusters: clmt - total.
-    Utils::Common::vec2<szt> clmt;
+    utils::common::vec2<szt> clmt;
     /// Cluster sizes measured in edges.
     std::vector<szt> cls;
 
@@ -92,12 +92,12 @@ public:
     /// Indexes of segments between nodes of degree 3 and 3: all together.
     std::vector<szt> mt33;
     /// Indexes of segments between nodes of degree 3 and 3: sorted into clusters.
-    Utils::Common::vec2<szt> mtc33;
+    utils::common::vec2<szt> mtc33;
 
     /// {index,end} Pairs for segments between nodes of degs. 1 and 3 together.
     std::vector<std::array<szt,2>> mt13;
     /// {index,end} Pairs for segments between nodes of degs. 1 and 3: sorted into clusters.
-    Utils::Common::vec2<std::array<szt,2>> mtc13;
+    utils::common::vec2<std::array<szt,2>> mtc13;
 
     /// Output message processor.
     Msgr& msgr;
@@ -130,7 +130,7 @@ public:
      */
     void make_adjacency_list_edges(
         szt ic,
-        Utils::Common::vec2<szt>& a
+        utils::common::vec2<szt>& a
     ) noexcept;
 
     /// Populates 'mt??', 'mtc??', 'nn' and 'clmt' vectors
@@ -160,7 +160,7 @@ public:
 
 private:
 
-    Utils::Common::vec2<bool> clvisited;    ///< Temporary auxiliary field.
+    utils::common::vec2<bool> clvisited;    ///< Temporary auxiliary field.
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -224,7 +224,7 @@ template<typename Mt>
 void Structure<Mt>::
 make_adjacency_list_edges(
     const szt c,
-    Utils::Common::vec2<szt>& a
+    utils::common::vec2<szt>& a
 ) noexcept
 {
     clvisited[c].resize(cls[c]);
@@ -284,7 +284,7 @@ populate_cluster_vectors() noexcept
     mt33.clear();    mtc33.resize(clnum);    for (auto& o : mtc33) o.clear();
     mt13.clear();    mtc13.resize(clnum);    for (auto& o : mtc13) o.clear();
 
-    nn = {{Utils::Common::zero<szt>}};
+    nn = {{utils::common::zero<szt>}};
     clmt.resize(clnum);
     for (auto& o : clmt) o.clear();    // # of segments
     
@@ -321,7 +321,7 @@ populate_cluster_vectors() noexcept
         else {
             ; XASSERT(false,
                       "Error in populate_cluster_vectors: failed classification for "
-                      +Utils::Common::STR(j)+"\n");
+                      +utils::common::STR(j)+"\n");
         }
     }
     nn[2] /= 3;
@@ -375,6 +375,6 @@ print( std::ostream& ofs ) const
         << " cln " << clnum;
 }
 
-}    // namespace MitoSim
+}    // namespace mitosim
 
 #endif // STRUCTURE_H

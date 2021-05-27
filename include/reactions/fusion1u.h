@@ -37,7 +37,7 @@
 
 #include "fusion.h"
 
-namespace MitoSim {
+namespace mitosim {
     
 /**
  * @brief Reaction slot for fusion of a degree 1 node with a loop segment.
@@ -47,7 +47,7 @@ template<typename Ntw>
 class Fusion1U
     : public Fusion<1,2,Ntw> {
 
-    friend Utils::Common::Gillespie<Reaction,RandFactory>;
+    friend utils::common::Gillespie<Reaction,RandFactory>;
 
 public:
 
@@ -188,7 +188,7 @@ template<typename Ntw>
 void Fusion1U<Ntw>::
 print( const bool le ) const
 {
-    using Utils::Common::STR;
+    using utils::common::STR;
     
     Reaction::print(false);
     msgr.template print<false>(" score "+STR(*score));
@@ -197,6 +197,6 @@ print( const bool le ) const
 }
 
 
-}    // namespace MitoSim
+}    // namespace mitosim
 
 #endif    // FUSION1U_H 

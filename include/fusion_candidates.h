@@ -32,7 +32,7 @@
 #ifndef FUSION_CANDIDATES_H
 #define FUSION_CANDIDATES_H
 
-namespace MitoSim {
+namespace mitosim {
 
 /**
  * @brief Container for fusion candidate nodes.
@@ -115,6 +115,6 @@ struct alignas(8) FusionCandidatesXU {
     szt size() const noexcept { return u.size(); }
 };
 
-}    // namespace MitoSim
+}    // namespace mitosim
 
 #endif // FUSION_CANDIDATES_H

@@ -42,11 +42,11 @@
 #include "utils/common/stop_watch.h"
 #include "utils/random/with_boost.h"
 
-namespace MitoSim {
-using RandFactory = Utils::Random::Boost<real>;
+namespace mitosim {
+using RandFactory = utils::random::Boost<real>;
 constexpr bool verbose {};   ///< Work in verbose mode.
 
-}   // namespace MitoSim
+}   // namespace mitosim
 
 #include "config.h"
 #include "network.h"
@@ -54,13 +54,13 @@ constexpr bool verbose {};   ///< Work in verbose mode.
 
 int main( int argc, char* argv[] )
 {
-    using Utils::Common::file_exists;
-    using Utils::Common::STR;
-    using Utils::Common::szt;
+    using utils::common::file_exists;
+    using utils::common::STR;
+    using utils::common::szt;
 
     constexpr const int MIN_ARGC = 5;
     if (argc < MIN_ARGC)
-        return Utils::Common::Exceptions::simple(
+        return utils::common::exceptions::simple(
             "Error: not sufficient configuration data provided", nullptr);
 
     // Working directory:
@@ -76,28 +76,28 @@ int main( int argc, char* argv[] )
     const auto workingDirOut = workingDir;   // directory for the output
 
     for (szt ii=runIni; ii<=runEnd; ii++) {
-        Utils::Common::StopWatch stopwatch;
+        utils::common::StopWatch stopwatch;
         stopwatch.start();
 
         std::ofstream logfile {workingDirOut+"log_m_"+STR(ii)+".txt"};
         constexpr const int PRINT_PRECISION = 6;
-        Utils::Common::Msgr msgr {&std::cout, &logfile, PRINT_PRECISION};
+        utils::common::Msgr msgr {&std::cout, &logfile, PRINT_PRECISION};
         msgr.print("Run "+STR(ii)+" started: "+stopwatch.start.str);
         msgr.print("workingDirOut = "+workingDirOut);
         msgr.print("runIni = " + STR(runIni));
         msgr.print("runEnd = " + STR(runEnd));
 
-        MitoSim::Config cfg {workingDirOut, configSuffix, STR(ii), msgr};
+        mitosim::Config cfg {workingDirOut, configSuffix, STR(ii), msgr};
 
         const auto seedFileName = workingDirIn+"seeds";
         if (!file_exists(seedFileName))
-            MitoSim::RandFactory::make_seed(seedFileName, &msgr);
+            mitosim::RandFactory::make_seed(seedFileName, &msgr);
 
-        auto rnd = std::make_unique<MitoSim::RandFactory>(seedFileName, ii, msgr);
+        auto rnd = std::make_unique<mitosim::RandFactory>(seedFileName, ii, msgr);
         constexpr const int MAX_NODE_DEGREE = 3;
         const auto network =
             std::make_unique<
-                MitoSim::Network<MitoSim::Segment<MAX_NODE_DEGREE>>
+                mitosim::Network<mitosim::Segment<MAX_NODE_DEGREE>>
                     >(cfg, *rnd, msgr);
 
         stopwatch.stop();

@@ -34,7 +34,7 @@
 
 #include "utils/common/misc.h"
 
-namespace MitoSim {
+namespace mitosim {
 
 template <szt> class Segment;
 
@@ -142,6 +142,6 @@ print( std::ostream& os,
     if (endline) os << "\n";
 }
 
-}    // namespace MitoSim
+}    // namespace mitosim
 
 #endif // EDGE_H

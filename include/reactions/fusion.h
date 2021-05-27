@@ -40,9 +40,9 @@
 
 #include "reaction.h"
 
-namespace MitoSim {
+namespace mitosim {
 
-using Utils::Common::uint;
+using utils::common::uint;
 
 /**
  * @brief Base class for fusion reaction classes.
@@ -56,7 +56,7 @@ template<uint D1,
 class Fusion
     : public Reaction {
 
-    friend Utils::Common::Gillespie<Reaction,RandFactory>;
+    friend utils::common::Gillespie<Reaction,RandFactory>;
 
 public:
 
@@ -70,7 +70,7 @@ public:
      * @param time current time
      * @param srt reaction name literal
      */
-    Fusion( Utils::Common::Msgr& msgr,
+    Fusion( utils::common::Msgr& msgr,
             const szt ind,
             Ntw& netw,
             const real rate,
@@ -181,6 +181,6 @@ print( const bool le ) const
     if (le) msgr.print("");
 }
 
-}  // namespace MitoSim
+}  // namespace mitosim
 
 #endif // FUSION_h

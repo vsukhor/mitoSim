@@ -34,9 +34,9 @@
 
 #include "utils/common/constants.h"
 
-namespace MitoSim {
+namespace mitosim {
 
-using Utils::Common::szt;
+using utils::common::szt;
 
 template<typename> class Fission;
 
@@ -76,7 +76,7 @@ private:
 
     // Propensities
     std::vector<ulong>   pr;          ///< Propensities per cluster.
-    Utils::Common::ulong prTotal {};  ///< Total propensity.
+    utils::common::ulong prTotal {};  ///< Total propensity.
 
     /**
      * @brief Set this reaction propensity for the indexed cluster.
@@ -107,7 +107,7 @@ NtwFission( Ntw& host )
 {}
 
 template<typename Ntw>
-Utils::Common::ulong NtwFission<Ntw>::
+utils::common::ulong NtwFission<Ntw>::
 set_prop() noexcept
 {
     pr.resize(clnum);
@@ -144,7 +144,7 @@ update_prop( const szt c ) noexcept
     if (c < clnum)
         set_prop(c);
 
-    prTotal = std::accumulate(pr.begin(), pr.end(), Utils::Common::zero<real>);
+    prTotal = std::accumulate(pr.begin(), pr.end(), utils::common::zero<real>);
 }
 
 template<typename Ntw>
@@ -187,6 +187,6 @@ find_random_node( szt& w, szt& a ) const noexcept
     return false;
 }
 
-}  // namespace MitoSim
+}  // namespace mitosim
 
 #endif // NTW_FISSION_H

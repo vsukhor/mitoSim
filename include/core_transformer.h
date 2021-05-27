@@ -43,7 +43,7 @@
 
 #include "structure.h"
 
-namespace MitoSim {
+namespace mitosim {
 
 /**
  * @brief The CoreTransformer class.
@@ -213,8 +213,8 @@ update_neigs( const szt oldn, const szt oend,
             ++i1;
             XASSERT(i1 <= mt[cn].nn[ce],
                     "A neig was not found: "+
-                    Utils::Common::STR(oldn)+" "+
-                    Utils::Common::STR(cn)+"\n");
+                    utils::common::STR(oldn)+" "+
+                    utils::common::STR(cn)+"\n");
             if (mt[cn].neig[ce][i1] == oldn &&
                 mt[cn].neen[ce][i1] == oend)
                 break;
@@ -249,7 +249,7 @@ fuse_antiparallel(
     const auto cl2 = mt[w2].cl;
 
     if constexpr (verbose) {
-        using Utils::Common::STR;
+        using utils::common::STR;
         msgr.print(STR("Fusion11a:  ")+
                    STR(w1)+"(of "+STR(len1)+") with "+
                    STR(w2)+"(of "+STR(len2)+") at end "+STR(end));
@@ -321,7 +321,7 @@ fuse_parallel(
     const auto cl2 = mt[w2].cl;
 
     if constexpr (verbose) {
-        using Utils::Common::STR;
+        using utils::common::STR;
         msgr.print(STR("Fusion11p:  ")+
                    STR(w1)+"(of "+STR(len1)+") with "+
                    STR(w2)+"(of "+STR(len2)+")");
@@ -429,6 +429,6 @@ update_gIndcl( const szt cl ) noexcept
             indcl = mt[j].set_gCl(cl, indcl);
 }
 
-}    // namespace MitoSim
+}    // namespace mitosim
 
 #endif // CORE_TRANSFORMER_H

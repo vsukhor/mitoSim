@@ -37,15 +37,15 @@
 #include "utils/common/msgr.h"
 #include "utils/config/reader.h"
 
-namespace MitoSim {
+namespace mitosim {
 
-using Utils::Common::bools;
-using Utils::Common::huge;
-using Utils::Common::onehuge;
-using Utils::Common::Msgr;
-using Utils::Common::szt;
-using Utils::Common::ulong;
-using Utils::Common::zerohuge;
+using utils::common::bools;
+using utils::common::huge;
+using utils::common::onehuge;
+using utils::common::Msgr;
+using utils::common::szt;
+using utils::common::ulong;
+using utils::common::zerohuge;
 
 /**
  * @brief Encapsulates and reads configuration parameters.
@@ -56,7 +56,7 @@ class Config {
 
     const std::string configSuffix;  ///< Application-specific suffix of the configuration file.
     const std::string cfgFname;      ///< Configuration file name.
-    Utils::Config::Reader read;      ///< Generic reader of configuraion files.
+    utils::config::Reader read;      ///< Generic reader of configuraion files.
 
 public:
 
@@ -123,6 +123,6 @@ public:
     {}
 };
 
-}    // namespace MitoSim
+}    // namespace mitosim
 
 #endif // CONFIG_H

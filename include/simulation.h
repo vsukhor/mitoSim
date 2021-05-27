@@ -41,7 +41,7 @@
 #include "reactions/fusion12.h"
 #include "reactions/fusion1u.h"
 
-namespace MitoSim {
+namespace mitosim {
 
 /**
  * @brief The Simulation class.
@@ -52,7 +52,7 @@ namespace MitoSim {
 template<typename Ntw>
 class Simulation {
 
-    using Msgr = Utils::Common::Msgr;
+    using Msgr = utils::common::Msgr;
 
 public:
 
@@ -89,7 +89,7 @@ private:
     szt saveFrequency;  ///< Frequency of detailed output to flie.
 
     /// Gillespie reactor controlling the simulation.
-    Utils::Common::Gillespie<RandFactory,Reaction> gsp;
+    utils::common::Gillespie<RandFactory,Reaction> gsp;
 
     void populateRc();  ///< Add reactions to the Gillespie simulator.
 
@@ -160,7 +160,7 @@ operator()()
 {
     netw.update_node_numbers();
     netw.update_books();
-    netw.save_mitos(true, false, 0, Utils::Common::zero<real>);
+    netw.save_mitos(true, false, 0, utils::common::zero<real>);
     if (it % logFrequency == 0)
         update_log();
 
@@ -169,18 +169,20 @@ operator()()
         it++;
         if (!gsp.set_asum()) {
             terminate(std::string("\nNo reaction left! ") +
-                      "Termination due to reaction *score == 0 for all reactions used.");
+                      "Termination due to reaction *score == 0 "+
+                      "for all reactions used.");
             break; 
         }
         XASSERT(!std::isnan(gsp.tau()), "Tau is nan\n");
         
         gsp.fire(time);
 
-        if (it % saveFrequency == 0) {
+        if (it % saveFrequency == 0)
             netw.save_mitos(false, false, it, time);        // appended
-        }
+
         if (it % logFrequency == 0)
             update_log();
+
         if (!netw.mtnum) {
             terminate("No segments left! Termination due to chondriome exhaustion.");
             break;
@@ -224,6 +226,6 @@ update_log( std::ostream &ofs )
     ofs << std::endl;
 }
 
-}    // namespace MitoSim
+}    // namespace mitosim
 
 #endif // SIMULATION_H
