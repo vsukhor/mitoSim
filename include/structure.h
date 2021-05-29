@@ -32,10 +32,17 @@
 #ifndef STRUCTURE_H
 #define STRUCTURE_H
 
+#include <vector>
+
+#include "utils/common/constants.h"
 #include "utils/common/misc.h"
 #include "utils/common/msgr.h"
 
 namespace mitosim {
+
+using utils::common::huge;
+using utils::common::Msgr;
+using utils::common::szt;
 
 /**
  * @brief The Structure class.
