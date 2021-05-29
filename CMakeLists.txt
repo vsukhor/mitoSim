@@ -47,8 +47,7 @@ add_compile_options(-O3 -msse4)
 
 find_package(Boost REQUIRED)
 
-set(LIB_UTILS "${CMAKE_CURRENT_SOURCE_DIR}/external/lib/libutils.a")
-
+# Dependence on utils:
 add_subdirectory(external)
 
 # The executable code is here

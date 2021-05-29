@@ -6,9 +6,8 @@ target_include_directories(mitosim_CPU PUBLIC
                            ../include/reactions
                            ../external)
 
-# This depends on (header only) boost
 target_link_libraries(mitosim_CPU PRIVATE Boost::boost)
-target_link_libraries(mitosim_CPU PRIVATE "${LIB_UTILS}")
+target_link_libraries(mitosim_CPU PRIVATE $<TARGET_FILE:utils>)
 
 add_custom_command(
     TARGET mitosim_CPU
