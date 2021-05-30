@@ -29,8 +29,8 @@
 * @author Valerii Sukhorukov
 */
 
-#ifndef FISSION_H
-#define FISSION_H
+#ifndef MITOSIM_FISSION_H
+#define MITOSIM_FISSION_H
 
 #include <string>
 #include <vector>
@@ -255,6 +255,6 @@ print( const bool le ) const
     if (le) msgr.print("\n");
 }
 
-}    // namespace mitosim
+}  // namespace mitosim
 
-#endif // FISSION_H
+#endif  // MITOSIM_FISSION_H

@@ -32,8 +32,8 @@
 * @author Valerii Sukhorukov
 */
 
-#ifndef CORE_TRANSFORMER_H
-#define CORE_TRANSFORMER_H
+#ifndef MITOSIM_CORE_TRANSFORMER_H
+#define MITOSIM_CORE_TRANSFORMER_H
 
 #include <vector>
 
@@ -429,6 +429,6 @@ update_gIndcl( const szt cl ) noexcept
             indcl = mt[j].set_gCl(cl, indcl);
 }
 
-}    // namespace mitosim
+}  // namespace mitosim
 
-#endif // CORE_TRANSFORMER_H
+#endif  // MITOSIM_CORE_TRANSFORMER_H

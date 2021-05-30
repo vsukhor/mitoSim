@@ -29,8 +29,8 @@
 * @author Valerii Sukhorukov
 */
 
-#ifndef EDGE_H
-#define EDGE_H
+#ifndef MITOSIM_EDGE_H
+#define MITOSIM_EDGE_H
 
 #include "utils/common/misc.h"
 
@@ -142,6 +142,6 @@ print( std::ostream& os,
     if (endline) os << "\n";
 }
 
-}    // namespace mitosim
+}  // namespace mitosim
 
-#endif // EDGE_H
+#endif  // MITOSIM_EDGE_H

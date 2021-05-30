@@ -29,8 +29,8 @@
 * @author Valerii Sukhorukov
 */
 
-#ifndef NTW_FISSION_H
-#define NTW_FISSION_H
+#ifndef MITOSIM_NTW_FISSION_H
+#define MITOSIM_NTW_FISSION_H
 
 #include "utils/common/constants.h"
 
@@ -189,4 +189,4 @@ find_random_node( szt& w, szt& a ) const noexcept
 
 }  // namespace mitosim
 
-#endif // NTW_FISSION_H
+#endif  // MITOSIM_NTW_FISSION_H

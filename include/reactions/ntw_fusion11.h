@@ -29,8 +29,8 @@
 * @author Valerii Sukhorukov
 */
 
-#ifndef NTW_FUSION11_H
-#define NTW_FUSION11_H
+#ifndef MITOSIM_NTW_FUSION11_H
+#define MITOSIM_NTW_FUSION11_H
 
 #include "utils/common/misc.h"
 
@@ -136,4 +136,4 @@ fire() noexcept
 
 }  // namespace mitosim
 
-#endif // NTW_FUSION11_H
+#endif  // MITOSIM_NTW_FUSION11_H

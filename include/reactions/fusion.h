@@ -29,8 +29,8 @@
 * @author Valerii Sukhorukov
 */
 
-#ifndef FUSION_h
-#define FUSION_h
+#ifndef MITOSIM_FUSION_h
+#define MITOSIM_FUSION_h
 
 #include <string>
 #include <vector>
@@ -183,4 +183,4 @@ print( const bool le ) const
 
 }  // namespace mitosim
 
-#endif // FUSION_h
+#endif  // MITOSIM_FUSION_h

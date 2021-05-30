@@ -29,8 +29,8 @@
 * @author Valerii Sukhorukov
 */
 
-#ifndef REACTION_h
-#define REACTION_h
+#ifndef MITOSIM_REACTION_H
+#define MITOSIM_REACTION_H
 
 #include <string>
 
@@ -157,6 +157,6 @@ protected:
 
 };
 
-}    // namespace mitosim
+}  // namespace mitosim
 
-#endif // REACTION_H
+#endif  // MITOSIM_REACTION_H

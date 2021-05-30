@@ -29,8 +29,8 @@
 * @author Valerii Sukhorukov
 */
 
-#ifndef SIMULATION_H
-#define SIMULATION_H
+#ifndef MITOSIM_SIMULATION_H
+#define MITOSIM_SIMULATION_H
 
 #include "utils/common/gillespie.h"
 #include "utils/common/misc.h"
@@ -226,6 +226,6 @@ update_log( std::ostream &ofs )
     ofs << std::endl;
 }
 
-}    // namespace mitosim
+}  // namespace mitosim
 
-#endif // SIMULATION_H
+#endif  // MITOSIM_SIMULATION_H

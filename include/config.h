@@ -29,8 +29,8 @@
 * @author Valerii Sukhorukov.
 */
 
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef MITOSIM_CONFIG_H
+#define MITOSIM_CONFIG_H
 
 #include <string>
 
@@ -123,6 +123,6 @@ public:
     {}
 };
 
-}    // namespace mitosim
+}  // namespace mitosim
 
-#endif // CONFIG_H
+#endif  // MITOSIM_CONFIG_H

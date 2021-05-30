@@ -29,8 +29,8 @@
 * @author Valerii Sukhorukov
 */
 
-#ifndef ABILITY_FOR_FISSION_H
-#define ABILITY_FOR_FISSION_H
+#ifndef MITOSIM_ABILITY_FOR_FISSION_H
+#define MITOSIM_ABILITY_FOR_FISSION_H
 
 #include <algorithm>
 #include <vector>
@@ -453,6 +453,6 @@ fiss3( const szt w,
     return {mt[w1].cl, mt[w2].cl};
 }
 
-}    // namespace mitosim
+}  // namespace mitosim
 
-#endif //  ABILITY_FOR_FISSION_H
+#endif  // MITOSIM_ABILITY_FOR_FISSION_H

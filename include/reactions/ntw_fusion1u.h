@@ -29,8 +29,8 @@
 * @author Valerii Sukhorukov
 */
 
-#ifndef NTW_FUSION1U_H
-#define NTW_FUSION1U_H
+#ifndef MITOSIM_NTW_FUSION1U_H
+#define MITOSIM_NTW_FUSION1U_H
 
 #include "../fusion_candidates.h"
 
@@ -121,6 +121,6 @@ fire() noexcept
 }
 
 
-}    // namespace mitosim
+}  // namespace mitosim
 
-#endif // NTW_FUSION1U_H
+#endif  // MITOSIM_NTW_FUSION1U_H

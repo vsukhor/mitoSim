@@ -29,8 +29,8 @@
 * @author Valerii Sukhorukov
 */
 
-#ifndef STRUCTURE_H
-#define STRUCTURE_H
+#ifndef MITOSIM_STRUCTURE_H
+#define MITOSIM_STRUCTURE_H
 
 #include <vector>
 
@@ -382,6 +382,6 @@ print( std::ostream& ofs ) const
         << " cln " << clnum;
 }
 
-}    // namespace mitosim
+}  // namespace mitosim
 
-#endif // STRUCTURE_H
+#endif  // MITOSIM_STRUCTURE_H

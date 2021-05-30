@@ -29,8 +29,8 @@
 * @author Valerii Sukhorukov
 */
 
-#ifndef NETWORK_H
-#define NETWORK_H
+#ifndef MITOSIM_NETWORK_H
+#define MITOSIM_NETWORK_H
 
 #include "utils/common/misc.h"
 #include "utils/common/msgr.h"
@@ -232,6 +232,6 @@ save_mitos(
     ofs.write(reinterpret_cast<const char*>(&nst2save), sizeof(szt));
 }
 
-}    // namespace mitosim
+}  // namespace mitosim
 
-#endif // NETWORK_H
+#endif  // MITOSIM_NETWORK_H

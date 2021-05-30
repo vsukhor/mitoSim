@@ -29,8 +29,8 @@
 * @author Valerii Sukhorukov
 */
 
-#ifndef ABILITY_FOR_FUSION_H
-#define ABILITY_FOR_FUSION_H
+#ifndef MITOSIM_ABILITY_FOR_FUSION_H
+#define MITOSIM_ABILITY_FOR_FUSION_H
 
 #include <vector>
 
@@ -299,4 +299,4 @@ fuse_to_loop( const szt w ) noexcept
 
 }  // namespace mitosim
 
-#endif // ABILITY_FOR_FUSION_H
+#endif  // MITOSIM_ABILITY_FOR_FUSION_H

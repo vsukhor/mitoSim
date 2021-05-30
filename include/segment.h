@@ -30,8 +30,8 @@
 * @author Valerii Sukhorukov
 */
 
-#ifndef SEGMENT_H
-#define SEGMENT_H
+#ifndef MITOSIM_SEGMENT_H
+#define MITOSIM_SEGMENT_H
 
 #include "utils/common/misc.h"
 #include "utils/common/msgr.h"
@@ -485,6 +485,6 @@ write( std::ofstream& ofs ) const
         g[j].write(ofs);
 }
 
-}    // namespace mitosim
+}  // namespace mitosim
 
-#endif // SEGMENT_H
+#endif  // MITOSIM_SEGMENT_H

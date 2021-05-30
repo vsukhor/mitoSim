@@ -29,8 +29,8 @@
 * @author Valerii Sukhorukov
 */
 
-#ifndef FUSION1U_H
-#define FUSION1U_H
+#ifndef MITOSIM_FUSION1U_H
+#define MITOSIM_FUSION1U_H
 
 #include "utils/common/misc.h"
 #include "utils/common/msgr.h"
@@ -197,6 +197,6 @@ print( const bool le ) const
 }
 
 
-}    // namespace mitosim
+}  // namespace mitosim
 
-#endif    // FUSION1U_H 
+#endif  // MITOSIM_FUSION1U_H

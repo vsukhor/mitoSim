@@ -29,8 +29,8 @@
 * @author Valerii Sukhorukov
 */
 
-#ifndef FUSION_CANDIDATES_H
-#define FUSION_CANDIDATES_H
+#ifndef MITOSIM_FUSION_CANDIDATES_H
+#define MITOSIM_FUSION_CANDIDATES_H
 
 namespace mitosim {
 
@@ -115,6 +115,6 @@ struct alignas(8) FusionCandidatesXU {
     szt size() const noexcept { return u.size(); }
 };
 
-}    // namespace mitosim
+}  // namespace mitosim
 
-#endif // FUSION_CANDIDATES_H
+#endif  // MITOSIM_FUSION_CANDIDATES_H

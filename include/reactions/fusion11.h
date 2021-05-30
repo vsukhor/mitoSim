@@ -29,8 +29,8 @@
 * @author Valerii Sukhorukov
 */
 
-#ifndef FUSION11_h
-#define FUSION11_h
+#ifndef MITOSIM_FUSION11_h
+#define MITOSIM_FUSION11_h
 
 #include "utils/common/misc.h"
 #include "utils/common/msgr.h"
@@ -131,7 +131,9 @@ private:
 };
     
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 template<typename Ntw> const std::string Fusion11<Ntw>::name {"fu11"};
+
 
 template<typename Ntw>
 void Fusion11<Ntw>::
@@ -140,6 +142,7 @@ set_score() noexcept
     *score = rate * propTotal;
 }
 
+
 template<typename Ntw>
 void Fusion11<Ntw>::
 set_prop() noexcept
@@ -147,12 +150,14 @@ set_prop() noexcept
     propTotal = netw.fu11.set_prop();
 }
 
+
 template<typename Ntw>
 void Fusion11<Ntw>::
 update_prop( szt /*unused*/, szt /*unused*/ ) noexcept
 {
     set_prop();
 }
+
 
 template<typename Ntw>
 void Fusion11<Ntw>::
@@ -167,6 +172,7 @@ fire() noexcept
     update_netw_stats();
 }
 
+
 template<typename Ntw>
 void Fusion11<Ntw>::
 print( const bool le ) const
@@ -179,7 +185,8 @@ print( const bool le ) const
     if (le) msgr.print("\n");
 }
 
-}    // namespace mitosim
+
+}  // namespace mitosim
 
 
-#endif // FUSION11_h
+#endif  // MITOSIM_FUSION11_h
