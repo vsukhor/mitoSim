@@ -79,7 +79,7 @@ Static linking is a default, so the executable can then be copied to another dir
 ### Running the simulation
 
 The simulation parameters are read from a short configuration file, structured
-as in the example [config_sample.txt](tests/config_sample.txt).
+as in the example [config_sample.txt](examples/config_sample.txt).
 More details on the config file formatting can be found in the
 Utils::Config [documentation](https://github.com/vsukhor/utils/blob/master/utils/config/conf_file_structure.md)
 The file is expected to be named as 'config_X.txt', where X is the configuration-specific suffix 
