@@ -32,10 +32,6 @@ OBJS_DIR := ./obj/
 OBJS += $(SRCS_MAIN:.cpp=.o)
 OBJS_FULL = $(patsubst %,$(OBJS_DIR)%,$(OBJS))
 
-ASMS_DIR := asm/
-ASMS += $(SRCS_MAIN:.cpp=.s)
-ASMS_FULL = $(patsubst %,$(ASMS_DIR)%,$(ASMS))
-
 MITOSIM_INC_DIR := $(MITOSIM_DIR)include/
 REACTS_INC_DIR := $(MITOSIM_DIR)include/reactions/
 INCDIR = -I$(BOOST_DIR) -I$(UTILS_DIR) -I$(MITOSIM_INC_DIR) -I$(REACTS_INC_DIR)
@@ -63,10 +59,7 @@ LFLAGS = -Wall -L$(UTILS_DIR)lib -lpthread -lstdc++ -lutils
 $(TARGET) : $(OBJS_FULL)
 	$(CC) $(LFLAGS) $^ -o $@
 
-$(OBJS_DIR)main.o : $(ASMS_DIR)main.s
-	$(AS) $< -o $@
-
-$(ASMS_DIR)main.s : $(MITOSIM_APP_DIR)main.cpp \
+$(OBJS_DIR)main.o : $(MITOSIM_APP_DIR)main.cpp \
 	$(REACTS_INC_DIR)ntw_fission.h \
 	$(REACTS_INC_DIR)ntw_fusion11.h \
 	$(REACTS_INC_DIR)ntw_fusion12.h \
@@ -97,4 +90,4 @@ $(ASMS_DIR)main.s : $(MITOSIM_APP_DIR)main.cpp \
 .PHONY: clean
 
 clean:
-	rm -rf $(OBJS_DIR)*.o $(ASMS_DIR)*.s $(TARGET_DIR)$(TARGET_CORE)*
+	rm -rf $(OBJS_DIR)*.o $(TARGET_DIR)$(TARGET_CORE)*
