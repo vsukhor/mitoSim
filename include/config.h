@@ -32,6 +32,7 @@
 #ifndef MITOSIM_CONFIG_H
 #define MITOSIM_CONFIG_H
 
+#include <filesystem>
 #include <string>
 
 #include "utils/common/msgr.h"
@@ -42,9 +43,6 @@ namespace mitosim {
 using utils::common::bools;
 using utils::common::huge;
 using utils::common::onehuge;
-using utils::common::Msgr;
-using utils::common::szt;
-using utils::common::ulong;
 using utils::common::zerohuge;
 
 /**
@@ -52,36 +50,45 @@ using utils::common::zerohuge;
  * @details Reads from a file and stores initial configuration
  * parameters for the hole modeling session.
  */
+template<typename realT>
 class Config {
-
-    const std::string configSuffix;  ///< Application-specific suffix of the configuration file.
-    const std::string cfgFname;      ///< Configuration file name.
-    utils::config::Reader read;      ///< Generic reader of configuraion files.
 
 public:
 
-    const std::string runName;        ///< Current run index as a string.
-    const std::string workingDirOut;  ///< Output directory.
+    using Msgr = utils::common::Msgr;
+    using szt = utils::common::szt;
+    using ulong = utils::common::ulong;
 
-    const real timeTotal;      ///< Total time to simulate.
-    const szt  logFrequency;   ///< (iterations): Every logfreq iteration steps log is updated.
-    const szt  saveFrequency;  ///< (iterations): Every saveFrequency steps save_mitos is executed.
+private:
 
-    const real edgeLength;  ///< (micrometers) Edge Length.
-    const szt  mtmassini;   ///< Total chondriome length, edges.
-    const szt  segmassini;  ///< Segment lengths at the beginning of simulation.
+    const std::filesystem::directory_entry file;  ///< Configuration file name.
+    utils::config::Reader read;  ///< Generic reader of configuraion files.
+
+public:
+
+    const std::string fnameSuffix;  ///< Application-specific suffix of the configuration file.
+    const std::string runName;      ///< Current run index as a string.
+    const std::filesystem::path workingDirOut;  ///< Output directory.
+
+    const realT timeTotal;      ///< Total time to simulate.
+    const szt   logFrequency;   ///< (iterations): Every logfreq iteration steps log is updated.
+    const szt   saveFrequency;  ///< (iterations): Every saveFrequency steps save_mitos is executed.
+
+    const realT edgeLength;  ///< (micrometers) Edge Length.
+    const szt   mtmassini;   ///< Total chondriome length, edges.
+    const szt   segmassini;  ///< Segment lengths at the beginning of simulation.
 
     // FISSION
-    const bool use_fission;   ///< A flag for the activation of the fission reaction.
-    const real rate_fission;  ///< Basic probability of breaking up a junction.
+    const bool  use_fission;   ///< A flag for the activation of the fission reaction.
+    const realT rate_fission;  ///< Basic probability of breaking up a junction.
 
     // FUSION
-    const bool use_11_fusion;   ///< A flag for the activation of the fussion_11 reaction.
-    const real fusion_rate_11;  ///< Probability of a free end to bind to another free end.
-    const bool use_12_fusion;   ///< A flag for the activation of the fusion_12 reaction.
-    const real fusion_rate_12;  ///< Probability of a free end to bind to a side.
-    const bool use_1L_fusion;   ///< A flag for the activation of the fusion_1L reaction.
-    const real fusion_rate_1L;  ///< Probability of a free end to bind to a separate cycle junction node.
+    const bool  use_11_fusion;   ///< A flag for the activation of the fussion_11 reaction.
+    const realT fusion_rate_11;  ///< Probability of a free end to bind to another free end.
+    const bool  use_12_fusion;   ///< A flag for the activation of the fusion_12 reaction.
+    const realT fusion_rate_12;  ///< Probability of a free end to bind to a side.
+    const bool  use_1L_fusion;   ///< A flag for the activation of the fusion_1L reaction.
+    const realT fusion_rate_1L;  ///< Probability of a free end to bind to a separate cycle junction node.
 
     /**
      * @brief Constructor.
@@ -91,35 +98,35 @@ public:
      * @par msgr Output message processor.
      */
     explicit Config(
-            const std::string& workingDirOut,
-            const std::string& configSuffix,
+            const std::filesystem::path& workingDirOut,
+            const std::string& fnameSuffix,
             const std::string& runName,
             Msgr& msgr
             )
-        : configSuffix {configSuffix}
-        , cfgFname {workingDirOut+"config"+"_"+configSuffix+".txt"}
-        , read {cfgFname, &msgr}
+        : file {workingDirOut / (std::string("config")+"_"+fnameSuffix+".txt")}
+        , read {file, &msgr}
+        , fnameSuffix {fnameSuffix}
         , runName {runName}
         , workingDirOut {workingDirOut}
-        , timeTotal     {read("timeTotal", zerohuge<real>)}
+        , timeTotal     {read("timeTotal", zerohuge<realT>)}
         , logFrequency  {read("logFrequency", onehuge<szt>)}
         , saveFrequency {read("saveFrequency", onehuge<szt>)}
 
-        , edgeLength {read("edgeLength", zerohuge<real>)}
+        , edgeLength {read("edgeLength", zerohuge<realT>)}
         , mtmassini  {read("mtmassini", onehuge<szt>)}
         , segmassini {read("segmassini", onehuge<szt>)}
 
     // FISSION
         , use_fission  {read("use_fission", bools)}
-        , rate_fission {read("rate_fission", zerohuge<real>)}
+        , rate_fission {read("rate_fission", zerohuge<realT>)}
 
     // FUSION
         , use_11_fusion  {read("use_11_fusion", bools)}
-        , fusion_rate_11 {read("fusion_rate_11", zerohuge<real>)}
+        , fusion_rate_11 {read("fusion_rate_11", zerohuge<realT>)}
         , use_12_fusion  {read("use_12_fusion", bools)}
-        , fusion_rate_12 {read("fusion_rate_12", zerohuge<real>)}
+        , fusion_rate_12 {read("fusion_rate_12", zerohuge<realT>)}
         , use_1L_fusion  {read("use_1L_fusion", bools)}
-        , fusion_rate_1L {read("fusion_rate_1L", zerohuge<real>)}
+        , fusion_rate_1L {read("fusion_rate_1L", zerohuge<realT>)}
     {}
 };
 

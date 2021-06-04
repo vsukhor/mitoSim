@@ -135,7 +135,7 @@ private:
 
     // Convenience references
     Ntw&          netw;    ///< ref: The network.
-    RandFactory&  rnd;    ///< ref: Random number factory.
+    RandFactory&  rnd;     ///< ref: Random number factory.
 
     std::array<szt,2> cc;
 

@@ -23,18 +23,9 @@
 ================================================================================
 */
 
+#include <filesystem>
 #include <string>
 #include <vector>
-
-#define FP32           // comment this to switch to a double precision.
-// #define USE_UTILS_XASSERT   // toggles XASSERTs.
-// #define PRINT_EDGES  // comment this to avoid printing detailed edge info.
-
-#ifdef FP32
-    using real = float;
-#else
-    using real = double;
-#endif
 
 #include "utils/common/constants.h"
 #include "utils/common/misc.h"
@@ -42,7 +33,12 @@
 #include "utils/common/stop_watch.h"
 #include "utils/random/with_boost.h"
 
+// #define USE_UTILS_XASSERT  // toggles XASSERTs.
+// #define PRINT_EDGES  // comment this to avoid printing detailed edge info.
+
 namespace mitosim {
+
+using real = float;
 using RandFactory = utils::random::Boost<real>;
 constexpr bool verbose {};   ///< Work in verbose mode.
 
@@ -54,7 +50,6 @@ constexpr bool verbose {};   ///< Work in verbose mode.
 
 int main( int argc, char* argv[] )
 {
-    using utils::common::file_exists;
     using utils::common::STR;
     using utils::common::szt;
 
@@ -64,7 +59,7 @@ int main( int argc, char* argv[] )
             "Error: not sufficient configuration data provided", nullptr);
 
     // Working directory:
-    const auto workingDir = std::string(argv[1]);
+    const auto workingDir = std::filesystem::path {std::string(argv[1])};
     // Application-specific suffix of the configuration file:
     const auto configSuffix = std::string(argv[2]);
     // Index of the starting run:
@@ -79,27 +74,30 @@ int main( int argc, char* argv[] )
         utils::common::StopWatch stopwatch;
         stopwatch.start();
 
-        std::ofstream logfile {workingDirOut+"log_m_"+STR(ii)+".txt"};
-        constexpr const int PRINT_PRECISION = 6;
+        const auto logf = std::filesystem::directory_entry{
+            workingDirOut / (STR("log_m_")+STR(ii)+".txt")
+        };
+        std::ofstream logfile {logf};
+        constexpr const int PRINT_PRECISION {6};
         utils::common::Msgr msgr {&std::cout, &logfile, PRINT_PRECISION};
         msgr.print("Run "+STR(ii)+" started: "+stopwatch.start.str);
-        msgr.print("workingDirOut = "+workingDirOut);
-        msgr.print("runIni = " + STR(runIni));
-        msgr.print("runEnd = " + STR(runEnd));
+        msgr.print("workingDirOut = "+workingDirOut.string());
+        msgr.print("runIni = "+STR(runIni));
+        msgr.print("runEnd = "+STR(runEnd));
 
-        mitosim::Config cfg {workingDirOut, configSuffix, STR(ii), msgr};
+        mitosim::Config<mitosim::real> cfg {workingDirOut, configSuffix, STR(ii), msgr};
 
-        const auto seedFileName = workingDirIn+"seeds";
-        if (!file_exists(seedFileName))
-            mitosim::RandFactory::make_seed(seedFileName, &msgr);
+        const auto seeds = std::filesystem::directory_entry(cfg.workingDirOut / "seeds");
+        if (!seeds.is_regular_file())
+            mitosim::RandFactory::make_seed(seeds, &msgr);
 
-        auto rnd = std::make_unique<mitosim::RandFactory>(seedFileName, ii, msgr);
-        constexpr const int MAX_NODE_DEGREE = 3;
+        auto rnd = std::make_unique<mitosim::RandFactory>(seeds, ii, msgr);
+        constexpr const int MAX_NODE_DEGREE {3};
         const auto network =
             std::make_unique<
                 mitosim::Network<mitosim::Segment<MAX_NODE_DEGREE>>
                     >(cfg, *rnd, msgr);
-
+        network->assemble()->simulate();
         stopwatch.stop();
         msgr.print("Run "+STR(ii)+
                    " finished: "+stopwatch.stop.str+

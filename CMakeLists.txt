@@ -5,6 +5,10 @@ project(mitosim
     DESCRIPTION "Simulator of mitochoondria reticulum"
     LANGUAGES CXX)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+add_compile_options(-O3 -msse4 -Wall)
+
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 
     # Let's ensure -std=c++xx instead of -std=g++xx
@@ -14,7 +18,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     # Let's nicely support folders in IDE's
     set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-    option(BUILD_DOC "Build documentation" ON)
+    option(BUILD_DOC "Build documentation" OFF)
     if(BUILD_DOC)
         find_package(Doxygen)
         if(Doxygen_FOUND)
@@ -40,11 +44,6 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     endif()
 endif()
 
-# FetchContent downloads during the configure step
-# include(FetchContent)
-
-add_compile_options(-O3 -msse4)
-
 find_package(Boost REQUIRED)
 
 # Dependence on utils:
@@ -53,6 +52,9 @@ add_subdirectory(external)
 # The executable code is here
 add_subdirectory(app)
 
-
-
+option(BUILD_TESTS "Build test files" ON)
+if(BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
 

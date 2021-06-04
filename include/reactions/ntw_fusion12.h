@@ -32,6 +32,11 @@
 #ifndef MITOSIM_NTW_FUSION12_H
 #define MITOSIM_NTW_FUSION12_H
 
+#include <array>
+#include <vector>
+
+#include "utils/common/constants.h"
+
 #include "../fusion_candidates.h"
 
 namespace mitosim {
@@ -49,12 +54,14 @@ class NtwFusion12 {
 
 public:
 
+    using szt = utils::common::szt;
+
     friend Fusion12<Ntw>;
 
     explicit NtwFusion12(Ntw&); ///< Constructor.
 
     /// Set this reaction propensity for the whole network.
-    szt set_prop() noexcept;
+    auto set_prop() noexcept -> szt;
 
 private:
 
@@ -93,8 +100,8 @@ NtwFusion12( Ntw& host )
 {}
 
 template<typename Ntw>
-szt NtwFusion12<Ntw>::
-set_prop() noexcept
+auto NtwFusion12<Ntw>::
+set_prop() noexcept -> szt
 {
      populate();
      return cnd.size();

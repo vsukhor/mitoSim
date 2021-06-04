@@ -32,11 +32,12 @@
 #ifndef MITOSIM_NTW_FISSION_H
 #define MITOSIM_NTW_FISSION_H
 
+#include <array>
+#include <vector>
+
 #include "utils/common/constants.h"
 
 namespace mitosim {
-
-using utils::common::szt;
 
 template<typename> class Fission;
 
@@ -46,6 +47,9 @@ template<typename> class Fission;
  */
 template<typename Ntw>
 class NtwFission {
+
+    using szt = utils::common::szt;
+    using ulong = utils::common::ulong;
 
 public:
 
@@ -107,8 +111,8 @@ NtwFission( Ntw& host )
 {}
 
 template<typename Ntw>
-utils::common::ulong NtwFission<Ntw>::
-set_prop() noexcept
+auto NtwFission<Ntw>::
+set_prop() noexcept -> ulong 
 {
     pr.resize(clnum);
     for (szt ic=0; ic<clnum; ic++)
@@ -123,8 +127,8 @@ set_prop( const szt ic ) noexcept
 {
     pr[ic] = 0UL;
     for (const auto w : host.clmt[ic]) {
-        pr[ic] += mt[w].set_end_fin(1) +
-                  mt[w].set_end_fin(2);
+        pr[ic] += mt[w].template set_end_fin<1>() +
+                  mt[w].template set_end_fin<2>();
         for (szt a=0; a<mt[w].g.size()-1; a++)
             pr[ic] += 2UL * mt[w].set_bulk_fin(a);
     }

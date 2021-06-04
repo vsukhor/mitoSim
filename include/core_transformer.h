@@ -64,6 +64,10 @@ protected:
 
 public:
 
+    using Msgr = utils::common::Msgr;
+    using szt = utils::common::szt;
+    using ulong = utils::common::ulong;
+
     /**
      * @brief Constructor,
      * @param msgr Output message processor.
@@ -108,7 +112,7 @@ protected:
      * @param w1 Index of the 1st segment.
      * @param w2 Index of the 2nd segment.
      */
-    std::array<szt,2> fuse_antiparallel(szt end, szt w1, szt w2) noexcept;
+    auto fuse_antiparallel(szt end, szt w1, szt w2) noexcept -> std::array<szt,2>;
 
     /**
      * @brief Perform fusion of two parallel oriented segments.
@@ -118,7 +122,7 @@ protected:
      * @param w1 Index of the 1st segment.
      * @param w2 Index of the 2nd segment.
      */
-    std::array<szt,2> fuse_parallel(szt w1, szt w2) noexcept;
+    auto fuse_parallel(szt w1, szt w2) noexcept -> std::array<szt,2>;
 
     /**
      * @brief Update network segment indexes.
@@ -175,7 +179,7 @@ rename_mito( const szt f, const szt t )
     copy_neigs(f, 1, t, 1);
     copy_neigs(f, 2, t, 2);
     mt[t].g = std::move(mt[f].g);
-    mt[t].cl = mt[f].cl;
+    mt[t].set_cl(mt[f].get_cl());
 }
 
 
@@ -236,17 +240,17 @@ update_neigs( const szt oldn, const szt oend,
 
 
 template<typename Mt>
-std::array<szt,2> CoreTransformer<Mt>::
+auto CoreTransformer<Mt>::
 fuse_antiparallel(
     const szt end,
     const szt w1,
     const szt w2
-) noexcept
+) noexcept -> std::array<szt,2>
 {
     [[maybe_unused]] const auto len1 = mt[w1].g.size();
     [[maybe_unused]] const auto len2 = mt[w2].g.size();
-    const auto cl1 = mt[w1].cl;
-    const auto cl2 = mt[w2].cl;
+    const auto cl1 = mt[w1].get_cl();
+    const auto cl2 = mt[w2].get_cl();
 
     if constexpr (verbose) {
         using utils::common::STR;
@@ -268,7 +272,7 @@ fuse_antiparallel(
         copy_neigs(w1, 2, w1, 1);    // copy w1's 1-end neigs to its 0-end
     copy_neigs(w2, opend, w1, 2);    // copy w2's 1-end neigs to w1's 1-end
 
-    if (mt[w2].cl != mt[w1].cl)
+    if (mt[w2].get_cl() != mt[w1].get_cl())
         update_mtcl_fuse(w1, w2);
 
     if (end == 1)
@@ -309,16 +313,16 @@ fuse_antiparallel(
 
 
 template<typename Mt>
-std::array<szt,2> CoreTransformer<Mt>::
+auto CoreTransformer<Mt>::
 fuse_parallel(
     const szt w1,
     const szt w2
-) noexcept
+) noexcept -> std::array<szt,2>
 {
     [[maybe_unused]] const auto len1 = mt[w1].g.size();
     [[maybe_unused]] const auto len2 = mt[w2].g.size();
-    const auto cl1 = mt[w1].cl;
-    const auto cl2 = mt[w2].cl;
+    const auto cl1 = mt[w1].get_cl();
+    const auto cl2 = mt[w2].get_cl();
 
     if constexpr (verbose) {
         using utils::common::STR;
@@ -336,7 +340,7 @@ fuse_parallel(
             "Error during parallel fusion: end 2 of w2 is not free.\n");
 
     copy_neigs(w2, 1, w1, 1);
-    if(mt[w2].cl != mt[w1].cl)
+    if (mt[w2].get_cl() != mt[w1].get_cl())
         update_mtcl_fuse(w1, w2);
 
     std::move(mt[w1].g.begin(), mt[w1].g.end(), std::back_inserter(mt[w2].g));
@@ -375,17 +379,17 @@ update_mtcl_fuse(
     const szt w2
 ) noexcept
 {
-    const auto w1cl = mt[w1].cl;
-    const auto w2cl = mt[w2].cl;
+    const auto w1cl = mt[w1].get_cl();
+    const auto w2cl = mt[w2].get_cl();
 
     for (szt i=1; i<=mtnum; i++)
-        if (mt[i].cl == w2cl)
-            mt[i].cl = w1cl;
+        if (mt[i].get_cl() == w2cl)
+            mt[i].set_cl(w1cl);
 
     if (w2cl != clnum-1)
         for(szt i=1; i<=mtnum; i++)
-            if(mt[i].cl == clnum-1)
-                mt[i].cl = w2cl;
+            if(mt[i].get_cl() == clnum-1)
+                mt[i].set_cl(w2cl);
     clnum--;
 }
 
@@ -412,8 +416,8 @@ update_cl(
 ) noexcept        // args by value
 {
     for (szt i=1; i<=mtnum; i++)
-        if (mt[i].cl == cf)
-            mt[i].cl = ct;
+        if (mt[i].get_cl() == cf)
+            mt[i].set_cl(ct);
 
     update_gIndcl(ct);
 }
@@ -425,7 +429,7 @@ update_gIndcl( const szt cl ) noexcept
 {
     szt indcl {};
     for (szt j=1; j<=mtnum; j++)
-        if (mt[j].cl == cl)
+        if (mt[j].get_cl() == cl)
             indcl = mt[j].set_gCl(cl, indcl);
 }
 

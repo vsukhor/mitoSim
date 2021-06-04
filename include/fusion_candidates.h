@@ -41,6 +41,8 @@ namespace mitosim {
  */
 struct alignas(8) FusionCandidatesXX {
 
+    using szt = utils::common::szt;
+
     static constexpr int MIN_ALIGNMENT = 8;
 
     /// Segment and end indexes of the 1st participant.
@@ -82,6 +84,8 @@ struct alignas(8) FusionCandidatesXX {
  * @note Should be used only the reactions intended for fusion to a loop segment.
  */
 struct alignas(8) FusionCandidatesXU {
+
+    using szt = utils::common::szt;
 
     static constexpr int MIN_ALIGNMENT = 8;
 

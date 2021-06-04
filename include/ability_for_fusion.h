@@ -32,9 +32,10 @@
 #ifndef MITOSIM_ABILITY_FOR_FUSION_H
 #define MITOSIM_ABILITY_FOR_FUSION_H
 
+#include <array>
 #include <vector>
 
-#include "utils/common/misc.h"
+#include "utils/common/constants.h"
 #include "utils/common/msgr.h"
 
 #include "ability_for_fission.h"
@@ -65,6 +66,10 @@ protected:
 
 public:
 
+    using Msgr = utils::common::Msgr;
+    using szt = utils::common::szt;
+    using ulong = utils::common::ulong;
+
     /**
      * @brief Constructor.
      * @param msgr Output message processor.
@@ -80,8 +85,8 @@ public:
      * @param w2 Segment index of the 2nd fusion partner.
      * @param e2 Segment end of the 2nd fusion partner.
      */
-    std::array<szt,2> fuse11(szt w1, szt e1,
-                             szt w2, szt e2) noexcept;
+    auto fuse11(szt w1, szt e1,
+                szt w2, szt e2) noexcept -> std::array<szt,2>;
 
     /**
      * @brief Fuse a node of degree 1 to a node of degree 2.
@@ -90,8 +95,8 @@ public:
      * @param w2 Segment index of the fusion partner containing the node of degree 2.
      * @param a2 Position of the node of degree 2 relative to the segment starting edge.
      */
-    std::array<szt,2> fuse12(szt w1, szt end,
-                             szt w2, szt a2) noexcept;
+    auto fuse12(szt w1, szt end,
+                szt w2, szt a2) noexcept -> std::array<szt,2>;
 
     /**
      * @brief Fuse a node of degree 1 to the end node in a disconnected loop.
@@ -99,13 +104,13 @@ public:
      * @param e1 Segment end of the fusion partner containing the node of degree 1.
      * @param w2 Segment index of the loop segment.
      */
-    std::array<szt,2> fuse1L(szt w1, szt e1, szt w2) noexcept;
+    auto fuse1L(szt w1, szt e1, szt w2) noexcept -> std::array<szt,2>;
 
     /**
      * @brief Fuse end nodes a disconnected segment having free ends to form a loop.
      * @param w Segment index.
      */
-    std::array<szt,2> fuse_to_loop(szt w) noexcept;
+    auto fuse_to_loop(szt w) noexcept -> std::array<szt,2>;
 
 };
 
@@ -122,13 +127,13 @@ AbilityForFusion(
 
 
 template<typename Mt>
-std::array<szt,2> AbilityForFusion<Mt>::
+auto AbilityForFusion<Mt>::
 fuse11(
     const szt w1,
     const szt e1,
     const szt w2,
     const szt e2
-) noexcept
+) noexcept -> std::array<szt,2>
 {
     if (w2 == w1) return fuse_to_loop(w1);
     if (e1 == e2) return fuse_antiparallel(e1, w1, w2);
@@ -138,13 +143,13 @@ fuse11(
 
 
 template<typename Mt>
-std::array<szt,2> AbilityForFusion<Mt>::
+auto AbilityForFusion<Mt>::
 fuse12(
     const szt w1,
     const szt end,
     const szt w2,
     const szt a2
-) noexcept
+) noexcept -> std::array<szt,2>
 {
     if constexpr (verbose) {
         using utils::common::STR;
@@ -155,11 +160,11 @@ fuse12(
         mt[w1].print(w1, "     before s: ");
         mt[w2].print(w2, "     before s: ");
     }
-    const auto cl1 = mt[w1].cl;
-    const auto cl2 = mt[w2].cl;
+    const auto cl1 = mt[w1].get_cl();
+    const auto cl2 = mt[w2].get_cl();
 
     // mt[mi] is to be produced by fission:
-    auto mi = mt[w2].is_cycle() ? w2 : mtnum+1;
+    auto mi = mt[w2].is_cycle() ? w2 : mtnum + 1;
 
     fiss2(w2, a2);
 
@@ -207,8 +212,10 @@ fuse12(
         mt[mi].neig[1][2] = w2;            mt[mi].neen[1][2] = 2;
     }
 
-    if(mt[w2].cl != mt[mi].cl) update_cl_fuse(mt[w2].cl, mt[mi].cl);
-    if(mt[w2].cl != mt[w1].cl) update_cl_fuse(mt[w1].cl, mt[w2].cl);
+    if(mt[w2].get_cl() != mt[mi].get_cl())
+        update_cl_fuse(mt[w2].get_cl(), mt[mi].get_cl());
+    if(mt[w2].get_cl() != mt[w1].get_cl())
+        update_cl_fuse(mt[w1].get_cl(), mt[w2].get_cl());
 
     if constexpr (verbose) {
         mt[w1].print(w1, "       producing ");
@@ -224,12 +231,12 @@ fuse12(
 
 
 template<typename Mt>
-std::array<szt,2> AbilityForFusion<Mt>::
+auto AbilityForFusion<Mt>::
 fuse1L(
     const szt w1,
     const szt e1,
     const szt w2
-) noexcept
+) noexcept -> std::array<szt,2>
 {
     if constexpr (verbose) {
         using utils::common::STR;
@@ -239,8 +246,8 @@ fuse1L(
         mt[w1].print( w1, "     before s: " );
         mt[w2].print( w2, "     before s: " );
     }
-    const auto cl1 = mt[w1].cl;
-    const auto cl2 = mt[w2].cl;
+    const auto cl1 = mt[w1].get_cl();
+    const auto cl2 = mt[w2].get_cl();
 
     // update w1 at e1
     mt[w1].nn[e1] = 2;
@@ -257,8 +264,8 @@ fuse1L(
     mt[w2].neig[2][1] = w2;        mt[w2].neen[2][1] = 1;
     mt[w2].neig[2][2] = w1;        mt[w2].neen[2][2] = e1;
 
-    if (mt[w1].cl != mt[w2].cl )
-        update_cl_fuse(mt[w1].cl, mt[w2].cl);
+    if (mt[w1].get_cl() != mt[w2].get_cl() )
+        update_cl_fuse(mt[w1].get_cl(), mt[w2].get_cl());
 
     if constexpr (verbose) {
         mt[w1].print(w1, "       producing ");
@@ -271,8 +278,8 @@ fuse1L(
 
 
 template<typename Mt>
-std::array<szt,2> AbilityForFusion<Mt>::
-fuse_to_loop( const szt w ) noexcept
+auto AbilityForFusion<Mt>::
+fuse_to_loop( const szt w ) noexcept -> std::array<szt,2>
 {
     XASSERT(!mt[w].is_cycle(),
             "Error: attempt to fuse_to_loop a separate cycle.\n");
@@ -294,7 +301,7 @@ fuse_to_loop( const szt w ) noexcept
         msgr.print("Producing ");
         mt[w].print(w, "After ", 0);
     }
-    return {mt[w].cl, mt[w].cl};
+    return {mt[w].get_cl(), mt[w].get_cl()};
 }
 
 }  // namespace mitosim

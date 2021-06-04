@@ -57,9 +57,12 @@ class Network
 
 public:
 
+    using Msgr = utils::common::Msgr;
+
     using thisT = Network<SegmentT>;
     using ST = SegmentT;
 
+    using Structure<SegmentT>::add_disconnected_segment;
     using Structure<SegmentT>::clnum;
     using Structure<SegmentT>::glm;
     using Structure<SegmentT>::msgr;
@@ -83,7 +86,7 @@ public:
     RandFactory&  rnd;   ///< Random number factory.
     double        time;  ///< Current time.
     ulong         it;    ///< Iteration counter.
-    const Config& cfg;   ///< Configuration.
+    const Config<real>& cfg;   ///< Configuration.
 
     // Reaction slots:
     NtwFission<thisT>  fis;   ///< Slot for fission reaction.
@@ -98,16 +101,21 @@ public:
      * @param msgr Output message processor.
      */
     explicit Network(
-            const Config& cfg,
+            const Config<real>& cfg,
             RandFactory& rnd,
             Msgr& msgr
     );
 
+    /// Produce everything necessary for the simulation to start.
+    auto assemble() -> thisT*;
+
+    /// Run simulation on this network.
+    void simulate();
+
 private:
 
     /// Generate the network components
-    void generate_mitos();
-
+    void generate_components();
 
     /// Update the network state variables
     void update_books() noexcept;
@@ -132,7 +140,7 @@ private:
 template<typename SegmentT>
 Network<SegmentT>::
 Network(
-        const Config& cfg,
+        const Config<real>& cfg,
         RandFactory& rnd,
         Msgr& msgr
     )
@@ -145,33 +153,43 @@ Network(
     , fu11 {*this}
     , fu12 {*this}
     , fu1L {*this}
+{}
+
+
+template<typename SegmentT>
+auto Network<SegmentT>::
+assemble() -> thisT*
 {
-    generate_mitos();
+    generate_components();
     update_books();
-    Simulation<thisT> sim {*this, rnd, time, it, msgr};
-    sim();
+    return this;
 }
 
 
 template<typename SegmentT>
 void Network<SegmentT>::
-generate_mitos()
+simulate()
 {
-    mtnum = cfg.mtmassini / cfg.segmassini;
-    if (mtnum < 1)
+    Simulation<thisT> sim {*this, rnd, time, it, msgr};
+    sim.initialize()();
+}
+
+
+template<typename SegmentT>
+void Network<SegmentT>::
+generate_components()
+{
+    // Desired initial number of sedments.
+    const szt num = cfg.mtmassini / cfg.segmassini;
+    if (num < 1)
         msgr.exit("The system should have at least one segment initially");
 
-    mtmass = 0;
-    szt m {1};
-    szt ei {};
-    mt.emplace_back(msgr);            // an "empty" one
-    while (m <= mtnum) {
-        mt.emplace_back(cfg.segmassini, m-1, mtmass, ei, msgr);
-        m++;
-    }
-    clnum = mtnum;
-    msgr.print("Generated mtnum " + std::to_string(mtnum) +
-                " of mtmass: " + std::to_string(mtmass));
+    szt m {mtnum};      // initial number of segments
+    while (mtnum - m <= num-1)
+        add_disconnected_segment(cfg.segmassini);
+
+    msgr.print("Generated mtnum " + std::to_string(num) +
+               " of mtmass: " + std::to_string(mtmass));
 }
 
 
@@ -192,16 +210,18 @@ save_mitos(
     const real t
 ) const
 {
-    const auto fname = (last) ? cfg.workingDirOut+"mitos_last_"+cfg.runName
-                              : cfg.workingDirOut+"mitos_"     +cfg.runName;
+    using d_e = std::filesystem::directory_entry;
+    const auto file = last
+        ? d_e {cfg.workingDirOut / (std::string("mitos_last_")+cfg.runName)}
+        : d_e {cfg.workingDirOut / (std::string("mitos_")     +cfg.runName)};
     const auto flags = (startnew) ? std::ios::binary | std::ios::trunc
                                   : std::ios::binary | std::ios::app;
-    std::ofstream ofs {fname, flags};
+    std::ofstream ofs {file, flags};
     if (ofs.fail())
-        msgr.print("Cannot open file: "+fname);
+        msgr.print("Cannot open file: "+file.path().string());
 
-    ofs.write((char*) &t, sizeof(real));
-    ofs.write((char*) &mtnum, sizeof(szt));
+    ofs.write(reinterpret_cast<const char*>(&t), sizeof(t));
+    ofs.write(reinterpret_cast<const char*>(&mtnum), sizeof(szt));
 
     static szt mtnummax;
     static szt nn1max;

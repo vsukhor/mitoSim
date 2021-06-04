@@ -1,5 +1,5 @@
 add_executable(mitosim_CPU main.cpp)
-target_compile_features(mitosim_CPU PRIVATE cxx_std_17)
+target_compile_features(mitosim_CPU PRIVATE cxx_std_20)
 
 target_include_directories(mitosim_CPU PUBLIC
                            ../include

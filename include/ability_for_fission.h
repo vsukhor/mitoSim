@@ -35,7 +35,7 @@
 #include <algorithm>
 #include <vector>
 
-#include "utils/common/misc.h"
+#include "utils/common/constants.h"
 #include "utils/common/msgr.h"
 
 #include "core_transformer.h"
@@ -74,6 +74,10 @@ protected:
 
 public:
 
+    using Msgr = utils::common::Msgr;
+    using szt = utils::common::szt;
+    using ulong = utils::common::ulong;
+
     /**
      * @brief Constructor.
      * @param msgr Output message processor.
@@ -85,21 +89,21 @@ public:
      * @param w Segment index.
      * @param a Division positon inside the segment.
      */
-    std::array<szt,2> fiss(szt w, szt a);
+    auto fiss(szt w, szt a) -> std::array<szt,2>;
 
     /**
      * @brief Divide the segment at a node of degree 2.
      * @param w Global segment index.
      * @param a The node position inside the segment.
      */
-    std::array<szt,2> fiss2(szt w, szt a);
+    auto fiss2(szt w, szt a) -> std::array<szt,2>;
 
     /**
      * @brief Divide the segment at a node of degree 3.
      * @param w Global segment index.
      * @param a The node position inside the segment.
      */
-    std::array<szt,2> fiss3(szt w, szt a);
+    auto fiss3(szt w, szt a) -> std::array<szt,2>;
 
 private:
 
@@ -188,9 +192,9 @@ dfs( const szt w1, const szt e1,
 
 // 'a' is counted from 1 and is the last element to remain in the old segment.
 template<typename Mt>
-std::array<szt,2> AbilityForFission<Mt>::
+auto AbilityForFission<Mt>::
 fiss( const szt w,
-      const szt a )
+      const szt a ) -> std::array<szt,2>
 {
     // node 3 -> nodes 2+1 and node 2 -> nodes 1+1 in pure loops
     if (a && a < mt[w].g.size())
@@ -212,14 +216,14 @@ fiss( const szt w,
 // 'a' is the node position inside the segment 'w'
 // 'a' is counted from 1 and is the last element to remain in the original segment
 template<typename Mt>
-std::array<szt,2> AbilityForFission<Mt>::
+auto AbilityForFission<Mt>::
 fiss2( const szt w,
-       const szt a )
+       const szt a ) -> std::array<szt,2>
 {
     if constexpr (verbose)
         mt[w].print(w, "fission2:  ", a);     // cuts between g[a-1] and g[a]
 
-    [[maybe_unused]] const auto clini = mt[w].cl;
+    [[maybe_unused]] const auto clini = mt[w].get_cl();
 
     const auto ind1 = mt[w].g[a-1].get_ind();
     const auto ind2 = mt[w].g[a].get_ind();
@@ -241,13 +245,13 @@ fiss2( const szt w,
 
     this->copy_neigs(w, 2, mtnum, 2);
 
-    mt[mtnum].cl = inCycle
-                 ? mt[w].cl
-                 : clnum - 1;
+    mt[mtnum].set_cl(inCycle
+                     ? mt[w].get_cl()
+                     : clnum - 1);
 
     if (!inCycle) {
         // Renumber Edge::indcl of the remaining part of the original cluster.
-        update_gIndcl(mt[w].cl);
+        update_gIndcl(mt[w].get_cl());
         // Renumber Edge::indcl of the newly formed cluster.
         update_gIndcl(clnum-1);
     }
@@ -274,7 +278,8 @@ fiss2( const szt w,
     const auto w1 = glm[ind1];
     const auto w2 = glm[ind2];
 
-    XASSERT(mt[w1].cl == clini || mt[w2].cl == clini,
+    XASSERT(mt[w1].get_cl() == clini ||
+            mt[w2].get_cl() == clini,
             "Error in fiss3: mt[w1].cl != clini && mt[w2].cl != clini\n");
     if constexpr (verbose) {
         mt[w1].print(w1, "       producing ");
@@ -284,7 +289,7 @@ fiss2( const szt w,
         std::cout << std::endl;
     }
 
-    return {mt[w].cl, mt[mtnum].cl};
+    return {mt[w].get_cl(), mt[mtnum].get_cl()};
 }
 
 // divides at a node of degree 3
@@ -292,14 +297,14 @@ fiss2( const szt w,
 // 'at' is the node position inside the segment 'w'
 // 'at' is counted from 1 and is the last element to remain in the original segment
 template<typename Mt>
-std::array<szt,2> AbilityForFission<Mt>::
+auto AbilityForFission<Mt>::
 fiss3( const szt w,
-       const szt a )
+       const szt a ) -> std::array<szt,2>
 {
     if constexpr (verbose)
         mt[w].print(w, "fission3:  ", a);
 
-    const auto clini = mt[w].cl;
+    const auto clini = mt[w].get_cl();
     bool inCycle {};
     bool f {};
     szt n[2], e[2];
@@ -442,15 +447,15 @@ fiss3( const szt w,
     basic_update();
     const auto w1 = glm[ind1];
     const auto w2 = glm[ind2];
-    XASSERT(mt[w1].cl == clini ||
-            mt[w2].cl == clini,
+    XASSERT(mt[w1].get_cl() == clini ||
+            mt[w2].get_cl() == clini,
             "Error in fiss3: mt[w1].cl != clini && mt[w2].cl != clini\n");
     if constexpr (verbose) {
         mt[w1].print(w1, "       producing ");
         if (w1 != w2) mt[w2].print(w2, "             and ");
         std::cout << std::endl;
     }
-    return {mt[w1].cl, mt[w2].cl};
+    return {mt[w1].get_cl(), mt[w2].get_cl()};
 }
 
 }  // namespace mitosim

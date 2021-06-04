@@ -32,11 +32,14 @@
 #ifndef MITOSIM_EDGE_H
 #define MITOSIM_EDGE_H
 
-#include "utils/common/misc.h"
+#include <fstream>
+#include <ostream>
+
+#include "utils/common/constants.h"
 
 namespace mitosim {
 
-template <szt> class Segment;
+template <unsigned> class Segment;
 
 /**
  * @brief The Network Edge class.
@@ -51,9 +54,18 @@ class Edge {
 
     friend Segment<3>;
 
-    szt ind {huge<szt>};    ///< Index network-wide: starts from 0.
-    szt indcl {huge<szt>};  ///< Index cluster-wide: starts from 0.
-    szt cl {huge<szt>};     ///< Current cluster index.
+public:
+
+    using szt = utils::common::szt;
+    using ulong = utils::common::ulong;
+
+    static constexpr auto hugeszt = utils::common::huge<szt>;
+
+private:
+
+    szt ind {hugeszt};    ///< Index network-wide: starts from 0.
+    szt indcl {hugeszt};  ///< Index cluster-wide: starts from 0.
+    szt cl {hugeszt};     ///< Current cluster index.
 
     /// Contribution to fission propensity at each end.
     std::array<ulong,2> fin {{}};
@@ -72,8 +84,14 @@ public:
         szt cl
     );
 
-    auto get_ind() const noexcept { return ind; }
-    auto get_fin(const int i) const noexcept { return fin[i]; }
+    constexpr auto get_ind() const noexcept { return ind; }
+    constexpr auto get_indcl() const noexcept { return indcl; }
+    constexpr auto get_cl() const noexcept { return cl; }
+    constexpr auto get_fin(const int i) const noexcept { return fin[i]; }
+    void set_fin(const int i,
+                 const ulong f) noexcept {
+        fin[i] = f;
+    }
 
     /// Swap the edge ends.
     void reflect();

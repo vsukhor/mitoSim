@@ -72,6 +72,9 @@ public:
         Msgr& msgr
     );
 
+    /// Make everything ready for start.
+    auto initialize() -> Simulation<Ntw>&;
+
     void operator()();  ///< Runs the simulation.
 
 private:
@@ -92,7 +95,6 @@ private:
     utils::common::Gillespie<RandFactory,Reaction> gsp;
 
     void populateRc();  ///< Add reactions to the Gillespie simulator.
-
 
     /**
      * @brief Terminate the simulation early due to the reactant exhaustion.
@@ -125,9 +127,16 @@ Simulation(
     , logFrequency {netw.cfg.logFrequency}
     , saveFrequency {netw.cfg.saveFrequency}
     , gsp {rnd}
+{}
+
+template<typename Ntw>
+auto Simulation<Ntw>::
+initialize() -> Simulation<Ntw>&
 {
     populateRc();
     gsp.initialize();
+
+    return *this;
 }
 
 
@@ -136,7 +145,7 @@ void Simulation<Ntw>::
 populateRc()
 {
     szt ind {};
-    if (netw.cfg.use_fission  )
+    if (netw.cfg.use_fission)
         gsp.add_reaction(std::make_unique<Fission <Ntw>>(
             msgr, ind++, netw, netw.cfg.rate_fission, netw.rnd, it, time));
 
@@ -178,7 +187,7 @@ operator()()
         gsp.fire(time);
 
         if (it % saveFrequency == 0)
-            netw.save_mitos(false, false, it, time);        // appended
+            netw.save_mitos(false, false, it, time);  // appended
 
         if (it % logFrequency == 0)
             update_log();
@@ -191,7 +200,7 @@ operator()()
 
     msgr.print("\nFinal state:");
     update_log();
-    netw.save_mitos(true, true, it, time);        // only the last snapshot
+    netw.save_mitos(true, true, it, time);   // only the last snapshot
     msgr.print("Final mtnum: " + std::to_string(netw.mtnum) + "\n");
 }
 

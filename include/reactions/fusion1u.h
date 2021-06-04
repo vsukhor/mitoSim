@@ -51,6 +51,8 @@ class Fusion1U
 
 public:
 
+    using Msgr = utils::common::Msgr;
+
     /**
      * @brief Constructor.
      * @param msgr Output message processor.

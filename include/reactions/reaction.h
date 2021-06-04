@@ -44,6 +44,10 @@ class Reaction {
 
 public:    // Only constant parameters are public.
 
+    using Msgr = utils::common::Msgr;
+    using szt = utils::common::szt;
+    using ulong = utils::common::ulong;
+
     /// Index in Simulation::rc, i.e. index among all used and not used reactions.
     const szt ind {};
     /// Reaction rate constant.
