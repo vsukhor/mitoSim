@@ -61,7 +61,7 @@ public:
 
 private:
 
-    const std::filesystem::directory_entry file;  ///< Configuration file name.
+    const std::filesystem::path file;  ///< Configuration file name.
     utils::config::Reader read;  ///< Generic reader of configuraion files.
 
 public:

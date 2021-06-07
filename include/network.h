@@ -210,15 +210,14 @@ save_mitos(
     const real t
 ) const
 {
-    using d_e = std::filesystem::directory_entry;
-    const auto file = last
-        ? d_e {cfg.workingDirOut / (std::string("mitos_last_")+cfg.runName)}
-        : d_e {cfg.workingDirOut / (std::string("mitos_")     +cfg.runName)};
+    const auto file {last
+        ? cfg.workingDirOut / (std::string("mitos_last_")+cfg.runName)
+        : cfg.workingDirOut / (std::string("mitos_")     +cfg.runName)};
     const auto flags = (startnew) ? std::ios::binary | std::ios::trunc
                                   : std::ios::binary | std::ios::app;
     std::ofstream ofs {file, flags};
     if (ofs.fail())
-        msgr.print("Cannot open file: "+file.path().string());
+        msgr.print("Cannot open file: "+file.string());
 
     ofs.write(reinterpret_cast<const char*>(&t), sizeof(t));
     ofs.write(reinterpret_cast<const char*>(&mtnum), sizeof(szt));
