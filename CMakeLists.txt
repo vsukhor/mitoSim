@@ -52,9 +52,10 @@ add_subdirectory(external)
 # The executable code is here
 add_subdirectory(app)
 
-option(BUILD_TESTS "Build test files" ON)
-if(BUILD_TESTS)
-    enable_testing()
-    add_subdirectory(tests)
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    option(BUILD_TESTS "Build test files" True)
+    if(BUILD_TESTS)
+        enable_testing()
+        add_subdirectory(tests)
+    endif()
 endif()
-
