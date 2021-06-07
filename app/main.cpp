@@ -24,6 +24,7 @@
 */
 
 #include <filesystem>
+#include <ostream>
 #include <string>
 #include <vector>
 
@@ -74,7 +75,7 @@ int main( int argc, char* argv[] )
         utils::common::StopWatch stopwatch;
         stopwatch.start();
 
-        const auto logf = std::filesystem::directory_entry{
+        const auto logf = std::filesystem::directory_entry {
             workingDirOut / (STR("log_m_")+STR(ii)+".txt")
         };
         std::ofstream logfile {logf};
@@ -87,7 +88,8 @@ int main( int argc, char* argv[] )
 
         mitosim::Config<mitosim::real> cfg {workingDirOut, configSuffix, STR(ii), msgr};
 
-        const auto seeds = std::filesystem::directory_entry(cfg.workingDirOut / "seeds");
+        const auto seeds =
+            std::filesystem::directory_entry(cfg.workingDirOut / "seeds");
         if (!seeds.is_regular_file())
             mitosim::RandFactory::make_seed(seeds, &msgr);
 
