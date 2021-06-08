@@ -68,6 +68,7 @@ public:
      * @param ind reaction id.
      * @param netw The network object.
      * @param rate Reaction rate constant.
+     * @param rnd Random number factory.
      * @param it Iteration counter.
      * @param time Current time.
      */
