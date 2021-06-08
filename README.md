@@ -53,7 +53,7 @@ and, in the case of an update, do this explicitly on the submodule:
 
 #### Building
 
-The code requires a C++20 - capable compiler (e.g, it was tested with clang 12.0 on macOS).
+Current code requires a C++20 - capable compiler. It was tested on macOS (clang-12) and Ubuntu (gcc-11).
 For generation of pseudo-random numbers, [Utils::Random](https://github.com/vsukhor/utils/tree/master/utils/random)
 relies on either [boost](https://www.boost.org/) or [NVIDIA cuRAND](https://developer.nvidia.com/curand), so
 depending on the underlying generator chosen, one of these should be accessible (in the case 
