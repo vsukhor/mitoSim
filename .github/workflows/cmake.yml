@@ -37,6 +37,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        submodules: 'true'
     - name: Install dependencies on macOS
       if: startsWith(matrix.config.os, 'macos')
       run: |
