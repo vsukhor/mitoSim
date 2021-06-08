@@ -54,8 +54,6 @@ jobs:
           mkdir -p ${{github.workspace}}/build
           mkdir -p ${{github.workspace}}/build/tests
           cp -r ${{github.workspace}}/tests/data ${{github.workspace}}/build/tests
-          echo =============== Get BOOST =======================================
-          sudo apt-get update && sudo apt-get install -yq libboost1.76-dev
           echo =============== Update gcc ======================================
           echo gcc version before:
           gcc --version
@@ -65,6 +63,8 @@ jobs:
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 90 --slave /usr/bin/g++ g++ /usr/bin/g++-11 --slave /usr/bin/gcov gcov /usr/bin/gcov-11
           echo gcc version after
           gcc --version
+          echo =============== Get BOOST =======================================
+          sudo apt-get update && sudo apt-get install -yq libboost1.76-dev
           echo =============== Update ninja ====================================
           echo ninja version before
           ninja --version
@@ -78,7 +78,7 @@ jobs:
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Build
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} -j 2
+      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
     - name: Test
       working-directory: ${{github.workspace}}/build
