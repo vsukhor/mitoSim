@@ -17,6 +17,11 @@ if(Doxygen_FOUND)
         COMMENT "Generating API documentation with Doxygen"
 #        VERBATIM
     )
+	add_custom_command(
+		TARGET doc_doxygen
+		POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/imgs ${CMAKE_CURRENT_SOURCE_DIR}/html
+	)
 else()
     message(STATUS "Doxygen not found, not building docs")
 endif()
