@@ -56,7 +56,7 @@ jobs:
           cp -r ${{github.workspace}}/tests/data ${{github.workspace}}/build/tests
           echo =============== Get BOOST =======================================
           wget https://boostorg.jfrog.io/artifactory/main/release/1.76.0/source/boost_1_76_0.tar.bz2
-          sudo tar --bzip2 -xf /usr/local/
+          sudo tar --bzip2 -xf 
           echo =============== Update gcc ======================================
           echo gcc version before:
           gcc --version
