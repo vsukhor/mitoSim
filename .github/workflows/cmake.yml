@@ -41,6 +41,7 @@ jobs:
       if: startsWith(matrix.config.os, 'macos')
       run: |
           brew install ninja
+          brew install boost
           mkdir -p ${{github.workspace}}/build
           mkdir -p ${{github.workspace}}/build/tests
           cp -r ${{github.workspace}}/tests/data ${{github.workspace}}/build/tests
@@ -51,7 +52,10 @@ jobs:
           mkdir -p ${{github.workspace}}/build
           mkdir -p ${{github.workspace}}/build/tests
           cp -r ${{github.workspace}}/tests/data ${{github.workspace}}/build/tests
-          echo =============== Update gcc== ====================================
+          echo =============== Get BOOST =======================================
+          wget https://boostorg.jfrog.io/artifactory/main/release/1.76.0/source/boost_1_76_0.tar.bz2
+          sudo tar --bzip2 -xf /usr/local/
+          echo =============== Update gcc ======================================
           echo gcc version before:
           gcc --version
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test
