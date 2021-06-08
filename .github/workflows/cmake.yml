@@ -64,7 +64,7 @@ jobs:
           echo gcc version after
           gcc --version
           echo =============== Get BOOST =======================================
-          sudo apt-get update && sudo apt-get install -yq libboost1.76-dev
+          sudo apt-get update && sudo apt-get install libboost-all-dev
           echo =============== Update ninja ====================================
           echo ninja version before
           ninja --version
