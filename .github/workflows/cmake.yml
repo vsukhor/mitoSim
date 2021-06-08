@@ -64,7 +64,8 @@ jobs:
           echo gcc version after
           gcc --version
           echo =============== Get BOOST =======================================
-          sudo apt-get update && sudo apt-get install libboost-all-dev
+          sudo apt-get update
+          sudo apt-get install libboost-all-dev
           echo =============== Update ninja ====================================
           echo ninja version before
           ninja --version
@@ -83,3 +84,8 @@ jobs:
     - name: Test
       working-directory: ${{github.workspace}}/build
       run: ${{github.workspace}}/tests/unittests_mitosim
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: mitosim-${{ matrix.config.os }}
+        path: ${{github.workspace}}/app/mitosim_CPU
