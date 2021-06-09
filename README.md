@@ -46,7 +46,7 @@ The simulator makes use of the general-purpose library [utils](https://github.co
 (included here as a git submodule).
 So, when cloning, please make sure, that the dependent library is included, e.g., by applying:
 
-    git clone --recursive https://github.com/vsukhor/mitosim
+    git clone --recursive https://github.com/vsukhor/mitoSim.git
 
 and, in the case of an update, do this explicitly on the submodule:
 
@@ -61,22 +61,10 @@ relies on either [boost](https://www.boost.org/) or [NVIDIA cuRAND](https://deve
 depending on the underlying generator chosen, one of these should be accessible (in the case 
 of the former, the headers suffice).
 
-##### Alternative ways for building the code
-
-1. On systems having [cmake](https://cmake.org) (ver. 3.15 or higher) installed, the build can be 
-performed e.g. as follows:  
+Using [cmake](https://cmake.org) (ver. 3.15 or higher):  
     `cd mitosim`  
-    `mkdir build`  
     `cmake -S . -B build`  
     `cmake --build build`  
-
-2. Two cmake-independent makefiles ([this](https://github.com/vsukhor/utils/blob/master/manual_make/Makefile)
-    and [this](manual_make/Makefile)) are available for more targeted manual builds of the utility 
-    library and the main application respectively.
-    If the library is built separately, please make sure to do this before building the executable.
-    Their use is straightforward, and detailed instructions are given in the beginning of the makefiles.
-
-Static linking is a default, so the executable can then be copied to another directory if necessary.
 
 ### Running the simulation
 
