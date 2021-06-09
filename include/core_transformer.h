@@ -217,8 +217,8 @@ update_neigs( const szt oldn, const szt oend,
             ++i1;
             XASSERT(i1 <= mt[cn].nn[ce],
                     "A neig was not found: "+
-                    utils::common::STR(oldn)+" "+
-                    utils::common::STR(cn)+"\n");
+                    std::to_string(oldn)+" "+
+                    std::to_string(cn)+"\n");
             if (mt[cn].neig[ce][i1] == oldn &&
                 mt[cn].neen[ce][i1] == oend)
                 break;
@@ -254,9 +254,9 @@ fuse_antiparallel(
 
     if constexpr (verbose) {
         using utils::common::STR;
-        msgr.print(STR("Fusion11a:  ")+
-                   STR(w1)+"(of "+STR(len1)+") with "+
-                   STR(w2)+"(of "+STR(len2)+") at end "+STR(end));
+        msgr.print("Fusion11a:  ",
+                   w1, "(of ", len1, ") with ",
+                   w2, "(of ", len2, ") at end ", end);
         mt[w1].print(w1, "     before a: ");
         mt[w2].print(w2, "     before a: ");
     }
@@ -326,9 +326,9 @@ fuse_parallel(
 
     if constexpr (verbose) {
         using utils::common::STR;
-        msgr.print(STR("Fusion11p:  ")+
-                   STR(w1)+"(of "+STR(len1)+") with "+
-                   STR(w2)+"(of "+STR(len2)+")");
+        msgr.print("Fusion11p:  ",
+                   w1, "(of ", len1, ") with ",
+                   w2, "(of ", len2, ")");
         mt[w1].print(w1, "     before p: ");
         mt[w2].print(w2, "     before p: ");
     }

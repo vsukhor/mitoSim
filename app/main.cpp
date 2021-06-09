@@ -79,10 +79,10 @@ int main( int argc, char* argv[] )
         std::ofstream logfile {logf};
         constexpr const int PRINT_PRECISION {6};
         utils::common::Msgr msgr {&std::cout, &logfile, PRINT_PRECISION};
-        msgr.print("Run "+STR(ii)+" started: "+stopwatch.start.str);
-        msgr.print("workingDirOut = "+workingDirOut.string());
-        msgr.print("runIni = "+STR(runIni));
-        msgr.print("runEnd = "+STR(runEnd));
+        msgr.print("Run ", ii, " started: ", stopwatch.start.str);
+        msgr.print("workingDirOut = ", workingDirOut);
+        msgr.print("runIni = ", runIni);
+        msgr.print("runEnd = ", runEnd);
 
         mitosim::Config<mitosim::real> cfg {workingDirOut, configSuffix, STR(ii), msgr};
 
@@ -98,9 +98,8 @@ int main( int argc, char* argv[] )
                     >(cfg, *rnd, msgr);
         network->assemble()->simulate();
         stopwatch.stop();
-        msgr.print("Run "+STR(ii)+
-                   " finished: "+stopwatch.stop.str+
-                   " after "+stopwatch.duration()+" sec\n");
+        msgr.print("Run ", ii, " finished: "+stopwatch.stop.str,
+                   " after ", stopwatch.duration(), " sec\n");
 
     }
 

@@ -190,8 +190,8 @@ print( const bool le ) const
     using utils::common::STR;
     
     Reaction::print(false);
-    msgr.template print<false>(" score "+STR(*score));
-    msgr.template print<false>(" eventCount "+STR(eventCount));
+    msgr.template print<false>(" score ", *score);
+    msgr.template print<false>(" eventCount ", eventCount);
     if (le) msgr.print("\n");
 }
 

@@ -188,8 +188,7 @@ generate_components()
     while (mtnum - m <= num-1)
         add_disconnected_segment(cfg.segmassini);
 
-    msgr.print("Generated mtnum " + std::to_string(num) +
-               " of mtmass: " + std::to_string(mtmass));
+    msgr.print("Generated mtnum ", num, " of mtmass: ", mtmass);
 }
 
 

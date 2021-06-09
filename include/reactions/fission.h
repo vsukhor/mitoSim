@@ -251,8 +251,8 @@ print( const bool le ) const
     using utils::common::STR;
 
     Reaction::print(false);
-    msgr.print<false>(" score " + STR(*score));
-    msgr.print<false>(" eventCount " + STR(eventCount));
+    msgr.print<false>(" score ", *score);
+    msgr.print<false>(" eventCount ", eventCount);
     if (le) msgr.print("\n");
 }
 

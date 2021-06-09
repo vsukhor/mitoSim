@@ -153,10 +153,9 @@ fuse12(
 {
     if constexpr (verbose) {
         using utils::common::STR;
-        msgr.print(STR("Fusion12:  ")+
-                   STR(w1)+"(of "+STR(mt[w1].g.size())+" e "+
-                   STR(end)+") with "+STR(w2)+"(of "+
-                   STR(mt[w2].g.size())+" at "+STR(a2)+")\n");
+        msgr.print("Fusion12:  ",
+                   w1, "(of ", mt[w1].g.size(), " e ", end, ") with ",
+                   w2, "(of ", mt[w2].g.size(), " at ", a2, ")\n");
         mt[w1].print(w1, "     before s: ");
         mt[w2].print(w2, "     before s: ");
     }
@@ -240,9 +239,9 @@ fuse1L(
 {
     if constexpr (verbose) {
         using utils::common::STR;
-        msgr.print(STR("Fusion1U:  ")+
-                   STR(w1)+"(of "+STR(mt[w1].g.size())+" e "+STR(e1)+
-                   ") with a CYCLE "+STR(w2)+"(of "+STR(mt[w2].g.size())+")\n");
+        msgr.print("Fusion1U:  ",
+                   w1, "(of ", mt[w1].g.size(), " e ", e1,
+                   ") with a CYCLE ", w2, "(of ", mt[w2].g.size(), ")\n");
         mt[w1].print( w1, "     before s: " );
         mt[w2].print( w2, "     before s: " );
     }
@@ -288,8 +287,8 @@ fuse_to_loop( const szt w ) noexcept -> std::array<szt,2>
 
     if constexpr (verbose) {
         using utils::common::STR;
-        msgr.print(STR("Fused to cycle: ")+
-                   STR(w)+" of length "+STR(mt[w].g.size()));
+        msgr.print("Fused to cycle: ",
+                   w, " of length ", mt[w].g.size());
         mt[w].print(w, "Before ", 0);
     }
 

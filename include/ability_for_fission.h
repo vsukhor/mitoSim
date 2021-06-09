@@ -452,7 +452,8 @@ fiss3( const szt w,
             "Error in fiss3: mt[w1].cl != clini && mt[w2].cl != clini\n");
     if constexpr (verbose) {
         mt[w1].print(w1, "       producing ");
-        if (w1 != w2) mt[w2].print(w2, "             and ");
+        if (w1 != w2)
+            mt[w2].print(w2, "             and ");
         std::cout << std::endl;
     }
     return {mt[w1].get_cl(), mt[w2].get_cl()};

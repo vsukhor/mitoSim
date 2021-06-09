@@ -177,8 +177,8 @@ void Fusion<D1,D2,Ntw>::
 print( const bool le ) const
 {
     Reaction::print(false);
-    msgr.print<false>(" deg1 " + std::to_string(D1));
-    msgr.print<false>(" deg2 " + std::to_string(D2));
+    msgr.print<false>(" deg1 ", D1);
+    msgr.print<false>(" deg2 ", D2);
     if (le) msgr.print("");
 }
 

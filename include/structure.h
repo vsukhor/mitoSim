@@ -361,7 +361,7 @@ populate_cluster_vectors() noexcept
         else {
             ; XASSERT(false,
                       "Error in populate_cluster_vectors: failed classification for "
-                      +utils::common::STR(j)+"\n");
+                      +std::to_string(j)+"\n");
         }
     }
     nn[2] /= 3;

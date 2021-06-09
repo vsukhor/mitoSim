@@ -201,7 +201,7 @@ operator()()
     msgr.print("\nFinal state:");
     update_log();
     netw.save_mitos(true, true, it, time);   // only the last snapshot
-    msgr.print("Final mtnum: " + std::to_string(netw.mtnum) + "\n");
+    msgr.print("Final mtnum: ", netw.mtnum, "\n");
 }
 
 

@@ -143,9 +143,9 @@ public:    // Only constant parameters are public.
      */
     virtual void print( const bool le ) const
     {
-        msgr.print<false>(" it " + std::to_string(it));
-        msgr.print<false>(" srt " + srt);
-        msgr.print<false>(" rate " + std::to_string(rate));
+        msgr.print<false>(" it ", it);
+        msgr.print<false>(" srt ", srt);
+        msgr.print<false>(" rate ", rate);
         if (le) msgr.print("\n");
     }
 
