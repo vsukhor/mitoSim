@@ -416,8 +416,7 @@ num_nodes( const szt deg ) const noexcept -> szt // deg = 1, 2, 3
         if (nn[1] != 2 && nn[2] != 2) return 0;
     }
 
-    msgr.exit("Error in Segment::num_nodes(). Not implemented for degree " +
-              std::to_string(deg));
+    msgr.exit("Error in Segment::num_nodes(). Not implemented for degree ", deg);
     return hugeszt;
 }
 
