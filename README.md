@@ -4,6 +4,8 @@
 
 ![dynamic graph](imgs/dynamic_graph.png)
 
+![build](https://github.com/vsukhor/MosaicSC/actions/workflows/cmake.yml/badge.svg)
+
 ### Biological interpretation: mitochondria
 
 Mitochondria are organelles in biological cells essential for keeping the cells alive.
