@@ -52,8 +52,8 @@ constexpr bool verbose {};   ///< Work in verbose mode.
 
 int main( int argc, char* argv[] )
 {
-    constexpr const int MIN_ARGC {5};
-    if (argc < MIN_ARGC)
+    constexpr int minArgc = 5;
+    if (argc < minArgc)
         return utils::common::exceptions::simple(
             "Error: not sufficient configuration data provided", nullptr);
 
@@ -78,8 +78,8 @@ int main( int argc, char* argv[] )
         const auto logf {workingDirOut /
                          (std::string("log_m_")+std::to_string(ii)+".txt")};
         std::ofstream logfile {logf};
-        constexpr const int PRINT_PRECISION {6};
-        utils::common::Msgr msgr {&std::cout, &logfile, PRINT_PRECISION};
+        constexpr int printPrecision = 6;
+        utils::common::Msgr msgr {&std::cout, &logfile, printPrecision};
 
         // Report the environment:
         msgr.print("Run ", ii, " started: ", stopwatch.start.str);
@@ -99,10 +99,10 @@ int main( int argc, char* argv[] )
         auto rnd = std::make_unique<mitosim::RandFactory>(seeds, ii, msgr);
 
         // Create and simulate the network:
-        constexpr const int MAX_NODE_DEGREE {3};
+        constexpr int maxNodeDegree = 3;
         const auto network =
             std::make_unique<
-                mitosim::Network<mitosim::Segment<MAX_NODE_DEGREE>>
+                mitosim::Network<mitosim::Segment<maxNodeDegree>>
                     >(cfg, *rnd, msgr);
         network->assemble()->simulate();
 
