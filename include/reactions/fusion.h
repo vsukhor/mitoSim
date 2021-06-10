@@ -112,10 +112,10 @@ protected:
     using Reaction::msgr;
 
     // Convenience references.
-    Ntw&         netw;        ///< ref: The host network for this reaction.
-    RandFactory& rnd;        ///< ref: Random number factory.
+    Ntw&         netw;  ///< ref: The host network for this reaction.
+    RandFactory& rnd;   ///< ref: Random number factory.
 
-    std::array<szt,2> cc;   ///< Indices of the clusters.
+    std::array<szt,2> cc;  ///< Indices of the clusters.
 
     void update_netw_stats() override;
 

@@ -29,6 +29,7 @@
 #include <vector>
 
 #include "utils/common/constants.h"
+#include "utils/common/exceptions.h"
 #include "utils/common/misc.h"
 #include "utils/common/msgr.h"
 #include "utils/common/stop_watch.h"
@@ -43,7 +44,7 @@ using real = float;
 using RandFactory = utils::random::Boost<real>;
 constexpr bool verbose {};   ///< Work in verbose mode.
 
-}   // namespace mitosim
+}  // namespace mitosim
 
 #include "config.h"
 #include "network.h"
@@ -51,56 +52,64 @@ constexpr bool verbose {};   ///< Work in verbose mode.
 
 int main( int argc, char* argv[] )
 {
-    using utils::common::STR;
-    using utils::common::szt;
-
-    constexpr const int MIN_ARGC = 5;
+    constexpr const int MIN_ARGC {5};
     if (argc < MIN_ARGC)
         return utils::common::exceptions::simple(
             "Error: not sufficient configuration data provided", nullptr);
 
     // Working directory:
-    const auto workingDir = std::filesystem::path {std::string(argv[1])};
-    // Application-specific suffix of the configuration file:
-    const auto configSuffix = std::string(argv[2]);
-    // Index of the starting run:
-    const auto runIni = static_cast<szt>(std::stoi(argv[3]));
-    // Index of the last run:
-    const auto runEnd = static_cast<szt>(std::stoi(argv[4]));
-
+    const std::filesystem::path workingDir {std::string(argv[1])};
     const auto workingDirIn = workingDir;    // directory for the input
     const auto workingDirOut = workingDir;   // directory for the output
 
-    for (szt ii=runIni; ii<=runEnd; ii++) {
+    // Application-specific suffix of the configuration file:
+    const auto configSuffix = std::string(argv[2]);
+
+    const auto runIni = std::stoi(argv[3]);  // index of the starting run
+    const auto runEnd = std::stoi(argv[4]);  // index of the last run
+
+    // Loop over the simulation runs:
+    for (int ii=runIni; ii<=runEnd; ii++) {
+
         utils::common::StopWatch stopwatch;
         stopwatch.start();
 
-        const auto logf {workingDirOut / (STR("log_m_")+STR(ii)+".txt")};
+        // Set the logging:
+        const auto logf {workingDirOut /
+                         (std::string("log_m_")+std::to_string(ii)+".txt")};
         std::ofstream logfile {logf};
         constexpr const int PRINT_PRECISION {6};
         utils::common::Msgr msgr {&std::cout, &logfile, PRINT_PRECISION};
+
+        // Report the environment:
         msgr.print("Run ", ii, " started: ", stopwatch.start.str);
         msgr.print("workingDirOut = ", workingDirOut);
         msgr.print("runIni = ", runIni);
         msgr.print("runEnd = ", runEnd);
 
-        mitosim::Config<mitosim::real> cfg {workingDirOut, configSuffix, STR(ii), msgr};
+        // Import the configuration settings:
+        mitosim::Config<mitosim::real> cfg {
+            workingDirOut, configSuffix, std::to_string(ii), msgr
+        };
 
+        // Initialise random number factory:
         const auto seeds {cfg.workingDirOut / "seeds"};
         if (!std::filesystem::is_regular_file(seeds))
             mitosim::RandFactory::make_seed(seeds, &msgr);
-
         auto rnd = std::make_unique<mitosim::RandFactory>(seeds, ii, msgr);
+
+        // Create and simulate the network:
         constexpr const int MAX_NODE_DEGREE {3};
         const auto network =
             std::make_unique<
                 mitosim::Network<mitosim::Segment<MAX_NODE_DEGREE>>
                     >(cfg, *rnd, msgr);
         network->assemble()->simulate();
+
+        // Finalize:
         stopwatch.stop();
         msgr.print("Run ", ii, " finished: "+stopwatch.stop.str,
                    " after ", stopwatch.duration(), " sec\n");
-
     }
 
     return EXIT_SUCCESS;

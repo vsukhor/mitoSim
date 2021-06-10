@@ -135,8 +135,8 @@ private:
     using Reaction::srt;
 
     // Convenience references
-    Ntw&          netw;    ///< ref: The network.
-    RandFactory&  rnd;     ///< ref: Random number factory.
+    Ntw&          netw;  ///< ref: The network.
+    RandFactory&  rnd;   ///< ref: Random number factory.
 
     std::array<szt,2> cc;
 
@@ -144,7 +144,7 @@ private:
     real* score {};
 
     /// Number of times this reaction was fired.
-    szt    eventCount {};
+    szt eventCount {};
 
     /// Reactions that need a score update after *this has fired.
     std::vector<Reaction*> dependents;
@@ -158,7 +158,7 @@ private:
     /// Attach this score to the Gillespie mechanism.
     void attach_score_pointer(real*a) noexcept override { score = a; };
 
-    /// Network and reaction updates necessary after a reaction event was executed.
+    /// Updates necessary after a reaction event was executed.
     void update_netw_stats() override;
 
 };

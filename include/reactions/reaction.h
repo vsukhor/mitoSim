@@ -155,7 +155,7 @@ protected:
 
     /** All necessary updates after the given reaction event was executed.
      * @details Pure virtual function: Network and reaction updates necessary
-     *          after the given reaction event was executed.
+     * after the given reaction event was executed.
      */
     virtual void update_netw_stats() = 0;
 
