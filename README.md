@@ -2,7 +2,7 @@
 
 ### A stochastic simulator of graphs evolving under the action of division and fusion of components
 
-![dynamic graph](imgs/dynamic_graph.png)
+![dynamic graph](docs/imgs/dynamic_graph.png)
 
 ![build](https://github.com/vsukhor/MosaicSC/actions/workflows/cmake.yml/badge.svg)
 
