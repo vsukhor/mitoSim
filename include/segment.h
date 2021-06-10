@@ -480,7 +480,7 @@ print( std::ostream& os,
 #ifdef PRINT_EDGES
     os << std::endl;
     for (szt i=0; i<g.size(); i++) 
-        g[i].print(os, i, 1);
+        g[i].print(os, i);
 #else
     os << " len " << g.size();
 #endif

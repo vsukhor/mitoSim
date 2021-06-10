@@ -104,11 +104,12 @@ public:
 
     /**
      * @brief Print the edge to a stream.
+     * @tparam ENDL Flag to end current line.
      * @param os Output stream.
      * @param a Position inside segment.
-     * @param endline Flag to end current line.
     */
-    void print(std::ostream& os, szt a, bool endline) const;
+    template<bool ENDL=true>
+    void print(std::ostream& os, szt a) const;
 };
 
 
@@ -148,16 +149,16 @@ write( std::ofstream &ofs ) const
 
 
 template<int ContentT>
+template<bool ENDL>
 void Edge<ContentT>::
 print( std::ostream& os,
-       const szt a,
-       const bool endline ) const
+       const szt a ) const
 {
     os << "[" << a << "] ";
     os << " ind " << ind; 
     os << " indcl " << indcl;
     os << " fin " << fin[0] << " " << fin[1];
-    if (endline) os << "\n";
+    if constexpr (ENDL) os << "\n";
 }
 
 }  // namespace mitosim
