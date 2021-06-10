@@ -46,12 +46,16 @@ The simulator makes use of the general-purpose library [utils](https://github.co
 (included here as a git submodule).
 So, when cloning, please make sure, that the dependent library is included, e.g., by applying:
 
-    git clone --recursive https://github.com/vsukhor/mitoSim.git
+```console
+git clone --recursive https://github.com/vsukhor/mitoSim.git
+```
 
 and, in the case of an update, do this explicitly on the submodule:
 
-    git submodule init
-    git submodule update
+```console
+git submodule init
+git submodule update
+```
 
 #### Building
 
@@ -62,10 +66,12 @@ depending on the underlying generator chosen, one of these should be accessible 
 of the former, the headers suffice).
 
 Using [cmake](https://cmake.org) (ver. 3.15 or higher):  
-    `cd mitosim`  
-    `cmake -S . -B build`  
-    `cmake --build build`  
 
+```console
+cd mitosim  
+cmake -S . -B build  
+cmake --build build  
+```
 ### Running the simulation
 
 The simulation parameters are read from a short configuration file, structured
@@ -76,7 +82,9 @@ The file is expected to be named as 'config_X.txt', where X is the configuration
 and the rest of the name is fixed.
 Then, using the above example, and the executable 'mitosim_CPU' simulation may be launched as
 
-    ./mitosim_CPU   /working/directory/   sample   22   28
+```console
+./mitosim_CPU  /working/directory/  sample 22 28
+```
 
 The first two arguments are the working directory where the config file is positioned and the 
 config file suffix respectively. The last two arguments are the range limits of the run indexes 
