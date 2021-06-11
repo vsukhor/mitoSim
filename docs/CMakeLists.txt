@@ -20,7 +20,12 @@ if(Doxygen_FOUND)
 	add_custom_command(
 		TARGET doc_doxygen
 		POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/imgs ${CMAKE_CURRENT_SOURCE_DIR}/html
+		COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_SOURCE_DIR}/html/docs/imgs
+	)
+	add_custom_command(
+		TARGET doc_doxygen
+		POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/imgs ${CMAKE_CURRENT_SOURCE_DIR}/html/docs/imgs
 	)
 else()
     message(STATUS "Doxygen not found, not building docs")
