@@ -36,6 +36,7 @@
 
 #include "utils/common/misc.h"
 #include "utils/common/msgr.h"
+#include "utils/stochastic/gillespie.h"
 
 namespace mitosim {
 
@@ -54,11 +55,11 @@ public:    // Only constant parameters are public.
     const real rate {};
 
     // Convenience references
-    const ulong& it;      ///< ref: Internal network iteration counter.
-    const real&  time;    ///< ref: Internal network time.
+    const ulong& it;    ///< ref: Internal network iteration counter.
+    const real&  time;  ///< ref: Internal network time.
 
-    const std::string shortName;   ///< Reaction name.
-    const std::string srt;           ///< Reaction name abbreviation.
+    const std::string shortName;  ///< Reaction name.
+    const std::string srt;        ///< Reaction name abbreviation.
 
     /**
      * @brief Constructor.
@@ -73,10 +74,10 @@ public:    // Only constant parameters are public.
     Reaction( Msgr& msgr,
               const szt ind,
               const real rate,
-              const ulong& it,        // const ref
-              const real& time,        // const ref
+              const ulong& it,              // const ref
+              const real& time,             // const ref
               const std::string shortName,  // value + move
-              const std::string srt   // value + move
+              const std::string srt         // value + move
         )
         : ind {ind}
         , rate {rate}

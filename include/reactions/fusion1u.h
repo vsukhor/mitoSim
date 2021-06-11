@@ -34,6 +34,7 @@
 
 #include "utils/common/misc.h"
 #include "utils/common/msgr.h"
+#include "utils/stochastic/gillespie.h"
 
 #include "fusion.h"
 
@@ -47,7 +48,7 @@ template<typename Ntw>
 class Fusion1U
     : public Fusion<1,2,Ntw> {
 
-    friend utils::common::Gillespie<Reaction,RandFactory>;
+    friend utils::stochastic::Gillespie<Reaction,RandFactory>;
 
 public:
 

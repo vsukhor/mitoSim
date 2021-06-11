@@ -32,7 +32,7 @@
 #ifndef MITOSIM_SIMULATION_H
 #define MITOSIM_SIMULATION_H
 
-#include "utils/common/gillespie.h"
+#include "utils/stochastic/gillespie.h"
 #include "utils/common/misc.h"
 #include "utils/common/msgr.h"
 
@@ -52,9 +52,9 @@ namespace mitosim {
 template<typename Ntw>
 class Simulation {
 
-    using Msgr = utils::common::Msgr;
-
 public:
+
+    using Msgr = utils::common::Msgr;
 
     /**
      * @brief Constructor
@@ -92,7 +92,7 @@ private:
     szt saveFrequency;  ///< Frequency of detailed output to flie.
 
     /// Gillespie reactor controlling the simulation.
-    utils::common::Gillespie<RandFactory,Reaction> gsp;
+    utils::stochastic::Gillespie<RandFactory,Reaction> gsp;
 
     void populateRc();  ///< Add reactions to the Gillespie simulator.
 

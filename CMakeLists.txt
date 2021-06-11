@@ -25,7 +25,9 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 endif()
 
 find_package(Boost REQUIRED)
-
+if(Boost_FOUND)
+  include_directories(${Boost_INCLUDE_DIRS})
+endif()
 # Dependence on utils:
 add_subdirectory(external)
 
