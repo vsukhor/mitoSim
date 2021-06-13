@@ -39,7 +39,7 @@
 
 #include "utils/common/constants.h"
 #include "utils/common/misc.h"
-#include "utils/common/msgr.h"
+#include "utils/msgr.h"
 
 #include "edge.h"
 
@@ -74,7 +74,6 @@ class Segment<3> {
 
 public:
 
-    using Msgr = utils::common::Msgr;
     using szt = utils::common::szt;
     using ulong = utils::common::ulong;
 
@@ -99,7 +98,7 @@ public:
      * @brief Constructor
      * @param msgr Output message processor.
      */
-    explicit Segment(Msgr& msgr);
+    explicit Segment(utils::Msgr& msgr);
 
     /**
      * @brief Constructor.
@@ -112,7 +111,7 @@ public:
         szt segmass,
         szt cl,
         szt ei,
-        Msgr& msgr );
+        utils::Msgr& msgr );
 
     constexpr auto get_cl() const noexcept { return cl; }
     void set_cl( szt newcl ) noexcept { cl = newcl; }
@@ -226,7 +225,8 @@ public:
 private:
 
     szt cl {};   ///< cluster index.
-    Msgr& msgr;  ///< Output message processor.
+    
+    utils::Msgr& msgr;  ///< Output message processor.
 
     /**
      * @brief Insert an edge imediately after g[a] making it g[a+1].
@@ -246,7 +246,7 @@ private:
 
 inline
 Segment<3>::
-Segment( Msgr& msgr )
+Segment(utils::Msgr& msgr)
     : msgr {msgr}
 {
     init_ends();
@@ -259,7 +259,7 @@ Segment(
       const szt segmass,
       const szt cl,
       szt ei,
-      Msgr& msgr     // var ref
+      utils::Msgr& msgr     // var ref
     )
     : cl {cl}
     , msgr {msgr}

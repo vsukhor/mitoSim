@@ -33,7 +33,7 @@
 #define MITOSIM_FUSION12_H
 
 #include "utils/common/misc.h"
-#include "utils/common/msgr.h"
+#include "utils/msgr.h"
 #include "utils/stochastic/gillespie.h"
 
 #include "fusion.h"
@@ -52,7 +52,7 @@ class Fusion12
 
 public:
 
-    using Msgr = utils::common::Msgr;
+    using Msgr = utils::Msgr;
 
     /**
      * @brief Constructor.

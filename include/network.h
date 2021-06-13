@@ -33,7 +33,7 @@
 #define MITOSIM_NETWORK_H
 
 #include "utils/common/misc.h"
-#include "utils/common/msgr.h"
+#include "utils/msgr.h"
 
 #include "ability_for_fusion.h"
 #include "config.h"
@@ -56,8 +56,6 @@ class Network
     :  public AbilityForFusion<SegmentT> {
 
 public:
-
-    using Msgr = utils::common::Msgr;
 
     using thisT = Network<SegmentT>;
     using ST = SegmentT;
@@ -103,7 +101,7 @@ public:
     explicit Network(
             const Config<real>& cfg,
             RandFactory& rnd,
-            Msgr& msgr
+            utils::Msgr& msgr
     );
 
     /// Produce everything necessary for the simulation to start.
@@ -142,7 +140,7 @@ Network<SegmentT>::
 Network(
         const Config<real>& cfg,
         RandFactory& rnd,
-        Msgr& msgr
+        utils::Msgr& msgr
     )
     : AbilityForFusion<SegmentT> {msgr}
     , rnd {rnd}

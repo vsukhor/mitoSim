@@ -36,7 +36,7 @@
 #include <vector>
 
 #include "utils/common/misc.h"
-#include "utils/common/msgr.h"
+#include "utils/msgr.h"
 #include "utils/stochastic/gillespie.h"
 
 #include "reaction.h"
@@ -72,7 +72,7 @@ public:
      * @param time current time
      * @param srt reaction name literal
      */
-    Fusion( utils::common::Msgr& msgr,
+    Fusion( utils::Msgr& msgr,
             const szt ind,
             Ntw& netw,
             const real rate,

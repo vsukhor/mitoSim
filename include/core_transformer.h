@@ -39,7 +39,7 @@
 
 #include "utils/common/constants.h"
 #include "utils/common/misc.h"
-#include "utils/common/msgr.h"
+#include "utils/msgr.h"
 
 #include "structure.h"
 
@@ -64,7 +64,6 @@ protected:
 
 public:
 
-    using Msgr = utils::common::Msgr;
     using szt = utils::common::szt;
     using ulong = utils::common::ulong;
 
@@ -72,7 +71,7 @@ public:
      * @brief Constructor,
      * @param msgr Output message processor.
      */
-    explicit CoreTransformer(Msgr& msgr);
+    explicit CoreTransformer(utils::Msgr& msgr);
 
     /**
      * @brief Update the structure of diaconnected components produced by fusion.
@@ -166,7 +165,7 @@ protected:
 template<typename Mt>
 CoreTransformer<Mt>::
 CoreTransformer(
-        Msgr& msgr
+        utils::Msgr& msgr
     )
     : Structure<Mt> {msgr}
 {}

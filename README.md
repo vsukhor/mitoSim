@@ -33,14 +33,12 @@ transformations in continuous time.
 
 More details can be found in the original
 [publication](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002745):  
-Sukhorukov VM, Dikov D, Reichert AS, Meyer-Hermann M: Emergence of the mitochondrial
+Sukhorukov VM, Dikov D, Reichert AS, Meyer-Hermann M. Emergence of the mitochondrial
 reticulum from fission and fusion dynamics.
 PLoS Comput Biol. 2012, 8: e1002745-10.1371/journal.pcbi.1002745.  
 Please reference the above manuscript whenever the results produced by this code are made publicly available.
 
 ### Installation
-
-#### Dependencies
 
 The simulator makes use of the general-purpose library [utils](https://github.com/vsukhor/utils),
 (included here as a git submodule).
@@ -57,10 +55,8 @@ git submodule init
 git submodule update
 ```
 
-#### Building
-
-Current code requires a C++20 - capable compiler. It was tested on macOS (clang-12) and Ubuntu (gcc-11).
-For generation of pseudo-random numbers, [Utils::Random](https://github.com/vsukhor/utils/tree/master/utils/random)
+**mitoSim**  requires a C++20 - capable compiler. It was tested on macOS (clang-12) and Ubuntu (gcc-11).
+For generation of pseudo-random numbers, [utils::random](https://github.com/vsukhor/utils/tree/master/utils/random)
 relies on either [boost](https://www.boost.org/) or [NVIDIA cuRAND](https://developer.nvidia.com/curand), so
 depending on the underlying generator chosen, one of these should be accessible (in the case
 of the former, the headers suffice).

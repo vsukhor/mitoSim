@@ -32,9 +32,9 @@
 #ifndef MITOSIM_SIMULATION_H
 #define MITOSIM_SIMULATION_H
 
-#include "utils/stochastic/gillespie.h"
 #include "utils/common/misc.h"
-#include "utils/common/msgr.h"
+#include "utils/msgr.h"
+#include "utils/stochastic/gillespie.h"
 
 #include "reactions/fission.h"
 #include "reactions/fusion11.h"
@@ -54,8 +54,6 @@ class Simulation {
 
 public:
 
-    using Msgr = utils::common::Msgr;
-
     /**
      * @brief Constructor
      * @param netw the network to be simulated
@@ -69,7 +67,7 @@ public:
         RandFactory& rnd,
         double& time,
         ulong& it,
-        Msgr& msgr
+        utils::Msgr& msgr
     );
 
     /// Make everything ready for start.
@@ -82,7 +80,7 @@ private:
     Ntw& netw;  ///< ref: Simulated network.
 
     // Convenience references to some data fields of the network.
-    Msgr&        msgr;   ///< ref: Output message processor.
+    utils::Msgr& msgr;   ///< ref: Output message processor.
     RandFactory& rnd;    ///< ref: random number factory.
     double&      time;   ///< ref: current time.
     ulong&       it;     ///< ref: iteration counter.
@@ -117,7 +115,7 @@ Simulation(
         RandFactory& rnd,
         double& time,
         ulong& it,
-        Msgr& msgr
+        utils::Msgr& msgr
     )
     : netw {netw}
     , msgr {msgr}

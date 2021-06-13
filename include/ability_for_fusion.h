@@ -36,7 +36,7 @@
 #include <vector>
 
 #include "utils/common/constants.h"
-#include "utils/common/msgr.h"
+#include "utils/msgr.h"
 
 #include "ability_for_fission.h"
 #include "core_transformer.h"
@@ -66,7 +66,6 @@ protected:
 
 public:
 
-    using Msgr = utils::common::Msgr;
     using szt = utils::common::szt;
     using ulong = utils::common::ulong;
 
@@ -75,7 +74,7 @@ public:
      * @param msgr Output message processor.
      */
     explicit AbilityForFusion(
-        Msgr& msgr
+        utils::Msgr& msgr
     );
 
     /**
@@ -120,7 +119,7 @@ public:
 template<typename Mt>
 AbilityForFusion<Mt>::
 AbilityForFusion(
-        Msgr& msgr
+        utils::Msgr& msgr
     )
     : AbilityForFission<Mt> {msgr}
 {}

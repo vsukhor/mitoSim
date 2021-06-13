@@ -36,7 +36,7 @@
 #include <vector>
 
 #include "utils/common/constants.h"
-#include "utils/common/msgr.h"
+#include "utils/msgr.h"
 
 #include "core_transformer.h"
 
@@ -74,7 +74,6 @@ protected:
 
 public:
 
-    using Msgr = utils::common::Msgr;
     using szt = utils::common::szt;
     using ulong = utils::common::ulong;
 
@@ -82,7 +81,7 @@ public:
      * @brief Constructor.
      * @param msgr Output message processor.
      */
-    explicit AbilityForFission(Msgr& msgr);
+    explicit AbilityForFission(utils::Msgr& msgr);
 
     /**
      * @brief Perform fission of a segment.
@@ -136,7 +135,7 @@ private:
 template<typename Mt>
 AbilityForFission<Mt>::
 AbilityForFission(
-        Msgr& msgr
+        utils::Msgr& msgr
     )
     : CoreTransformer<Mt> {msgr}
 {}

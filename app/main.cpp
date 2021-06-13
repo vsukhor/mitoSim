@@ -29,11 +29,10 @@
 #include <vector>
 
 #include "utils/common/constants.h"
-#include "utils/common/exceptions.h"
 #include "utils/common/misc.h"
-#include "utils/common/msgr.h"
-#include "utils/common/stop_watch.h"
+#include "utils/msgr.h"
 #include "utils/random/with_boost.h"
+#include "utils/stop_watch.h"
 
 // #define USE_UTILS_XASSERT  // toggles XASSERTs.
 // #define PRINT_EDGES  // comment this to avoid printing detailed edge info.
@@ -53,9 +52,10 @@ constexpr bool verbose {};   ///< Work in verbose mode.
 int main( int argc, char* argv[] )
 {
     constexpr int minArgc = 5;
-    if (argc < minArgc)
-        return utils::common::exceptions::simple(
-            "Error: not sufficient configuration data provided", nullptr);
+    if (argc < minArgc) {
+        std::cerr << "Error: not sufficient configuration data provided\n";
+        std::exit(EXIT_FAILURE);
+    }
 
     // Working directory:
     const std::filesystem::path workingDir {std::string(argv[1])};
@@ -71,7 +71,7 @@ int main( int argc, char* argv[] )
     // Loop over the simulation runs:
     for (int ii=runIni; ii<=runEnd; ii++) {
 
-        utils::common::StopWatch stopwatch;
+        utils::StopWatch stopwatch;
         stopwatch.start();
 
         // Set the logging:
@@ -79,7 +79,7 @@ int main( int argc, char* argv[] )
                          (std::string("log_m_")+std::to_string(ii)+".txt")};
         std::ofstream logfile {logf};
         constexpr int printPrecision = 6;
-        utils::common::Msgr msgr {&std::cout, &logfile, printPrecision};
+        utils::Msgr msgr {&std::cout, &logfile, printPrecision};
 
         // Report the environment:
         msgr.print("Run ", ii, " started: ", stopwatch.start.str);

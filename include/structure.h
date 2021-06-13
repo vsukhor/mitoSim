@@ -37,7 +37,7 @@
 
 #include "utils/common/constants.h"
 #include "utils/common/misc.h"
-#include "utils/common/msgr.h"
+#include "utils/msgr.h"
 
 namespace mitosim {
 
@@ -53,7 +53,6 @@ class Structure {
 
 public:
 
-    using Msgr = utils::common::Msgr;
     using szt = utils::common::szt;
     template<typename T> using vec2 = utils::common::vec2<T>;
     template<typename T> using vec3 = utils::common::vec3<T>;
@@ -109,7 +108,7 @@ public:
     vec2<std::array<szt,2>> mtc13;
 
     /// Output message processor.
-    Msgr& msgr;
+    utils::Msgr& msgr;
 
     /// Minimal length of a segment that can bend into a cycle.
     static constexpr szt minLoopLength {2};
@@ -118,7 +117,7 @@ public:
     * @brief Constructor.
     * @param msgr Output message processor.
     */
-    explicit Structure(Msgr& msgr);
+    explicit Structure(utils::Msgr& msgr);
 
     /// Appends a disconnected segment to the reticulum.
     void add_disconnected_segment(szt segmass);
@@ -180,7 +179,7 @@ private:
 template<typename Mt>
 Structure<Mt>::
 Structure(
-        Msgr& msgr
+        utils::Msgr& msgr
     )
     : msgr {msgr}
 {}

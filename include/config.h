@@ -35,8 +35,8 @@
 #include <filesystem>
 #include <string>
 
-#include "utils/common/msgr.h"
 #include "utils/config/reader.h"
+#include "utils/msgr.h"
 
 namespace mitosim {
 
@@ -55,7 +55,6 @@ class Config {
 
 public:
 
-    using Msgr = utils::common::Msgr;
     using szt = utils::common::szt;
     using ulong = utils::common::ulong;
 
@@ -101,7 +100,7 @@ public:
             const std::filesystem::path& workingDirOut,
             const std::string& fnameSuffix,
             const std::string& runName,
-            Msgr& msgr
+            utils::Msgr& msgr
             )
         : file {workingDirOut / (std::string("config")+"_"+fnameSuffix+".txt")}
         , read {file, &msgr}

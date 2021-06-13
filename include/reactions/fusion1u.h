@@ -33,7 +33,7 @@
 #define MITOSIM_FUSION1U_H
 
 #include "utils/common/misc.h"
-#include "utils/common/msgr.h"
+#include "utils/msgr.h"
 #include "utils/stochastic/gillespie.h"
 
 #include "fusion.h"
@@ -52,8 +52,6 @@ class Fusion1U
 
 public:
 
-    using Msgr = utils::common::Msgr;
-
     /**
      * @brief Constructor.
      * @param msgr Output message processor.
@@ -64,7 +62,7 @@ public:
      * @param it Iteration counter.
      * @param time Current time.
      */
-    Fusion1U( Msgr& msgr,
+    Fusion1U( utils::Msgr& msgr,
               const szt ind,
               Ntw& netw,
               const real rate,

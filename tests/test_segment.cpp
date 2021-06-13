@@ -1,6 +1,8 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
+#include "utils/msgr.h"
+
 #include "../segment.h"
 
 namespace segment_test {
@@ -13,7 +15,7 @@ class SegmentTest
 protected:
 
     using Segment = mitosim::Segment<3>;
-    using Msgr = Segment::Msgr;
+    using Msgr = utils::Msgr;
     using szt = Segment::szt;
 
     struct Config {

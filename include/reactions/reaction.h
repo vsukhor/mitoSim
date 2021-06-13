@@ -35,7 +35,7 @@
 #include <string>
 
 #include "utils/common/misc.h"
-#include "utils/common/msgr.h"
+#include "utils/msgr.h"
 #include "utils/stochastic/gillespie.h"
 
 namespace mitosim {
@@ -45,7 +45,6 @@ class Reaction {
 
 public:    // Only constant parameters are public.
 
-    using Msgr = utils::common::Msgr;
     using szt = utils::common::szt;
     using ulong = utils::common::ulong;
 
@@ -71,7 +70,7 @@ public:    // Only constant parameters are public.
      * @param shortName Reaction name.
      * @param srt Reaction name abbreviated.
      */
-    Reaction( Msgr& msgr,
+    Reaction( utils::Msgr& msgr,
               const szt ind,
               const real rate,
               const ulong& it,              // const ref
@@ -152,7 +151,7 @@ public:    // Only constant parameters are public.
 
 protected:
 
-    utils::common::Msgr& msgr;  ///< ref: Output message processor.
+    utils::Msgr& msgr;  ///< ref: Output message processor.
 
     /** All necessary updates after the given reaction event was executed.
      * @details Pure virtual function: Network and reaction updates necessary

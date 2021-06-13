@@ -2,6 +2,8 @@
 
 #include "gtest/gtest.h"
 
+#include "utils/msgr.h"
+
 #include "../config.h"
 
 namespace config_test {
@@ -17,7 +19,7 @@ protected:
     const std::string fnameSuffix {"sample"};
     const std::string runName {"42"};
 
-    Config::Msgr msgr;
+    utils::Msgr msgr;
     const Config cfg;
 
     ConfigTest()
