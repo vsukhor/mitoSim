@@ -24,10 +24,10 @@
 */
 
 /**
-* @file fusion11.h
-* @brief Contains class encapsulating tip-to-tip fusion reaction.
-* @author Valerii Sukhorukov
-*/
+ * @file fusion11.h
+ * @brief Contains class encapsulating tip-to-tip fusion reaction.
+ * @author Valerii Sukhorukov
+ */
 
 #ifndef MITOSIM_FUSION11_h
 #define MITOSIM_FUSION11_h

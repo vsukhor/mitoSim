@@ -24,10 +24,10 @@
 */
 
 /**
-* @file fusion1u.h
-* @brief Contains class encapsulating tip-to-loop fusion reaction.
-* @author Valerii Sukhorukov
-*/
+ * @file fusion1u.h
+ * @brief Contains class encapsulating tip-to-loop fusion reaction.
+ * @author Valerii Sukhorukov
+ */
 
 #ifndef MITOSIM_FUSION1U_H
 #define MITOSIM_FUSION1U_H

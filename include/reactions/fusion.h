@@ -24,10 +24,10 @@
 */
 
 /**
-* @file fusion.h
-* @brief Contains base class for fusions reactions.
-* @author Valerii Sukhorukov
-*/
+ * @file fusion.h
+ * @brief Contains base class for fusions reactions.
+ * @author Valerii Sukhorukov
+ */
 
 #ifndef MITOSIM_FUSION_h
 #define MITOSIM_FUSION_h

@@ -24,10 +24,10 @@
 */
 
 /**
-* @file fission.h
-* @brief Contains class encapsulating the fission reaction.
-* @author Valerii Sukhorukov
-*/
+ * @file fission.h
+ * @brief Contains class encapsulating the fission reaction.
+ * @author Valerii Sukhorukov
+ */
 
 #ifndef MITOSIM_FISSION_H
 #define MITOSIM_FISSION_H
@@ -39,7 +39,6 @@
 #include "utils/msgr.h"
 #include "utils/stochastic/gillespie.h"
 #include "utils/stochastic/reaction.h"
-//#include "reaction.h"
 
 namespace mitosim {
 

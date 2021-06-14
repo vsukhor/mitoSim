@@ -24,10 +24,10 @@
 */
 
 /**
-* @file ntw_fusion1u.h
-* @brief Contains class encapsulating slot on the graph which enables tip-to-loop fusion.
-* @author Valerii Sukhorukov
-*/
+ * @file ntw_fusion1u.h
+ * @brief Contains class encapsulating slot on the graph which enables tip-to-loop fusion.
+ * @author Valerii Sukhorukov
+ */
 
 #ifndef MITOSIM_NTW_FUSION1U_H
 #define MITOSIM_NTW_FUSION1U_H

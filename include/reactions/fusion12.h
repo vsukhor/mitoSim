@@ -24,10 +24,10 @@
 */
 
 /**
-* @file fusion12.h
-* @brief Contains class encapsulating tip-to-side fusion reaction.
-* @author Valerii Sukhorukov
-*/
+ * @file fusion12.h
+ * @brief Contains class encapsulating tip-to-side fusion reaction.
+ * @author Valerii Sukhorukov
+ */
 
 #ifndef MITOSIM_FUSION12_H
 #define MITOSIM_FUSION12_H
