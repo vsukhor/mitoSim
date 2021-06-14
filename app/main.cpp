@@ -69,34 +69,30 @@ int main( int argc, char* argv[] )
     const auto runEnd = std::stoi(argv[4]);  // index of the last run
 
     // Loop over the simulation runs:
-    for (int ii=runIni; ii<=runEnd; ii++) {
+    for (int runInd=runIni; runInd<=runEnd; runInd++) {
 
         utils::StopWatch stopwatch;
         stopwatch.start();
 
         // Set the logging:
         const auto logf {workingDirOut /
-                         (std::string("log_m_")+std::to_string(ii)+".txt")};
+                         (std::string("log_m_")+std::to_string(runInd)+".txt")};
         std::ofstream logfile {logf};
         constexpr int printPrecision = 6;
         utils::Msgr msgr {&std::cout, &logfile, printPrecision};
 
         // Report the environment:
-        msgr.print("Run ", ii, " started: ", stopwatch.start.str);
+        msgr.print("Run ", runInd, " started: ", stopwatch.start.str);
         msgr.print("workingDirOut = ", workingDirOut);
         msgr.print("runIni = ", runIni);
         msgr.print("runEnd = ", runEnd);
 
         // Import the configuration settings:
         mitosim::Config<mitosim::real> cfg {
-            workingDirOut, configSuffix, std::to_string(ii), msgr
+            workingDirOut, configSuffix, std::to_string(runInd), msgr
         };
 
-        // Initialise random number factory:
-        const auto seeds {cfg.workingDirOut / "seeds"};
-        if (!std::filesystem::is_regular_file(seeds))
-            mitosim::RandFactory::make_seed(seeds, &msgr);
-        auto rnd = std::make_unique<mitosim::RandFactory>(seeds, ii, msgr);
+        auto rnd = std::make_unique<mitosim::RandFactory>(runInd, msgr);
 
         // Create and simulate the network:
         constexpr int maxNodeDegree = 3;
@@ -108,7 +104,7 @@ int main( int argc, char* argv[] )
 
         // Finalize:
         stopwatch.stop();
-        msgr.print("Run ", ii, " finished: "+stopwatch.stop.str,
+        msgr.print("Run ", runInd, " finished: "+stopwatch.stop.str,
                    " after ", stopwatch.duration(), " sec\n");
     }
 
