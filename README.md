@@ -76,10 +76,10 @@ More details on the config file formatting can be found in the
 Utils::Config [documentation](https://github.com/vsukhor/utils/blob/master/utils/config/conf_file_structure.md)
 The file is expected to be named as 'config_X.txt', where X is the configuration-specific suffix
 and the rest of the name is fixed.
-Then, using the above example, and the executable 'mitosim_CPU' simulation may be launched as
+Then, using the above example, and the executable 'mitosim_cpu' simulation may be launched as
 
 ```console
-./mitosim_CPU  /working/directory/  sample 22 28
+./mitosim  /path/to/configfile/  sample 22 28
 ```
 
 The first two arguments are the working directory where the config file is positioned and the
