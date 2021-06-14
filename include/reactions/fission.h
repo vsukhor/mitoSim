@@ -38,8 +38,8 @@
 #include "utils/common/misc.h"
 #include "utils/msgr.h"
 #include "utils/stochastic/gillespie.h"
-
-#include "reaction.h"
+#include "utils/stochastic/reaction.h"
+//#include "reaction.h"
 
 namespace mitosim {
 
@@ -52,92 +52,87 @@ template<uint, uint, typename>
 class Fusion;
 
 /**
- * @brief Fission reaction class.
- * @tparam Ntw type of the network
+ * Fission reaction class.
+ * @tparam Ntw The network class.
  */
 template<typename Ntw>
 class Fission
-    : public Reaction {
+: public utils::stochastic::Reaction<RandFactory> {
 
     friend utils::stochastic::Gillespie<Reaction,RandFactory>;
 
 public:
 
     /**
-     * @brief Constructor.
+     * Constructor.
      * @param msgr Output message processor.
      * @param ind reaction id.
      * @param netw The network object.
      * @param rate Reaction rate constant.
-     * @param rnd Random number factory.
-     * @param it Iteration counter.
-     * @param time Current time.
      */
     Fission( utils::Msgr& msgr,
              const szt ind,
              Ntw& netw,
-             const real rate,
-             RandFactory& rnd,
-             const ulong& it,    // const ref
-             const real& time    // const ref
-        )
-        : Reaction {msgr, ind, rate, it, time, "fission", name}
+             const real rate
+       )
+        : Reaction {msgr, ind, rate, name, "fission"}
         , netw {netw}
-        , rnd {rnd}
     {}
 
-    /// Set the Gillespie score for this reaction.
+
+    /// Sets the Gillespie score for this reaction.
     void set_score() noexcept override;
 
     /**
-    * @brief Gillespie score for this reaction.
-    * @result Total weight of this reaction in the simulation set.
-    */
+     * Gillespie score for this reaction.
+     * @result Total weight of this reaction in the simulation set.
+     */
     real get_score() const noexcept override { return *score; };
 
 
-    /// Updatee propensity for two network components indexed in the parameters.
+    /// Updates propensity for two network components indexed in the parameters.
     void update_prop(szt c1, szt c2) noexcept override;
 
 
-    /// Execute the raction event.
+    /// Executes the raction event.
     void fire() noexcept override;
 
 
     /**
-     * @brief Activity status of the reaction.
+     * Activity status of the reaction.
      * @return True if the reaction is used in the current simulation session.
      * @param r Pointer to the reaction.
      */
     static constexpr auto is_active(const std::unique_ptr<Reaction>& r) noexcept;
 
+
     /**
-     * @brief Populate the vector of reactions that need a score update.
-     * @details The update is performed after *this has fired
-     *          and initializes the propensities and effective rate.
+     * Populates the vector of reactions that need a score update.
+     * The update is performed after *this has fired
+     * and initializes the propensities and effective rate.
      * @param rc Vector of unique pointers to all reactions taking part in
-     *        the simulation.
+     * the simulation.
      */
     void initialize_dependencies(const vup<Reaction>& rc) noexcept override;
 
-    /// Return the number of times this reaction was fired.
+
+    /// Returns the number of times this reaction was fired.
     szt event_count() const noexcept override { return eventCount; }
 
+
     /**
-     * @brief Print the parameters.
+     * Prints the reaction parameters.
      * @param le True if new line after the output.
      */
     void print(bool le) const override;
+
 
 private:
 
     using Reaction::msgr;
     using Reaction::rate;
-    using Reaction::srt;
 
-    // Convenience references
-    Ntw&          netw;  ///< ref: The network.
-    RandFactory&  rnd;   ///< ref: Random number factory.
+    Ntw& netw;  ///< ref: The network.
 
     std::array<szt,2> cc;
 
@@ -154,7 +149,7 @@ private:
     static const std::string name;
 
     /// Set this reaction propensity for the whole network.
-    void set_prop() noexcept;
+    void set_prop() noexcept override;
 
     /// Attach this score to the Gillespie mechanism.
     void attach_score_pointer(real*a) noexcept override { score = a; };
@@ -173,7 +168,7 @@ template<typename Ntw> constexpr
 auto Fission<Ntw>::
 is_active( const std::unique_ptr<Reaction>& r ) noexcept
 {
-    return r->srt == name;
+    return r->shortName == name;
 };
 
 
@@ -249,8 +244,6 @@ template<typename Ntw>
 void Fission<Ntw>::
 print( const bool le ) const
 {
-    using utils::common::STR;
-
     Reaction::print(false);
     msgr.print<false>(" score ", *score);
     msgr.print<false>(" eventCount ", eventCount);

@@ -35,6 +35,7 @@
 #include "utils/common/misc.h"
 #include "utils/msgr.h"
 #include "utils/stochastic/gillespie.h"
+#include "utils/stochastic/reaction.h"
 
 #include "fusion.h"
 
@@ -42,65 +43,58 @@ namespace mitosim {
     
 /**
  * Reaction slot for fusion of two nodes of degree 1.
- * @tparam Ntw Type of the network.
+ * @tparam Ntw The network class.
  */
 template<typename Ntw>
 class Fusion11
     : public Fusion<1,1,Ntw> {
+
+    using Reaction = utils::stochastic::Reaction<RandFactory>;
 
     friend utils::stochastic::Gillespie<Reaction,RandFactory>;
 
 public:
 
     /**
-     * @brief Constructor.
+     * Constructor.
      * @param msgr Output message processor.
      * @param ind Reaction id.
      * @param netw The network object.
      * @param rate Rate constant.
-     * @param rnd Random number factory.
-     * @param it Iteration counter.
-     * @param time Current time.
      */
     Fusion11(
             utils::Msgr& msgr,
             const szt ind,
             Ntw& netw,
-            const real rate,
-            RandFactory& rnd,
-            const ulong& it,    // const ref
-            const real& time    // const ref
+            const real rate
         )
-        : Fusion<1,1,Ntw> {msgr, ind, netw, rate, rnd, it, time, name}
+        : Fusion<1,1,Ntw> {msgr, ind, netw, rate, name}
     {}
 
-    /// Set the Gillespie score for this reaction.
-    void set_score() noexcept final;
+    /// Sets the Gillespie score for this reaction.
+    void set_score() noexcept override;
 
     /**
-     * @brief Gillespie score for this reaction.
+     * Gillespie score for this reaction.
      * @result Total weight of this reaction in the simulation set.
      */
-    real get_score() const noexcept final { return *score; };
+    real get_score() const noexcept override { return *score; };
 
     /**
-     * @brief Update propensity for a pair of network components.
+     * Updates propensity for a pair of network components.
      * @param c1 Index of the 1st component to update.
      * @param c2 Index of the 2nd component to update.
      */
-    void update_prop(szt c1, szt c2) noexcept final;
+    void update_prop(szt c1, szt c2) noexcept override;
 
-    /// Execute the raction event.
-    void fire() noexcept final;
+    /// Executes the raction event.
+    void fire() noexcept override;
 
-    /**
-     * @brief The number of times this reaction was fired.
-     * @result The number of times this reaction was fired.
-     */
-    szt event_count() const noexcept final { return eventCount; }
+     /// The number of times this reaction was fired.
+    szt event_count() const noexcept override { return eventCount; }
 
     /**
-     * @brief Print the parameters.
+     * Prints the reaction parameters.
      * @param le True if new line after the output.
      */
     void print(bool le) const override;
@@ -122,14 +116,14 @@ private:
     szt propTotal {};
 
     /// Set this reaction propensity for the whole network.
-    void set_prop() noexcept final;
+    void set_prop() noexcept override;
 
     /**
     * @brief Attach this score to the Gillespie mechanism.
     * @param a Placeholder in the Gillespie object responsible for this
     * reaction score.
     */
-    void attach_score_pointer(real* a) noexcept final { score = a; };
+    void attach_score_pointer(real* a) noexcept override { score = a; };
 };
     
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -179,8 +173,6 @@ template<typename Ntw>
 void Fusion11<Ntw>::
 print( const bool le ) const
 {
-    using utils::common::STR;
-    
     Fusion<1,1,Ntw>::print(false);
     msgr.template print<false>(" score ", *score);
     msgr.template print<false>(" eventCount ", eventCount);

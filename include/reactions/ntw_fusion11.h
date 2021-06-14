@@ -24,10 +24,10 @@
 */
 
 /**
-* @file ntw_fusion11.h
-* @brief Class encapsulating slot on the graph which enables tip-to-tip fusion.
-* @author Valerii Sukhorukov
-*/
+ * @file ntw_fusion11.h
+ * @brief Class encapsulating slot on the graph which enables tip-to-tip fusion.
+ * @author Valerii Sukhorukov
+ */
 
 #ifndef MITOSIM_NTW_FUSION11_H
 #define MITOSIM_NTW_FUSION11_H
@@ -44,7 +44,7 @@ namespace mitosim {
 template<typename> class Fusion11;
 
 /**
- * @brief Network-specific reaction slot for fusion of two nodes of degree 1.
+ * Network-specific reaction slot for fusion of two nodes of degree 1.
  * @tparam Ntw Type of the network.
  */
 template<typename Ntw>
@@ -58,7 +58,7 @@ public:
 
     explicit NtwFusion11(Ntw&);  ///< Constructor.
 
-    /// Set this reaction propensity for the whole network.
+    /// Sets this reaction propensity for the whole network.
     auto set_prop() noexcept -> szt;
 
 private:
@@ -73,10 +73,10 @@ private:
     /// Node pairs suitable for this type of fusion.
     FusionCandidatesXX cnd;
 
-    /// Populate the vector of node pairs suitable for this type of fusion.
+    /// Populates the vector of node pairs suitable for this type of fusion.
     void populate() noexcept;
 
-    /// Execute the raction event.
+    /// Executes the raction event.
     auto fire() noexcept;
 };
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

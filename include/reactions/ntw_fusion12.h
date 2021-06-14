@@ -24,10 +24,10 @@
 */
 
 /**
-* @file ntw_fusion12.h
-* @brief Class encapsulating slot on the graph which enables tip-to-side fusion.
-* @author Valerii Sukhorukov
-*/
+ * @file ntw_fusion12.h
+ * @brief Class encapsulating slot on the graph which enables tip-to-side fusion.
+ * @author Valerii Sukhorukov
+ */
 
 #ifndef MITOSIM_NTW_FUSION12_H
 #define MITOSIM_NTW_FUSION12_H
@@ -44,9 +44,9 @@ namespace mitosim {
 template<typename> class Fusion12;
 
 /**
- * @brief Reaction slot for fusion of a degree 1 node with a degree 2 node,
- * @details Network-specific reaction slot for fusion of a degree 1 node
- *          with a degree 2 node.
+ * Reaction slot for fusion of a degree 1 node with a degree 2 node,
+ * Network-specific reaction slot for fusion of a degree 1 node
+ * with a degree 2 node.
  * @tparam Ntw Type of the network.
  */
 template<typename Ntw>
@@ -60,7 +60,7 @@ public:
 
     explicit NtwFusion12(Ntw&); ///< Constructor.
 
-    /// Set this reaction propensity for the whole network.
+    /// Sets this reaction propensity for the whole network.
     auto set_prop() noexcept -> szt;
 
 private:
@@ -76,12 +76,12 @@ private:
     const std::vector<szt>&               mt22;
     const std::vector<szt>&               mt33;
 
-    FusionCandidatesXX cnd;  ///< node pairs suitable for this type of fusion.
+    FusionCandidatesXX cnd;  ///< Node pairs suitable for this type of fusion.
 
-    /// Populate the vector of node pairs suitable for this type of fusion.
+    /// Populates the vector of node pairs suitable for this type of fusion.
     void populate() noexcept;
 
-    /// Execute the raction event.
+    /// Executes the raction event.
     auto fire() noexcept;
 };
 

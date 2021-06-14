@@ -38,15 +38,14 @@
 #include "utils/common/misc.h"
 #include "utils/msgr.h"
 #include "utils/stochastic/gillespie.h"
-
-#include "reaction.h"
+#include "utils/stochastic/reaction.h"
 
 namespace mitosim {
 
 using utils::common::uint;
 
 /**
- * @brief Base class for fusion reaction classes.
+ * Base class for fusion reaction classes.
  * @tparam D1 node degree of the 1st fusion participant
  * @tparam D2 node degree of the 2nd fusion participant
  * @tparam Ntw type of the network
@@ -55,81 +54,69 @@ template<uint D1,
          uint D2,
          typename Ntw>
 class Fusion
-    : public Reaction {
+    : public utils::stochastic::Reaction<RandFactory> {
 
     friend utils::stochastic::Gillespie<Reaction,RandFactory>;
 
 public:
 
     /**
-     * @brief Constructor.
+     * Constructor.
      * @param msgr Output message processor.
      * @param ind reaction id
      * @param netw The network object.
      * @param rate rate constant
-     * @param rnd Random number factory.
-     * @param it iteration counter
-     * @param time current time
-     * @param srt reaction name literal
+     * @param name reaction name literal
      */
-    Fusion( utils::Msgr& msgr,
+    explicit Fusion(
+            utils::Msgr& msgr,
             const szt ind,
             Ntw& netw,
             const real rate,
-            RandFactory& rnd,
-            const ulong& it,        // const ref
-            const real& time,        // const ref
-            const std::string& srt
+            const std::string& name
         )
-        : Reaction {msgr, ind, rate, it, time, "fusion", srt}
+        : Reaction {msgr, ind, rate, name, "fusion"}
         , netw {netw}
-        , rnd {rnd}
     {}
 
     /**
-     * @brief Activity status of the reaction.
+     * Activity status of the reaction.
      * @return True if the reaction is used in the current simulation session.
      * @param r Pointer to the reaction.
      */
     static constexpr auto is_active(const std::unique_ptr<Reaction>& r);
 
     /**
-     * @brief Populate the vector of reactions that need a score update.
-     * @details The update is performed after *this has fired
-     *          and initializes the propensities and effective rate.
+     * Populates the vector of reactions that need a score update.
+     * The update is performed after *this has fired
+     * and initializes the propensities and effective rate.
      * @param rc Vector of unique pointers to all reactions taking part in
-     *        the simulation.
+     * the simulation.
      */
     void initialize_dependencies(const vup<Reaction>& rc) noexcept override;
 
     /**
-    * @brief Print the parameters.
-    * @param le True if new line after the output.
-    */
+     * Prints the reaction parameters.
+     * @param le True if new line after the output.
+     */
     void print(bool le) const override;
 
 protected:
 
     using Reaction::msgr;
 
-    // Convenience references.
-    Ntw&         netw;  ///< ref: The host network for this reaction.
-    RandFactory& rnd;   ///< ref: Random number factory.
+    Ntw& netw;  ///< ref: The host network for this reaction.
 
-    std::array<szt,2> cc;  ///< Indices of the clusters.
+    std::array<szt,2> cc;  ///< Indices of the participating clusters.
 
     void update_netw_stats() override;
 
 private:
 
-    using Reaction::it;
     using Reaction::set_score;
 
     /// Reactions that need a score update after *this has fired.
-    std::vector<Reaction*>  dependents;
-
-    /// Sets this reaction propensity for the whole network.
-    virtual void set_prop() noexcept = 0;
+    std::vector<Reaction*> dependents;
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -138,9 +125,9 @@ template<uint D1, uint D2, typename Ntw> constexpr
 auto Fusion<D1,D2,Ntw>::
 is_active( const std::unique_ptr<Reaction>& r )
 {
-    return  r->srt == "fu1L" ||
-            r->srt == "fu11" ||
-            r->srt == "fu12";
+    return  r->shortName == "fu1L" ||
+            r->shortName == "fu11" ||
+            r->shortName == "fu12";
 }
 
 

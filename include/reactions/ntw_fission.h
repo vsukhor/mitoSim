@@ -24,10 +24,10 @@
 */
 
 /**
-* @file ntw_fission.h
-* @brief Contains class encapsulating slot on the graph which enables fission.
-* @author Valerii Sukhorukov
-*/
+ * @file ntw_fission.h
+ * @brief Contains class encapsulating slot on the graph which enables fission.
+ * @author Valerii Sukhorukov
+ */
 
 #ifndef MITOSIM_NTW_FISSION_H
 #define MITOSIM_NTW_FISSION_H
@@ -42,7 +42,7 @@ namespace mitosim {
 template<typename> class Fission;
 
 /**
- * @brief Base class for network-specific fission reaction slots.
+ * Base class for network-specific fission reaction slots.
  * @tparam Ntw Type of the network.
  */
 template<typename Ntw>
@@ -57,11 +57,11 @@ public:
 
     explicit NtwFission(Ntw& host);  ///< Constructor.
 
-    /// Set this reaction propensity for the whole network.
+    /// Sets this reaction propensity for the whole network.
     ulong set_prop()  noexcept;
 
     /**
-     * @brief Update this reaction propensity for the whole network.
+     * Update this reaction propensity for the whole network.
      * This is done after updating it for the cluster indexed.
      * @param c Cluster index that triggers the update.
      */
@@ -78,22 +78,22 @@ private:
     typename Ntw::Reticulum& mt;     ///< ref: The segments.
     const szt&               clnum;  ///< ref: Current number fo clusters.
 
-    // Propensities
+    // Propensities:
     std::vector<ulong>   pr;          ///< Propensities per cluster.
     utils::common::ulong prTotal {};  ///< Total propensity.
 
     /**
-     * @brief Set this reaction propensity for the indexed cluster.
+     * Set this reaction propensity for the indexed cluster.
      * @note Does not update the whole network propensity.
      * @param c Index of the cluster that is updateed
      */
     void set_prop(szt c) noexcept;
 
-    /// Execute the raction event.
+    /// Executes the raction event.
     auto fire() noexcept;
 
     /**
-     * @brief Find sa random node from those suitable for this reaction.
+     * @brief Finds sa random node from those suitable for this reaction.
      * @param w Index of random segment.
      * @param a Random position inside the segment.
      */

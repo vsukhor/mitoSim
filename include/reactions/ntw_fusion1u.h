@@ -44,7 +44,7 @@ namespace mitosim {
 template<typename> class Fusion1U;
 
 /**
- * @brief Reaction slot for fusion of a degree 1 node with a looped segment.
+ * Reaction slot for fusion of a degree 1 node with a looped segment.
  * @details Network-specific reaction slot for fusion of a degree 1 node with
  * a looped segment.
  * @tparam Ntw Type of the network.
@@ -60,7 +60,7 @@ public:
 
     explicit NtwFusion1L(Ntw&);  ///< The only constructor.
 
-    /// Set this reaction propensity for the whole network.
+    /// Sets this reaction propensity for the whole network.
     auto set_prop() noexcept -> szt;
 
 private:
@@ -73,12 +73,12 @@ private:
     const std::vector<std::array<szt,2>>& mt13;
     const std::vector<szt>&               mt22;
 
-    FusionCandidatesXU cnd; ///< node pairs suitable for this type of fusion.
+    FusionCandidatesXU cnd; ///< Node pairs suitable for this type of fusion.
 
-    /// Populate the vector of node pairs suitable for this type of fusion.
+    /// Populates the vector of node pairs suitable for this type of fusion.
     void populate() noexcept;
 
-    /// Execute the reaction event.
+    /// Executes the reaction event.
     auto fire() noexcept;
 };
 

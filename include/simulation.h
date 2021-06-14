@@ -90,7 +90,8 @@ private:
     szt saveFrequency;  ///< Frequency of detailed output to flie.
 
     /// Gillespie reactor controlling the simulation.
-    utils::stochastic::Gillespie<RandFactory,Reaction> gsp;
+    utils::stochastic::Gillespie<RandFactory,
+                                 utils::stochastic::Reaction<RandFactory>> gsp;
 
     void populateRc();  ///< Add reactions to the Gillespie simulator.
 
@@ -145,19 +146,19 @@ populateRc()
     szt ind {};
     if (netw.cfg.use_fission)
         gsp.add_reaction(std::make_unique<Fission <Ntw>>(
-            msgr, ind++, netw, netw.cfg.rate_fission, netw.rnd, it, time));
+            msgr, ind++, netw, netw.cfg.rate_fission));
 
     if (netw.cfg.use_11_fusion)
         gsp.add_reaction(std::make_unique<Fusion11<Ntw>>(
-            msgr, ind++, netw, netw.cfg.fusion_rate_11, netw.rnd, it, time));
+            msgr, ind++, netw, netw.cfg.fusion_rate_11));
 
     if (netw.cfg.use_12_fusion)
         gsp.add_reaction(std::make_unique<Fusion12<Ntw>>(
-            msgr, ind++, netw, netw.cfg.fusion_rate_12, netw.rnd, it, time));
+            msgr, ind++, netw, netw.cfg.fusion_rate_12));
 
     if (netw.cfg.use_1L_fusion)
         gsp.add_reaction(std::make_unique<Fusion1U<Ntw>>(
-            msgr, ind++, netw, netw.cfg.fusion_rate_1L, netw.rnd, it, time));
+            msgr, ind++, netw, netw.cfg.fusion_rate_1L));
 }
 
 
