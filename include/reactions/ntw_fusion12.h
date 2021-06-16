@@ -35,7 +35,7 @@
 #include <array>
 #include <vector>
 
-#include "utils/common/constants.h"
+#include "utils/constants.h"
 
 #include "../fusion_candidates.h"
 
@@ -54,7 +54,7 @@ class NtwFusion12 {
 
 public:
 
-    using szt = utils::common::szt;
+    using szt = utils::szt;
 
     friend Fusion12<Ntw>;
 

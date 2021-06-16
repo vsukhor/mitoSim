@@ -37,7 +37,7 @@
 
 #include <vector>
 
-#include "utils/common/constants.h"
+#include "utils/constants.h"
 #include "utils/common/misc.h"
 #include "utils/msgr.h"
 
@@ -64,8 +64,7 @@ protected:
 
 public:
 
-    using szt = utils::common::szt;
-    using ulong = utils::common::ulong;
+    using szt = utils::szt;
 
     /**
      * @brief Constructor,
@@ -252,7 +251,6 @@ fuse_antiparallel(
     const auto cl2 = mt[w2].get_cl();
 
     if constexpr (verbose) {
-        using utils::common::STR;
         msgr.print("Fusion11a:  ",
                    w1, "(of ", len1, ") with ",
                    w2, "(of ", len2, ") at end ", end);
@@ -324,7 +322,6 @@ fuse_parallel(
     const auto cl2 = mt[w2].get_cl();
 
     if constexpr (verbose) {
-        using utils::common::STR;
         msgr.print("Fusion11p:  ",
                    w1, "(of ", len1, ") with ",
                    w2, "(of ", len2, ")");

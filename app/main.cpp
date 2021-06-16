@@ -28,7 +28,7 @@
 #include <string>
 #include <vector>
 
-#include "utils/common/constants.h"
+#include "utils/constants.h"
 #include "utils/common/misc.h"
 #include "utils/msgr.h"
 #include "utils/random/with_boost.h"

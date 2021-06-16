@@ -40,10 +40,10 @@
 
 namespace mitosim {
 
-using utils::common::bools;
-using utils::common::huge;
-using utils::common::onehuge;
-using utils::common::zerohuge;
+using utils::bools;
+using utils::huge;
+using utils::onehuge;
+using utils::zerohuge;
 
 /**
  * @brief Encapsulates and reads configuration parameters.
@@ -55,8 +55,7 @@ class Config {
 
 public:
 
-    using szt = utils::common::szt;
-    using ulong = utils::common::ulong;
+    using szt = utils::szt;
 
 private:
 

@@ -35,7 +35,7 @@
 #include <array>
 #include <vector>
 
-#include "utils/common/constants.h"
+#include "utils/constants.h"
 
 namespace mitosim {
 
@@ -48,8 +48,7 @@ template<typename> class Fission;
 template<typename Ntw>
 class NtwFission {
 
-    using szt = utils::common::szt;
-    using ulong = utils::common::ulong;
+    using szt = utils::szt;
 
 public:
 
@@ -58,7 +57,7 @@ public:
     explicit NtwFission(Ntw& host);  ///< Constructor.
 
     /// Sets this reaction propensity for the whole network.
-    ulong set_prop()  noexcept;
+    unsigned long set_prop()  noexcept;
 
     /**
      * Update this reaction propensity for the whole network.
@@ -68,7 +67,7 @@ public:
     void update_prop(szt c) noexcept;
 
     /// prTotal getter.
-    constexpr ulong get_prTotal() const noexcept { return prTotal; }
+    constexpr unsigned long get_prTotal() const noexcept { return prTotal; }
 
 private:
 
@@ -79,8 +78,8 @@ private:
     const szt&               clnum;  ///< ref: Current number fo clusters.
 
     // Propensities:
-    std::vector<ulong>   pr;          ///< Propensities per cluster.
-    utils::common::ulong prTotal {};  ///< Total propensity.
+    std::vector<unsigned long>   pr;          ///< Propensities per cluster.
+    unsigned long prTotal {};  ///< Total propensity.
 
     /**
      * Set this reaction propensity for the indexed cluster.
@@ -112,7 +111,7 @@ NtwFission( Ntw& host )
 
 template<typename Ntw>
 auto NtwFission<Ntw>::
-set_prop() noexcept -> ulong 
+set_prop() noexcept -> unsigned long 
 {
     pr.resize(clnum);
     for (szt ic=0; ic<clnum; ic++)
@@ -148,7 +147,7 @@ update_prop( const szt c ) noexcept
     if (c < clnum)
         set_prop(c);
 
-    prTotal = std::accumulate(pr.begin(), pr.end(), utils::common::zero<real>);
+    prTotal = std::accumulate(pr.begin(), pr.end(), utils::zero<real>);
 }
 
 template<typename Ntw>

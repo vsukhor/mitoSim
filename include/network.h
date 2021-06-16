@@ -83,7 +83,7 @@ public:
 
     RandFactory&  rnd;   ///< Random number factory.
     double        time;  ///< Current time.
-    ulong         it;    ///< Iteration counter.
+    unsigned long         it;    ///< Iteration counter.
     const Config<real>& cfg;   ///< Configuration.
 
     // Reaction slots:
@@ -144,7 +144,7 @@ Network(
     )
     : AbilityForFusion<SegmentT> {msgr}
     , rnd {rnd}
-    , time {utils::common::zero<double>}
+    , time {utils::zero<double>}
     , it {}
     , cfg {cfg}
     , fis {*this}

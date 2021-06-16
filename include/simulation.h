@@ -66,7 +66,7 @@ public:
         Ntw& netw,
         RandFactory& rnd,
         double& time,
-        ulong& it,
+        unsigned long& it,
         utils::Msgr& msgr
     );
 
@@ -83,7 +83,7 @@ private:
     utils::Msgr& msgr;   ///< ref: Output message processor.
     RandFactory& rnd;    ///< ref: random number factory.
     double&      time;   ///< ref: current time.
-    ulong&       it;     ///< ref: iteration counter.
+    unsigned long&       it;     ///< ref: iteration counter.
 
     // Output parameters
     szt logFrequency;   ///< Frequency of short output to a log line.
@@ -115,7 +115,7 @@ Simulation(
         Ntw& netw,
         RandFactory& rnd,
         double& time,
-        ulong& it,
+        unsigned long& it,
         utils::Msgr& msgr
     )
     : netw {netw}
@@ -168,7 +168,7 @@ operator()()
 {
     netw.update_node_numbers();
     netw.update_books();
-    netw.save_mitos(true, false, 0, utils::common::zero<real>);
+    netw.save_mitos(true, false, 0, utils::zero<real>);
     if (it % logFrequency == 0)
         update_log();
 

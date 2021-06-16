@@ -37,8 +37,8 @@
 #include <array>
 #include <vector>
 
-#include "utils/common/constants.h"
 #include "utils/common/misc.h"
+#include "utils/constants.h"
 #include "utils/msgr.h"
 
 #include "edge.h"
@@ -74,14 +74,13 @@ class Segment<3> {
 
 public:
 
-    using szt = utils::common::szt;
-    using ulong = utils::common::ulong;
+    using szt = utils::szt;
 
 public:
 
     static constexpr szt numEnds {2};  ///< A segment has two ends.
     static constexpr szt maxDeg {3};   ///< Maximal node degree allowed.
-    static constexpr auto hugeszt = utils::common::huge<szt>;
+    static constexpr auto hugeszt = utils::huge<szt>;
 
     using EdgeT = Edge<maxDeg>;
     using thisT = Segment<maxDeg>;
@@ -190,13 +189,13 @@ public:
      * @tparam E In-segment node posiiton.
      */
     template <unsigned E>
-    constexpr auto set_end_fin() noexcept -> ulong;
+    constexpr auto set_end_fin() noexcept -> unsigned long;
 
     /**
      * @brief Set fission-specific factor for a bulk node.
      * @param a In-segment node posiiton.
      */
-     auto set_bulk_fin(szt a) -> ulong;
+     auto set_bulk_fin(szt a) -> unsigned long;
 
 
     /// Print segment parameters.
@@ -423,7 +422,7 @@ num_nodes( const szt deg ) const noexcept -> szt // deg = 1, 2, 3
 
 template <unsigned E> constexpr
 auto Segment<3>::
-set_end_fin() noexcept -> ulong
+set_end_fin() noexcept -> unsigned long
 {
     static_assert(E == 1 || E == 2, "Incorrectt segment end index");
 
@@ -436,7 +435,7 @@ set_end_fin() noexcept -> ulong
 
 inline
 auto Segment<3>::
-set_bulk_fin( const szt a ) -> ulong
+set_bulk_fin( const szt a ) -> unsigned long
 {
     XASSERT(a >= 0 || a <= g.size() - 1,
             std::string("Incorrectt segment edge index: ") + std::to_string(a));

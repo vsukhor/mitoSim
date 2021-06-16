@@ -7,7 +7,7 @@
 
 namespace segment_test {
 
-using utils::common::szt;
+using utils::szt;
 
 class SegmentTest
     : public testing::Test {
@@ -138,8 +138,8 @@ TEST_F(SegmentTest, SingleNeigIndex)
 {
     Segment sg {Config::segmass, Config::cl, conf.ei0, msgr};
 
-    EXPECT_EQ(sg.single_neig_index(1), utils::common::huge<szt>);
-    EXPECT_EQ(sg.single_neig_index(2), utils::common::huge<szt>);
+    EXPECT_EQ(sg.single_neig_index(1), utils::huge<szt>);
+    EXPECT_EQ(sg.single_neig_index(2), utils::huge<szt>);
 }
 
 TEST_F(SegmentTest, DoubleNeigIndexes)

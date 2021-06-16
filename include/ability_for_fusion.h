@@ -35,7 +35,7 @@
 #include <array>
 #include <vector>
 
-#include "utils/common/constants.h"
+#include "utils/constants.h"
 #include "utils/msgr.h"
 
 #include "ability_for_fission.h"
@@ -66,8 +66,7 @@ protected:
 
 public:
 
-    using szt = utils::common::szt;
-    using ulong = utils::common::ulong;
+    using szt = utils::szt;
 
     /**
      * @brief Constructor.
@@ -151,7 +150,6 @@ fuse12(
 ) noexcept -> std::array<szt,2>
 {
     if constexpr (verbose) {
-        using utils::common::STR;
         msgr.print("Fusion12:  ",
                    w1, "(of ", mt[w1].g.size(), " e ", end, ") with ",
                    w2, "(of ", mt[w2].g.size(), " at ", a2, ")\n");
@@ -237,7 +235,6 @@ fuse1L(
 ) noexcept -> std::array<szt,2>
 {
     if constexpr (verbose) {
-        using utils::common::STR;
         msgr.print("Fusion1U:  ",
                    w1, "(of ", mt[w1].g.size(), " e ", e1,
                    ") with a CYCLE ", w2, "(of ", mt[w2].g.size(), ")\n");
@@ -285,7 +282,6 @@ fuse_to_loop( const szt w ) noexcept -> std::array<szt,2>
             "Error: attempt to fuse_toLoop a not separate segment.\n");
 
     if constexpr (verbose) {
-        using utils::common::STR;
         msgr.print("Fused to cycle: ",
                    w, " of length ", mt[w].g.size());
         mt[w].print(w, "Before ", 0);

@@ -42,12 +42,10 @@
 
 namespace mitosim {
 
-using utils::common::szt;
-using utils::common::uint;
-using utils::common::ulong;
-using utils::common::vup;
+using utils::szt;
+using utils::vup;
 
-template<uint, uint, typename>
+template<unsigned, unsigned, typename>
 class Fusion;
 
 /**

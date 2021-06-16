@@ -35,7 +35,7 @@
 #include <fstream>
 #include <ostream>
 
-#include "utils/common/constants.h"
+#include "utils/constants.h"
 
 namespace mitosim {
 
@@ -56,10 +56,9 @@ class Edge {
 
 public:
 
-    using szt = utils::common::szt;
-    using ulong = utils::common::ulong;
+    using szt = utils::szt;
 
-    static constexpr auto hugeszt = utils::common::huge<szt>;
+    static constexpr auto hugeszt = utils::huge<szt>;
 
 private:
 
@@ -68,7 +67,7 @@ private:
     szt cl {hugeszt};     ///< Current cluster index.
 
     /// Contribution to fission propensity at each end.
-    std::array<ulong,2> fin {{}};
+    std::array<unsigned long,2> fin {{}};
 
 public:
 
@@ -89,7 +88,7 @@ public:
     constexpr auto get_cl() const noexcept { return cl; }
     constexpr auto get_fin(const int i) const noexcept { return fin[i]; }
     void set_fin(const int i,
-                 const ulong f) noexcept {
+                 const unsigned long f) noexcept {
         fin[i] = f;
     }
 
@@ -143,8 +142,8 @@ write( std::ofstream &ofs ) const
     ofs.write(reinterpret_cast<const char*>(&ind), sizeof(szt));
     ofs.write(reinterpret_cast<const char*>(&indcl), sizeof(szt));
     ofs.write(reinterpret_cast<const char*>(&cl), sizeof(szt));
-    ofs.write(reinterpret_cast<const char*>(&fin[0]), sizeof(ulong));
-    ofs.write(reinterpret_cast<const char*>(&fin[1]), sizeof(ulong));
+    ofs.write(reinterpret_cast<const char*>(&fin[0]), sizeof(unsigned long));
+    ofs.write(reinterpret_cast<const char*>(&fin[1]), sizeof(unsigned long));
 }
 
 

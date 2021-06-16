@@ -42,16 +42,14 @@
 
 namespace mitosim {
 
-using utils::common::uint;
-
 /**
  * Base class for fusion reaction classes.
  * @tparam D1 node degree of the 1st fusion participant
  * @tparam D2 node degree of the 2nd fusion participant
  * @tparam Ntw type of the network
  */
-template<uint D1,
-         uint D2,
+template<unsigned D1,
+         unsigned D2,
          typename Ntw>
 class Fusion
     : public utils::stochastic::Reaction<RandFactory> {
@@ -121,7 +119,7 @@ private:
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-template<uint D1, uint D2, typename Ntw> constexpr
+template<unsigned D1, unsigned D2, typename Ntw> constexpr
 auto Fusion<D1,D2,Ntw>::
 is_active( const std::unique_ptr<Reaction>& r )
 {
@@ -131,7 +129,7 @@ is_active( const std::unique_ptr<Reaction>& r )
 }
 
 
-template<uint D1, uint D2, typename Ntw>
+template<unsigned D1, unsigned D2, typename Ntw>
 void Fusion<D1,D2,Ntw>::
 initialize_dependencies( const vup<Reaction>& rc ) noexcept
 {
@@ -147,7 +145,7 @@ initialize_dependencies( const vup<Reaction>& rc ) noexcept
 }
 
 
-template<uint D1, uint D2, typename Ntw>
+template<unsigned D1, unsigned D2, typename Ntw>
 void Fusion<D1,D2,Ntw>::
 update_netw_stats()
 {
@@ -160,7 +158,7 @@ update_netw_stats()
 }
 
 
-template<uint D1, uint D2, typename Ntw>
+template<unsigned D1, unsigned D2, typename Ntw>
 void Fusion<D1,D2,Ntw>::
 print( const bool le ) const
 {

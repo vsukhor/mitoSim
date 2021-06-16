@@ -35,7 +35,7 @@
 #include <array>
 #include <vector>
 
-#include "utils/common/constants.h"
+#include "utils/constants.h"
 #include "utils/common/misc.h"
 #include "utils/msgr.h"
 
@@ -53,9 +53,9 @@ class Structure {
 
 public:
 
-    using szt = utils::common::szt;
-    template<typename T> using vec2 = utils::common::vec2<T>;
-    template<typename T> using vec3 = utils::common::vec3<T>;
+    using szt = utils::szt;
+    template<typename T> using vec2 = utils::vec2<T>;
+    template<typename T> using vec3 = utils::vec3<T>;
 
     using Reticulum = std::vector<Mt>;
 
@@ -305,7 +305,7 @@ template<typename Mt>
 void Structure<Mt>::
 populate_cluster_vectors() noexcept
 {
-    constexpr auto hugeszt = utils::common::huge<szt>;
+    constexpr auto hugeszt = utils::huge<szt>;
 
     mt11.clear();
     mtc11.resize(clnum);

@@ -35,7 +35,7 @@
 #include <array>
 #include <vector>
 
-#include "utils/common/constants.h"
+#include "utils/constants.h"
 
 #include "../fusion_candidates.h"
 
@@ -56,7 +56,7 @@ class NtwFusion1L {
 
 public:
 
-    using szt = utils::common::szt;
+    using szt = utils::szt;
 
     explicit NtwFusion1L(Ntw&);  ///< The only constructor.
 

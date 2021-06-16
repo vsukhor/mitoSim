@@ -41,7 +41,7 @@ namespace mitosim {
  */
 struct alignas(8) FusionCandidatesXX {
 
-    using szt = utils::common::szt;
+    using szt = utils::szt;
 
     static constexpr int MIN_ALIGNMENT = 8;
 
@@ -85,7 +85,7 @@ struct alignas(8) FusionCandidatesXX {
  */
 struct alignas(8) FusionCandidatesXU {
 
-    using szt = utils::common::szt;
+    using szt = utils::szt;
 
     static constexpr int MIN_ALIGNMENT = 8;
 

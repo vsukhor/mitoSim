@@ -35,7 +35,7 @@
 #include <algorithm>
 #include <vector>
 
-#include "utils/common/constants.h"
+#include "utils/constants.h"
 #include "utils/msgr.h"
 
 #include "core_transformer.h"
@@ -74,8 +74,7 @@ protected:
 
 public:
 
-    using szt = utils::common::szt;
-    using ulong = utils::common::ulong;
+    using szt = utils::szt;
 
     /**
      * @brief Constructor.
