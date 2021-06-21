@@ -293,7 +293,7 @@ increment_length(
 ) -> EdgeT*
 {
     g.insert(g.begin()+(a+1), std::move(p));
-    return &g[a+1];
+    return &g[static_cast<szt>(a) + 1];
 }
 
 

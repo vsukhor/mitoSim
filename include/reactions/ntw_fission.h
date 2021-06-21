@@ -78,7 +78,7 @@ private:
     const szt&               clnum;  ///< ref: Current number fo clusters.
 
     // Propensities:
-    std::vector<unsigned long>   pr;          ///< Propensities per cluster.
+    std::vector<unsigned long> pr;   ///< Propensities per cluster.
     unsigned long prTotal {};  ///< Total propensity.
 
     /**
@@ -147,7 +147,7 @@ update_prop( const szt c ) noexcept
     if (c < clnum)
         set_prop(c);
 
-    prTotal = std::accumulate(pr.begin(), pr.end(), utils::zero<real>);
+    prTotal = std::accumulate(pr.begin(), pr.end(), utils::zero<unsigned long>);
 }
 
 template<typename Ntw>

@@ -86,7 +86,7 @@ public:
     constexpr auto get_ind() const noexcept { return ind; }
     constexpr auto get_indcl() const noexcept { return indcl; }
     constexpr auto get_cl() const noexcept { return cl; }
-    constexpr auto get_fin(const int i) const noexcept { return fin[i]; }
+    constexpr auto get_fin(const szt i) const noexcept { return fin[i]; }
     void set_fin(const int i,
                  const unsigned long f) noexcept {
         fin[i] = f;

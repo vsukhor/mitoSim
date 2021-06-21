@@ -147,7 +147,9 @@ update_cl_fiss( const szt w,
 {
     vis.resize(mtnum + 2);
     // Nothing is visited in the beginning of the search.
-    std::fill(vis.begin() + 1, vis.begin()+mtnum + 1, 0);
+    std::fill(vis.begin() + 1,
+              vis.begin() + static_cast<long>(mtnum) + 1,
+              0);
 
     const szt oe {(e == 1) ? szt(2) : szt(1)};
 
@@ -233,10 +235,10 @@ fiss2( const szt w,
     mt.emplace_back(msgr);
     ++mtnum;
 
-    std::move(mt[w].g.begin()+a,
+    std::move(mt[w].g.begin() + static_cast<long>(a),
               mt[w].g.end(),
               std::back_inserter(mt[mtnum].g));
-    mt[w].g.erase(mt[w].g.begin()+a,
+    mt[w].g.erase(mt[w].g.begin() + static_cast<long>(a),
                   mt[w].g.end());
 
     mt[mtnum].nn[1] = 0;
