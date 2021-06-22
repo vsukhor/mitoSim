@@ -23,11 +23,9 @@
 ================================================================================
 */
 
-/**
- * @file fusion.h
- * @brief Contains base class for fusions reactions.
- * @author Valerii Sukhorukov
- */
+/// @file fusion.h
+/// @brief Contains base class for fusions reactions.
+/// @author Valerii Sukhorukov
 
 #ifndef MITOSIM_FUSION_h
 #define MITOSIM_FUSION_h
@@ -42,12 +40,10 @@
 
 namespace mitosim {
 
-/**
- * Base class for fusion reaction classes.
- * @tparam D1 node degree of the 1st fusion participant
- * @tparam D2 node degree of the 2nd fusion participant
- * @tparam Ntw type of the network
- */
+/// Base class for fusion reaction classes.
+/// @tparam D1 node degree of the 1st fusion participant
+/// @tparam D2 node degree of the 2nd fusion participant
+/// @tparam Ntw type of the network
 template<unsigned D1,
          unsigned D2,
          typename Ntw>
@@ -58,45 +54,34 @@ class Fusion
 
 public:
 
-    /**
-     * Constructor.
-     * @param msgr Output message processor.
-     * @param ind reaction id
-     * @param netw The network object.
-     * @param rate rate constant
-     * @param name reaction name literal
-     */
+    /// Constructor.
+    /// @param msgr Output message processor.
+    /// @param ind reaction id
+    /// @param netw The network object.
+    /// @param rate rate constant
+    /// @param name reaction name literal
     explicit Fusion(
-            utils::Msgr& msgr,
-            const szt ind,
-            Ntw& netw,
-            const real rate,
-            const std::string& name
-        )
-        : Reaction {msgr, ind, rate, name, "fusion"}
-        , netw {netw}
-    {}
+        utils::Msgr& msgr,
+        szt ind,
+        Ntw& netw,
+        real rate,
+        const std::string& name
+    );
 
-    /**
-     * Activity status of the reaction.
-     * @return True if the reaction is used in the current simulation session.
-     * @param r Pointer to the reaction.
-     */
+    /// Activity status of the reaction.
+    /// @return True if the reaction is used in the current simulation session.
+    /// @param r Pointer to the reaction.
     static constexpr auto is_active(const std::unique_ptr<Reaction>& r);
 
-    /**
-     * Populates the vector of reactions that need a score update.
-     * The update is performed after *this has fired
-     * and initializes the propensities and effective rate.
-     * @param rc Vector of unique pointers to all reactions taking part in
-     * the simulation.
-     */
+    /// Populates the vector of reactions that need a score update.
+    /// The update is performed after *this has fired
+    /// and initializes the propensities and effective rate.
+    ///  @param rc Vector of unique pointers to all reactions taking part in
+    /// the simulation.
     void initialize_dependencies(const vup<Reaction>& rc) noexcept override;
 
-    /**
-     * Prints the reaction parameters.
-     * @param le True if new line after the output.
-     */
+    /// Prints the reaction parameters.
+    /// @param le True if new line after the output.
     void print(bool le) const override;
 
 protected:
@@ -112,12 +97,22 @@ protected:
 private:
 
     using Reaction::set_score;
-
-    /// Reactions that need a score update after *this has fired.
-    std::vector<Reaction*> dependents;
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+template<unsigned D1, unsigned D2, typename Ntw>
+Fusion<D1,D2,Ntw>::
+Fusion(
+    utils::Msgr& msgr,
+    const szt ind,
+    Ntw& netw,
+    const real rate,
+    const std::string& name
+)
+    : Reaction {msgr, ind, rate, name, "fusion"}
+    , netw {netw}
+{}
 
 template<unsigned D1, unsigned D2, typename Ntw> constexpr
 auto Fusion<D1,D2,Ntw>::
@@ -138,7 +133,7 @@ initialize_dependencies( const vup<Reaction>& rc ) noexcept
             Fusion<D1,D2,Ntw>::is_active(o) ||
             Fission<Ntw>::is_active(o)
             )
-            dependents.push_back(o.get());
+            this->dependents.push_back(o.get());
 
     set_prop();
     set_score();

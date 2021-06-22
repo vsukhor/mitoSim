@@ -48,10 +48,8 @@ using utils::vup;
 template<unsigned, unsigned, typename>
 class Fusion;
 
-/**
- * Fission reaction class.
- * @tparam Ntw The network class.
- */
+/// Fission reaction class.
+/// @tparam Ntw The network class.
 template<typename Ntw>
 class Fission
 : public utils::stochastic::Reaction<RandFactory> {
@@ -60,31 +58,21 @@ class Fission
 
 public:
 
-    /**
-     * Constructor.
-     * @param msgr Output message processor.
-     * @param ind reaction id.
-     * @param netw The network object.
-     * @param rate Reaction rate constant.
-     */
-    Fission( utils::Msgr& msgr,
-             const szt ind,
-             Ntw& netw,
-             const real rate
-       )
-        : Reaction {msgr, ind, rate, name, "fission"}
-        , netw {netw}
-    {}
+    /// Constructor.
+    /// @param msgr Output message processor.
+    /// @param ind reaction id.
+    /// @param netw The network object.
+    /// @param rate Reaction rate constant.
+    explicit Fission(
+        utils::Msgr& msgr,
+        szt ind,
+        Ntw& netw,
+        real rate
+    );
 
 
     /// Sets the Gillespie score for this reaction.
     void set_score() noexcept override;
-
-    /**
-     * Gillespie score for this reaction.
-     * @result Total weight of this reaction in the simulation set.
-     */
-    real get_score() const noexcept override { return *score; };
 
 
     /// Updates propensity for two network components indexed in the parameters.
@@ -95,61 +83,36 @@ public:
     void fire() noexcept override;
 
 
-    /**
-     * Activity status of the reaction.
-     * @return True if the reaction is used in the current simulation session.
-     * @param r Pointer to the reaction.
-     */
+    /// Reports activity status of the reaction.
+    /// @return True if the reaction is used in the current simulation session.
+    /// @param r Pointer to the reaction.
     static constexpr auto is_active(const std::unique_ptr<Reaction>& r) noexcept;
 
 
-    /**
-     * Populates the vector of reactions that need a score update.
-     * The update is performed after *this has fired
-     * and initializes the propensities and effective rate.
-     * @param rc Vector of unique pointers to all reactions taking part in
-     * the simulation.
-     */
+    /// Populates the vector of reactions that need a score update.
+    /// The update is performed after *this has fired
+    /// and initializes the propensities and effective rate.
+    /// @param rc Vector of unique pointers to all reactions taking part in
+    /// the simulation.
     void initialize_dependencies(const vup<Reaction>& rc) noexcept override;
 
 
-    /// Returns the number of times this reaction was fired.
-    szt event_count() const noexcept override { return eventCount; }
-
-
-    /**
-     * Prints the reaction parameters.
-     * @param le True if new line after the output.
-     */
+    /// Prints the reaction parameters.
+    /// @param le True if new line after the output.
     void print(bool le) const override;
 
 
 private:
 
-    using Reaction::msgr;
-    using Reaction::rate;
-
     Ntw& netw;  ///< ref: The network.
 
     std::array<szt,2> cc;
-
-    /// Current rate as seen by the Gillespie reactor.
-    real* score {};
-
-    /// Number of times this reaction was fired.
-    szt eventCount {};
-
-    /// Reactions that need a score update after *this has fired.
-    std::vector<Reaction*> dependents;
 
     /// Reaction name constant.
     static const std::string name;
 
     /// Set this reaction propensity for the whole network.
     void set_prop() noexcept override;
-
-    /// Attach this score to the Gillespie mechanism.
-    void attach_score_pointer(real*a) noexcept override { score = a; };
 
     /// Updates necessary after a reaction event was executed.
     void update_netw_stats() override;
@@ -160,6 +123,16 @@ private:
 
 template<typename Ntw> const std::string Fission<Ntw>::name {"fiss"};
 
+template<typename Ntw>
+Fission<Ntw>::
+Fission(utils::Msgr& msgr,
+        const szt ind,
+        Ntw& netw,
+        const real rate
+)
+    : Reaction {msgr, ind, rate, name, "fission"}
+    , netw {netw}
+{}
 
 template<typename Ntw> constexpr
 auto Fission<Ntw>::
@@ -179,7 +152,7 @@ initialize_dependencies( const vup<Reaction>& rc ) noexcept
             Fusion<1,2,Ntw>::is_active(o) ||
             Fission<Ntw>::is_active(o)
             )
-            dependents.push_back(o.get());
+            this->dependents.push_back(o.get());
     }
     set_prop();
     set_score();
@@ -242,9 +215,7 @@ void Fission<Ntw>::
 print( const bool le ) const
 {
     Reaction::print(false);
-    msgr.print<false>(" score ", *score);
-    msgr.print<false>(" eventCount ", eventCount);
-    if (le) msgr.print("\n");
+    if (le) Reaction::msgr.print("\n");
 }
 
 }  // namespace mitosim
