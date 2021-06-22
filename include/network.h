@@ -214,7 +214,7 @@ save_mitos(
                                   : std::ios::binary | std::ios::app;
     std::ofstream ofs {file, flags};
     if (ofs.fail())
-        msgr.print("Cannot open file: "+file.string());
+        msgr.print("Cannot open file: ", file);
 
     ofs.write(reinterpret_cast<const char*>(&t), sizeof(t));
     ofs.write(reinterpret_cast<const char*>(&mtnum), sizeof(szt));
