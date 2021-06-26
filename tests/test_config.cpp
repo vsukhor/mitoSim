@@ -2,9 +2,8 @@
 
 #include "gtest/gtest.h"
 
-#include "utils/msgr.h"
-
 #include "../config.h"
+#include "../definitions.h"
 
 namespace config_test {
 
@@ -12,14 +11,14 @@ class ConfigTest
     : public testing::Test {
 
 protected:
-    using real = float;
+    using real = mitosim::real;
     using Config = mitosim::Config<real>;
 
     const std::string workingDir {std::filesystem::current_path() / "tests" / "data/"};
     const std::string fnameSuffix {"sample"};
     const std::string runName {"42"};
 
-    utils::Msgr msgr;
+    mitosim::Msgr msgr;
     const Config cfg;
 
     ConfigTest()

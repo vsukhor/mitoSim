@@ -24,11 +24,11 @@
 */
 
 /**
-* @file segment.h
-* @brief Contains Segment class template and its specialization for graphs.
-* @details Only graphs of max degree 3 are considered.
-* @author Valerii Sukhorukov
-*/
+ * @file segment.h
+ * @brief Contains Segment class template and its specialization for graphs.
+ * @details Only graphs of max degree 3 are considered.
+ * @author Valerii Sukhorukov
+ */
 
 #ifndef MITOSIM_SEGMENT_H
 #define MITOSIM_SEGMENT_H
@@ -37,10 +37,7 @@
 #include <array>
 #include <vector>
 
-#include "utils/common/misc.h"
-#include "utils/constants.h"
-#include "utils/msgr.h"
-
+#include "definitions.h"
 #include "edge.h"
 
 namespace mitosim {
@@ -74,13 +71,8 @@ class Segment<3> {
 
 public:
 
-    using szt = utils::szt;
-
-public:
-
     static constexpr szt numEnds {2};  ///< A segment has two ends.
     static constexpr szt maxDeg {3};   ///< Maximal node degree allowed.
-    static constexpr auto hugeszt = utils::huge<szt>;
 
     using EdgeT = Edge<maxDeg>;
     using thisT = Segment<maxDeg>;
@@ -97,7 +89,7 @@ public:
      * @brief Constructor
      * @param msgr Output message processor.
      */
-    explicit Segment(utils::Msgr& msgr);
+    explicit Segment(Msgr& msgr);
 
     /**
      * @brief Constructor.
@@ -110,7 +102,7 @@ public:
         szt segmass,
         szt cl,
         szt ei,
-        utils::Msgr& msgr );
+        Msgr& msgr );
 
     constexpr auto get_cl() const noexcept { return cl; }
     void set_cl( szt newcl ) noexcept { cl = newcl; }
@@ -189,20 +181,20 @@ public:
      * @tparam E In-segment node posiiton.
      */
     template <unsigned E>
-    constexpr auto set_end_fin() noexcept -> unsigned long;
+    constexpr auto set_end_fin() noexcept -> real;
 
     /**
      * @brief Set fission-specific factor for a bulk node.
      * @param a In-segment node posiiton.
      */
-     auto set_bulk_fin(szt a) -> unsigned long;
+     auto set_bulk_fin(szt a) -> real;
 
 
     /// Print segment parameters.
     void print(
         szt w,
         const std::string& tag,
-        szt at=hugeszt
+        szt at=huge<szt>
     ) const;
 
 
@@ -211,7 +203,7 @@ public:
         std::ostream& os,
         szt w,
         const std::string& tag,
-        szt at=hugeszt
+        szt at=huge<szt>
     ) const;
 
 
@@ -221,11 +213,11 @@ public:
      */
     void write(std::ofstream& ofs) const;
 
-private:
+protected:
 
     szt cl {};   ///< cluster index.
     
-    utils::Msgr& msgr;  ///< Output message processor.
+    Msgr& msgr;  ///< Output message processor.
 
     /**
      * @brief Insert an edge imediately after g[a] making it g[a+1].
@@ -245,7 +237,7 @@ private:
 
 inline
 Segment<3>::
-Segment(utils::Msgr& msgr)
+Segment(Msgr& msgr)
     : msgr {msgr}
 {
     init_ends();
@@ -258,7 +250,7 @@ Segment(
       const szt segmass,
       const szt cl,
       szt ei,
-      utils::Msgr& msgr     // var ref
+      Msgr& msgr     // var ref
     )
     : cl {cl}
     , msgr {msgr}
@@ -363,7 +355,7 @@ single_neig_index( const szt e ) const noexcept -> szt
         if (neig[e][i])
             return i;
             
-    return hugeszt;
+    return huge<szt>;
 }
 
 
@@ -416,18 +408,19 @@ num_nodes( const szt deg ) const noexcept -> szt // deg = 1, 2, 3
     }
 
     msgr.exit("Error in Segment::num_nodes(). Not implemented for degree ", deg);
-    return hugeszt;
+    return huge<szt>;
 }
 
 
 template <unsigned E> constexpr
 auto Segment<3>::
-set_end_fin() noexcept -> unsigned long
+set_end_fin() noexcept -> EdgeT::FinT
 {
     static_assert(E == 1 || E == 2, "Incorrectt segment end index");
 
     auto& f = g[end2a(E)].fin;
-    f[E-1] = nn[E] ? 1 : 0;
+    f[E-1] = nn[E] ? one<EdgeT::FinT>
+                   : zero<EdgeT::FinT>;
 
     return f[E-1];
 }
@@ -435,12 +428,12 @@ set_end_fin() noexcept -> unsigned long
 
 inline
 auto Segment<3>::
-set_bulk_fin( const szt a ) -> unsigned long
+set_bulk_fin( const szt a ) -> EdgeT::FinT
 {
     XASSERT(a >= 0 || a <= g.size() - 1,
             std::string("Incorrectt segment edge index: ") + std::to_string(a));
 
-    g[a].fin[1] = g[a+1].fin[0] = 1;
+    g[a].fin[1] = g[a+1].fin[0] = one<EdgeT::FinT>;
 
     return g[a].fin[1];
 }
@@ -465,7 +458,7 @@ print( std::ostream& os,
        const szt at ) const
 {
     os << "\t" << tag << w;
-    if (at == hugeszt) os << "(of ";
+    if (at == huge<szt>) os << "(of ";
     else os << "(at " << at << " of ";
     os << g.size() << ") [ ";    
     for (szt i=1; i<=nn[1]; i++) os << neig[1][i] << " ";

@@ -35,15 +35,12 @@
 #include <string>
 #include <vector>
 
-#include "utils/common/misc.h"
-#include "utils/msgr.h"
 #include "utils/stochastic/gillespie.h"
 #include "utils/stochastic/reaction.h"
 
-namespace mitosim {
+#include "definitions.h"
 
-using utils::szt;
-using utils::vup;
+namespace mitosim {
 
 template<unsigned, unsigned, typename>
 class Fusion;
@@ -64,7 +61,7 @@ public:
     /// @param netw The network object.
     /// @param rate Reaction rate constant.
     explicit Fission(
-        utils::Msgr& msgr,
+        Msgr& msgr,
         szt ind,
         Ntw& netw,
         real rate
@@ -125,7 +122,7 @@ template<typename Ntw> const std::string Fission<Ntw>::name {"fiss"};
 
 template<typename Ntw>
 Fission<Ntw>::
-Fission(utils::Msgr& msgr,
+Fission(Msgr& msgr,
         const szt ind,
         Ntw& netw,
         const real rate

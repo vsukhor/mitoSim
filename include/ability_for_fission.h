@@ -24,10 +24,10 @@
 */
 
 /**
-* @file ability_for_fission.h
-* @brief Contains class responsible for the graph fillsin capacity.
-* @author Valerii Sukhorukov
-*/
+ * @file ability_for_fission.h
+ * @brief Contains class responsible for the graph fillsin capacity.
+ * @author Valerii Sukhorukov
+ */
 
 #ifndef MITOSIM_ABILITY_FOR_FISSION_H
 #define MITOSIM_ABILITY_FOR_FISSION_H
@@ -35,10 +35,8 @@
 #include <algorithm>
 #include <vector>
 
-#include "utils/constants.h"
-#include "utils/msgr.h"
-
 #include "core_transformer.h"
+#include "definitions.h"
 
 namespace mitosim {
 
@@ -74,13 +72,11 @@ protected:
 
 public:
 
-    using szt = utils::szt;
-
     /**
      * @brief Constructor.
      * @param msgr Output message processor.
      */
-    explicit AbilityForFission(utils::Msgr& msgr);
+    explicit AbilityForFission(Msgr& msgr);
 
     /**
      * @brief Perform fission of a segment.
@@ -133,9 +129,7 @@ private:
 
 template<typename Mt>
 AbilityForFission<Mt>::
-AbilityForFission(
-        utils::Msgr& msgr
-    )
+AbilityForFission(Msgr& msgr)
     : CoreTransformer<Mt> {msgr}
 {}
 

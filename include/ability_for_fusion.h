@@ -24,10 +24,10 @@
 */
 
 /**
-* @file ability_for_fusion.h
-* @brief Contains class responsible for the graph fusion capacity.
-* @author Valerii Sukhorukov
-*/
+ * @file ability_for_fusion.h
+ * @brief Contains class responsible for the graph fusion capacity.
+ * @author Valerii Sukhorukov
+ */
 
 #ifndef MITOSIM_ABILITY_FOR_FUSION_H
 #define MITOSIM_ABILITY_FOR_FUSION_H
@@ -35,11 +35,9 @@
 #include <array>
 #include <vector>
 
-#include "utils/constants.h"
-#include "utils/msgr.h"
-
 #include "ability_for_fission.h"
 #include "core_transformer.h"
+#include "definitions.h"
 #include "structure.h"
 
 namespace mitosim {
@@ -66,14 +64,12 @@ protected:
 
 public:
 
-    using szt = utils::szt;
-
     /**
      * @brief Constructor.
      * @param msgr Output message processor.
      */
     explicit AbilityForFusion(
-        utils::Msgr& msgr
+        Msgr& msgr
     );
 
     /**
@@ -117,9 +113,7 @@ public:
 
 template<typename Mt>
 AbilityForFusion<Mt>::
-AbilityForFusion(
-        utils::Msgr& msgr
-    )
+AbilityForFusion(Msgr& msgr)
     : AbilityForFission<Mt> {msgr}
 {}
 

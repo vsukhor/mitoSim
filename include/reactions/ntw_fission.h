@@ -35,7 +35,7 @@
 #include <array>
 #include <vector>
 
-#include "utils/constants.h"
+#include "definitions.h"
 
 namespace mitosim {
 
@@ -48,16 +48,16 @@ template<typename> class Fission;
 template<typename Ntw>
 class NtwFission {
 
-    using szt = utils::szt;
-
 public:
+
+    using Prop = typename Ntw::ST::EdgeT::FinT;
 
     friend Fission<Ntw>;
 
     explicit NtwFission(Ntw& host);  ///< Constructor.
 
     /// Sets this reaction propensity for the whole network.
-    unsigned long set_prop()  noexcept;
+    Prop set_prop()  noexcept;
 
     /**
      * Update this reaction propensity for the whole network.
@@ -67,7 +67,7 @@ public:
     void update_prop(szt c) noexcept;
 
     /// prTotal getter.
-    constexpr unsigned long get_prTotal() const noexcept { return prTotal; }
+    constexpr auto get_prTotal() const noexcept { return prTotal; }
 
 private:
 
@@ -78,8 +78,8 @@ private:
     const szt&               clnum;  ///< ref: Current number fo clusters.
 
     // Propensities:
-    std::vector<unsigned long> pr;   ///< Propensities per cluster.
-    unsigned long prTotal {};  ///< Total propensity.
+    std::vector<Prop> pr;   ///< Propensities per cluster.
+    Prop prTotal {};  ///< Total propensity.
 
     /**
      * Set this reaction propensity for the indexed cluster.
@@ -111,20 +111,20 @@ NtwFission( Ntw& host )
 
 template<typename Ntw>
 auto NtwFission<Ntw>::
-set_prop() noexcept -> unsigned long 
+set_prop() noexcept -> Prop
 {
     pr.resize(clnum);
     for (szt ic=0; ic<clnum; ic++)
         set_prop(ic);
 
-    return std::accumulate(pr.begin(), pr.end(), 0UL);
+    return std::accumulate(pr.begin(), pr.end(), zero<Prop>);
 }
 
 template<typename Ntw>
 void NtwFission<Ntw>::
 set_prop( const szt ic ) noexcept
 {
-    pr[ic] = 0UL;
+    pr[ic] = zero<Prop>;
     for (const auto w : host.clmt[ic]) {
         pr[ic] += mt[w].template set_end_fin<1>() +
                   mt[w].template set_end_fin<2>();
@@ -147,7 +147,7 @@ update_prop( const szt c ) noexcept
     if (c < clnum)
         set_prop(c);
 
-    prTotal = std::accumulate(pr.begin(), pr.end(), utils::zero<unsigned long>);
+    prTotal = std::accumulate(pr.begin(), pr.end(), zero<Prop>);
 }
 
 template<typename Ntw>
@@ -166,8 +166,8 @@ template<typename Ntw>
 bool NtwFission<Ntw>::
 find_random_node( szt& w, szt& a ) const noexcept
 {
-    auto k = host.rnd.uniform1(prTotal);
-    szt ksum {};
+    auto k = host.rnd.uniform0(prTotal);
+    typename Ntw::ST::EdgeT::FinT ksum {};
     for (w=1; w<=host.mtnum; w++) {
         const auto& g = mt[w].g;
         a = 0;

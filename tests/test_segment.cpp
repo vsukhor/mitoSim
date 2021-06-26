@@ -1,13 +1,10 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
-#include "utils/msgr.h"
-
+#include "../definitions.h"
 #include "../segment.h"
 
 namespace segment_test {
-
-using utils::szt;
 
 class SegmentTest
     : public testing::Test {
@@ -15,8 +12,8 @@ class SegmentTest
 protected:
 
     using Segment = mitosim::Segment<3>;
-    using Msgr = utils::Msgr;
-    using szt = Segment::szt;
+    using Msgr = mitosim::Msgr;
+    using szt = mitosim::szt;
 
     struct Config {
 
@@ -73,8 +70,8 @@ TEST_F(SegmentTest, Constructor2)
         EXPECT_EQ(sg.g[i-1].get_cl(), sg.g[i].get_cl());
     }
     for (szt i = 1; i<sg.g.size(); i++) {
-        EXPECT_EQ(sg.g[i].get_fin(0), 0);
-        EXPECT_EQ(sg.g[i].get_fin(1), 0);
+        EXPECT_EQ(sg.g[i].get_fin(0), 0.);
+        EXPECT_EQ(sg.g[i].get_fin(1), 0.);
     }
 }
 
@@ -101,8 +98,8 @@ TEST_F(SegmentTest, setGCl)
         EXPECT_EQ(sg.g[i].get_indcl(), newIndcl + i);
         EXPECT_EQ(sg.g[i].get_ind(), conf.ei0 + i);
         EXPECT_EQ(sg.g[i].get_cl(), newCl);
-        EXPECT_EQ(sg.g[i].get_fin(0), 0);
-        EXPECT_EQ(sg.g[i].get_fin(1), 0);
+        EXPECT_EQ(sg.g[i].get_fin(0), 0.);
+        EXPECT_EQ(sg.g[i].get_fin(1), 0.);
         EXPECT_EQ(res, newIndcl + sg.g.size());
     }
 }
@@ -138,8 +135,8 @@ TEST_F(SegmentTest, SingleNeigIndex)
 {
     Segment sg {Config::segmass, Config::cl, conf.ei0, msgr};
 
-    EXPECT_EQ(sg.single_neig_index(1), utils::huge<szt>);
-    EXPECT_EQ(sg.single_neig_index(2), utils::huge<szt>);
+    EXPECT_EQ(sg.single_neig_index(1), mitosim::huge<szt>);
+    EXPECT_EQ(sg.single_neig_index(2), mitosim::huge<szt>);
 }
 
 TEST_F(SegmentTest, DoubleNeigIndexes)
@@ -173,8 +170,8 @@ TEST_F(SegmentTest, SetEndFin1)
     sg.template set_end_fin<1>();
 
     for (const auto& g : sg.g) {
-        EXPECT_EQ(g.get_fin(0), 0);
-        EXPECT_EQ(g.get_fin(1), 0);
+        EXPECT_EQ(g.get_fin(0), 0.);
+        EXPECT_EQ(g.get_fin(1), 0.);
     }
 }
 
@@ -184,8 +181,8 @@ TEST_F(SegmentTest, SetEndFin2)
     sg.template set_end_fin<2>();
 
     for (const auto& g : sg.g) {
-        EXPECT_EQ(g.get_fin(0), 0);
-        EXPECT_EQ(g.get_fin(1), 0);
+        EXPECT_EQ(g.get_fin(0), 0.);
+        EXPECT_EQ(g.get_fin(1), 0.);
     }
 }
 
@@ -195,18 +192,18 @@ TEST_F(SegmentTest, SetBulkFin)
     const szt a = 100;
     sg.set_bulk_fin(a);
 
-    EXPECT_EQ(sg.g[0].get_fin(0), 0);
+    EXPECT_EQ(sg.g[0].get_fin(0), 0.);
     for (szt i = 0; i < sg.g.size()-1; i++) {
         if (i == a) {
-            EXPECT_EQ(sg.g[i].get_fin(1), 1);
-            EXPECT_EQ(sg.g[i+1].get_fin(0), 1);
+            EXPECT_EQ(sg.g[i].get_fin(1), 1.);
+            EXPECT_EQ(sg.g[i+1].get_fin(0), 1.);
         }
         else {
-            EXPECT_EQ(sg.g[i].get_fin(1), 0);
-            EXPECT_EQ(sg.g[i+1].get_fin(0), 0);
+            EXPECT_EQ(sg.g[i].get_fin(1), 0.);
+            EXPECT_EQ(sg.g[i+1].get_fin(0), 0.);
         }
     }
-    EXPECT_EQ(sg.g.back().get_fin(1), 0);
+    EXPECT_EQ(sg.g.back().get_fin(1), 0.);
 }
 
 }  // namespace segment_test

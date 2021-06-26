@@ -1,7 +1,6 @@
 #include "gtest/gtest.h"
 
-#include "utils/msgr.h"
-
+#include "../definitions.h"
 #include "../segment.h"
 #include "../structure.h"
 
@@ -14,8 +13,8 @@ protected:
 
     using Mt = mitosim::Segment<3>;
     using Structure = mitosim::Structure<Mt>;
-    using Msgr = utils::Msgr;
-    using szt = Structure::szt;
+    using Msgr = mitosim::Msgr;
+    using szt = mitosim::szt;
 
     StructureTest()
         : msgr {}

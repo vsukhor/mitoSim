@@ -35,9 +35,8 @@
 #include <array>
 #include <vector>
 
-#include "utils/constants.h"
-
 #include "../fusion_candidates.h"
+#include "definitions.h"
 
 namespace mitosim {
 
@@ -55,8 +54,6 @@ class NtwFusion1L {
     friend Fusion1U<Ntw>;
 
 public:
-
-    using szt = utils::szt;
 
     explicit NtwFusion1L(Ntw&);  ///< The only constructor.
 

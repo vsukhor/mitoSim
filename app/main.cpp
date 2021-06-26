@@ -28,23 +28,9 @@
 #include <string>
 #include <vector>
 
-#include "utils/constants.h"
-#include "utils/common/misc.h"
-#include "utils/msgr.h"
-#include "utils/random/with_boost.h"
 #include "utils/stop_watch.h"
 
-// #define USE_UTILS_XASSERT  // toggles XASSERTs.
-// #define PRINT_EDGES  // comment this to avoid printing detailed edge info.
-
-namespace mitosim {
-
-using real = float;
-using RandFactory = utils::random::Boost<real>;
-constexpr bool verbose {};   ///< Work in verbose mode.
-
-}  // namespace mitosim
-
+#include "definitions.h"
 #include "config.h"
 #include "network.h"
 #include "segment.h"
@@ -79,7 +65,7 @@ int main( int argc, char* argv[] )
                          (std::string("log_m_")+std::to_string(runInd)+".txt")};
         std::ofstream logfile {logf};
         constexpr int printPrecision = 6;
-        utils::Msgr msgr {&std::cout, &logfile, printPrecision};
+        mitosim::Msgr msgr {&std::cout, &logfile, printPrecision};
 
         // Report the environment:
         msgr.print("Run ", runInd, " started: ", stopwatch.start.str);

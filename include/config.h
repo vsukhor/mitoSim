@@ -36,14 +36,10 @@
 #include <string>
 
 #include "utils/config/reader.h"
-#include "utils/msgr.h"
+
+#include "definitions.h"
 
 namespace mitosim {
-
-using utils::bools;
-using utils::huge;
-using utils::onehuge;
-using utils::zerohuge;
 
 /**
  * @brief Encapsulates and reads configuration parameters.
@@ -52,12 +48,6 @@ using utils::zerohuge;
  */
 template<typename realT>
 class Config {
-
-public:
-
-    using szt = utils::szt;
-
-private:
 
     const std::filesystem::path file;  ///< Configuration file name.
     utils::config::Reader read;  ///< Generic reader of configuraion files.
@@ -99,7 +89,7 @@ public:
             const std::filesystem::path& workingDirOut,
             const std::string& fnameSuffix,
             const std::string& runName,
-            utils::Msgr& msgr
+            Msgr& msgr
             )
         : file {workingDirOut / (std::string("config")+"_"+fnameSuffix+".txt")}
         , read {file, &msgr}

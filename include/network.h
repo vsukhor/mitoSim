@@ -24,19 +24,17 @@
 */
 
 /**
-* @file network.h
-* @brief High-level network components and functionality.
-* @author Valerii Sukhorukov
-*/
+ * @file network.h
+ * @brief High-level network components and functionality.
+ * @author Valerii Sukhorukov
+ */
 
 #ifndef MITOSIM_NETWORK_H
 #define MITOSIM_NETWORK_H
 
-#include "utils/common/misc.h"
-#include "utils/msgr.h"
-
 #include "ability_for_fusion.h"
 #include "config.h"
+#include "definitions.h"
 #include "ntw_fission.h"
 #include "ntw_fusion11.h"
 #include "ntw_fusion12.h"
@@ -101,7 +99,7 @@ public:
     explicit Network(
             const Config<real>& cfg,
             RandFactory& rnd,
-            utils::Msgr& msgr
+            Msgr& msgr
     );
 
     /// Produce everything necessary for the simulation to start.
@@ -140,11 +138,11 @@ Network<SegmentT>::
 Network(
         const Config<real>& cfg,
         RandFactory& rnd,
-        utils::Msgr& msgr
+        Msgr& msgr
     )
     : AbilityForFusion<SegmentT> {msgr}
     , rnd {rnd}
-    , time {utils::zero<double>}
+    , time {zero<double>}
     , it {}
     , cfg {cfg}
     , fis {*this}

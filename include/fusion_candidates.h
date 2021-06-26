@@ -24,10 +24,10 @@
 */
 
 /**
-* @file fusion_candidates.h
-* @brief Contains classes for storing nodes available for fusion.
-* @author Valerii Sukhorukov
-*/
+ * @file fusion_candidates.h
+ * @brief Contains classes for storing nodes available for fusion.
+ * @author Valerii Sukhorukov
+ */
 
 #ifndef MITOSIM_FUSION_CANDIDATES_H
 #define MITOSIM_FUSION_CANDIDATES_H
@@ -40,8 +40,6 @@ namespace mitosim {
  * for fusion to a loop segment.
  */
 struct alignas(8) FusionCandidatesXX {
-
-    using szt = utils::szt;
 
     static constexpr int MIN_ALIGNMENT = 8;
 
@@ -85,14 +83,12 @@ struct alignas(8) FusionCandidatesXX {
  */
 struct alignas(8) FusionCandidatesXU {
 
-    using szt = utils::szt;
-
     static constexpr int MIN_ALIGNMENT = 8;
 
     /// Segment and end indexes of the non-looped participant.
     alignas(MIN_ALIGNMENT) std::vector<std::array<szt,2>> u;
     alignas(MIN_ALIGNMENT) /// Segment index of the looped participant.
-    std::vector<szt>               v;
+    std::vector<szt> v;
 
     /// Empty the container.
     void clear() noexcept

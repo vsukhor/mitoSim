@@ -24,10 +24,10 @@
 */
 
 /**
-* @file structure.h
-* @brief Contains low-level network transformations implemented in class CoreTransformer.
-* @author Valerii Sukhorukov
-*/
+ * @file structure.h
+ * @brief Contains low-level network transformations implemented in class CoreTransformer.
+ * @author Valerii Sukhorukov
+ */
 
 #ifndef MITOSIM_STRUCTURE_H
 #define MITOSIM_STRUCTURE_H
@@ -35,9 +35,7 @@
 #include <array>
 #include <vector>
 
-#include "utils/constants.h"
-#include "utils/common/misc.h"
-#include "utils/msgr.h"
+#include "definitions.h"
 
 namespace mitosim {
 
@@ -52,10 +50,6 @@ template<typename Mt>
 class Structure {
 
 public:
-
-    using szt = utils::szt;
-    template<typename T> using vec2 = utils::vec2<T>;
-    template<typename T> using vec3 = utils::vec3<T>;
 
     using Reticulum = std::vector<Mt>;
 
@@ -108,7 +102,7 @@ public:
     vec2<std::array<szt,2>> mtc13;
 
     /// Output message processor.
-    utils::Msgr& msgr;
+    Msgr& msgr;
 
     /// Minimal length of a segment that can bend into a cycle.
     static constexpr szt minLoopLength {2};
@@ -117,7 +111,7 @@ public:
     * @brief Constructor.
     * @param msgr Output message processor.
     */
-    explicit Structure(utils::Msgr& msgr);
+    explicit Structure(Msgr& msgr);
 
     /// Appends a disconnected segment to the reticulum.
     void add_disconnected_segment(szt segmass);
@@ -179,7 +173,7 @@ private:
 template<typename Mt>
 Structure<Mt>::
 Structure(
-        utils::Msgr& msgr
+        Msgr& msgr
     )
     : msgr {msgr}
 {}
@@ -305,15 +299,13 @@ template<typename Mt>
 void Structure<Mt>::
 populate_cluster_vectors() noexcept
 {
-    constexpr auto hugeszt = utils::huge<szt>;
-
     mt11.clear();
     mtc11.resize(clnum);
-    std::fill(mtc11.begin(),  mtc11.end(),  hugeszt);
+    std::fill(mtc11.begin(),  mtc11.end(),  huge<szt>);
 
     mt22.clear();
     mtc22.resize(clnum);
-    std::fill(mtc22.begin(),  mtc22.end(),  hugeszt);
+    std::fill(mtc22.begin(),  mtc22.end(),  huge<szt>);
 
     mt33.clear();
     mtc33.resize(clnum);

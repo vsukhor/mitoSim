@@ -24,10 +24,10 @@
 */
 
 /**
-* @file edge.h
-* @brief The graph Edge class.
-* @author Valerii Sukhorukov
-*/
+ * @file edge.h
+ * @brief The graph Edge class.
+ * @author Valerii Sukhorukov
+ */
 
 #ifndef MITOSIM_EDGE_H
 #define MITOSIM_EDGE_H
@@ -35,7 +35,7 @@
 #include <fstream>
 #include <ostream>
 
-#include "utils/constants.h"
+#include "definitions.h"
 
 namespace mitosim {
 
@@ -56,18 +56,16 @@ class Edge {
 
 public:
 
-    using szt = utils::szt;
-
-    static constexpr auto hugeszt = utils::huge<szt>;
+    using FinT = real;
 
 private:
 
-    szt ind {hugeszt};    ///< Index network-wide: starts from 0.
-    szt indcl {hugeszt};  ///< Index cluster-wide: starts from 0.
-    szt cl {hugeszt};     ///< Current cluster index.
+    szt ind {huge<szt>};    ///< Index network-wide: starts from 0.
+    szt indcl {huge<szt>};  ///< Index cluster-wide: starts from 0.
+    szt cl {huge<szt>};     ///< Current cluster index.
 
     /// Contribution to fission propensity at each end.
-    std::array<unsigned long,2> fin {{}};
+    std::array<FinT,2> fin {{}};
 
 public:
 
@@ -83,12 +81,14 @@ public:
         szt cl
     );
 
+    explicit Edge(std::ifstream& ifs) { read(ifs); };
+
     constexpr auto get_ind() const noexcept { return ind; }
     constexpr auto get_indcl() const noexcept { return indcl; }
     constexpr auto get_cl() const noexcept { return cl; }
     constexpr auto get_fin(const szt i) const noexcept { return fin[i]; }
-    void set_fin(const int i,
-                 const unsigned long f) noexcept {
+    void set_fin(const szt i,
+                 const FinT f) noexcept {
         fin[i] = f;
     }
 
@@ -96,7 +96,13 @@ public:
     void reflect();
 
     /**
-     * @brief Write the edge to a file.
+     * @brief Read the edge from a binary file.
+     * @param ofs Output file stream.
+     */
+    void read(std::ifstream& ofs);
+
+    /**
+     * @brief Write the edge to a binary file.
      * @param ofs Output file stream.
      */
     void write(std::ofstream& ofs) const;
@@ -134,6 +140,16 @@ reflect()
     std::swap(fin[0], fin[1]);
 }
 
+template<int ContentT>
+void Edge<ContentT>::
+read( std::ifstream &ifs )
+{
+    ifs.read(reinterpret_cast<char*>(&ind), sizeof(szt));
+    ifs.read(reinterpret_cast<char*>(&indcl), sizeof(szt));
+    ifs.read(reinterpret_cast<char*>(&cl), sizeof(szt));
+    ifs.read(reinterpret_cast<char*>(&fin[0]), sizeof(FinT));
+    ifs.read(reinterpret_cast<char*>(&fin[1]), sizeof(FinT));
+}
 
 template<int ContentT>
 void Edge<ContentT>::
@@ -142,8 +158,8 @@ write( std::ofstream &ofs ) const
     ofs.write(reinterpret_cast<const char*>(&ind), sizeof(szt));
     ofs.write(reinterpret_cast<const char*>(&indcl), sizeof(szt));
     ofs.write(reinterpret_cast<const char*>(&cl), sizeof(szt));
-    ofs.write(reinterpret_cast<const char*>(&fin[0]), sizeof(unsigned long));
-    ofs.write(reinterpret_cast<const char*>(&fin[1]), sizeof(unsigned long));
+    ofs.write(reinterpret_cast<const char*>(&fin[0]), sizeof(FinT));
+    ofs.write(reinterpret_cast<const char*>(&fin[1]), sizeof(FinT));
 }
 
 

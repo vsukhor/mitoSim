@@ -25,22 +25,19 @@
 */
 
 /**
-* @file core_transformer.h
-* @brief Contains low-level network transformations.
-* @details Low-level network transformations are implemented in
-*          class CoreTransformer.
-* @author Valerii Sukhorukov
-*/
+ * @file core_transformer.h
+ * @brief Contains low-level network transformations.
+ * @details Low-level network transformations are implemented in
+ * class CoreTransformer.
+ * @author Valerii Sukhorukov
+ */
 
 #ifndef MITOSIM_CORE_TRANSFORMER_H
 #define MITOSIM_CORE_TRANSFORMER_H
 
 #include <vector>
 
-#include "utils/constants.h"
-#include "utils/common/misc.h"
-#include "utils/msgr.h"
-
+#include "definitions.h"
 #include "structure.h"
 
 namespace mitosim {
@@ -64,13 +61,11 @@ protected:
 
 public:
 
-    using szt = utils::szt;
-
     /**
      * @brief Constructor,
      * @param msgr Output message processor.
      */
-    explicit CoreTransformer(utils::Msgr& msgr);
+    explicit CoreTransformer(Msgr& msgr);
 
     /**
      * @brief Update the structure of diaconnected components produced by fusion.
@@ -164,7 +159,7 @@ protected:
 template<typename Mt>
 CoreTransformer<Mt>::
 CoreTransformer(
-        utils::Msgr& msgr
+        Msgr& msgr
     )
     : Structure<Mt> {msgr}
 {}

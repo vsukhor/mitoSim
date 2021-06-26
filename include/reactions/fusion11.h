@@ -32,11 +32,10 @@
 #ifndef MITOSIM_FUSION11_h
 #define MITOSIM_FUSION11_h
 
-#include "utils/common/misc.h"
-#include "utils/msgr.h"
 #include "utils/stochastic/gillespie.h"
 #include "utils/stochastic/reaction.h"
 
+#include "definitions.h"
 #include "fusion.h"
 
 namespace mitosim {
@@ -59,7 +58,7 @@ public:
     /// @param netw The network object.
     /// @param rate Rate constant.
     explicit Fusion11(
-            utils::Msgr& msgr,
+            Msgr& msgr,
             const szt ind,
             Ntw& netw,
             const real rate

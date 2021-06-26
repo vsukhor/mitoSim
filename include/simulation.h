@@ -24,18 +24,17 @@
 */
 
 /**
-* @file simulation.h
-* @brief The simulation control class.
-* @author Valerii Sukhorukov
-*/
+ * @file simulation.h
+ * @brief The simulation control class.
+ * @author Valerii Sukhorukov
+ */
 
 #ifndef MITOSIM_SIMULATION_H
 #define MITOSIM_SIMULATION_H
 
-#include "utils/common/misc.h"
-#include "utils/msgr.h"
 #include "utils/stochastic/gillespie.h"
 
+#include "definitions.h"
 #include "reactions/fission.h"
 #include "reactions/fusion11.h"
 #include "reactions/fusion12.h"
@@ -67,7 +66,7 @@ public:
         RandFactory& rnd,
         double& time,
         unsigned long& it,
-        utils::Msgr& msgr
+        Msgr& msgr
     );
 
     /// Make everything ready for start.
@@ -80,7 +79,7 @@ private:
     Ntw& netw;  ///< ref: Simulated network.
 
     // Convenience references to some data fields of the network.
-    utils::Msgr& msgr;   ///< ref: Output message processor.
+    Msgr& msgr;   ///< ref: Output message processor.
     RandFactory& rnd;    ///< ref: random number factory.
     double&      time;   ///< ref: current time.
     unsigned long&       it;     ///< ref: iteration counter.
@@ -116,7 +115,7 @@ Simulation(
         RandFactory& rnd,
         double& time,
         unsigned long& it,
-        utils::Msgr& msgr
+        Msgr& msgr
     )
     : netw {netw}
     , msgr {msgr}
@@ -168,7 +167,7 @@ operator()()
 {
     netw.update_node_numbers();
     netw.update_books();
-    netw.save_mitos(true, false, 0, utils::zero<real>);
+    netw.save_mitos(true, false, 0, zero<real>);
     if (it % logFrequency == 0)
         update_log();
 

@@ -35,9 +35,8 @@
 #include <array>
 #include <vector>
 
-#include "utils/constants.h"
-
 #include "../fusion_candidates.h"
+#include "definitions.h"
 
 namespace mitosim {
 
@@ -53,8 +52,6 @@ template<typename Ntw>
 class NtwFusion12 {
 
 public:
-
-    using szt = utils::szt;
 
     friend Fusion12<Ntw>;
 

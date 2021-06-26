@@ -33,10 +33,10 @@
 #include <string>
 #include <vector>
 
-#include "utils/common/misc.h"
-#include "utils/msgr.h"
 #include "utils/stochastic/gillespie.h"
 #include "utils/stochastic/reaction.h"
+
+#include "definitions.h"
 
 namespace mitosim {
 
@@ -61,7 +61,7 @@ public:
     /// @param rate rate constant
     /// @param name reaction name literal
     explicit Fusion(
-        utils::Msgr& msgr,
+        Msgr& msgr,
         szt ind,
         Ntw& netw,
         real rate,
@@ -104,7 +104,7 @@ private:
 template<unsigned D1, unsigned D2, typename Ntw>
 Fusion<D1,D2,Ntw>::
 Fusion(
-    utils::Msgr& msgr,
+    Msgr& msgr,
     const szt ind,
     Ntw& netw,
     const real rate,

@@ -32,11 +32,10 @@
 #ifndef MITOSIM_FUSION12_H
 #define MITOSIM_FUSION12_H
 
-#include "utils/common/misc.h"
-#include "utils/msgr.h"
 #include "utils/stochastic/gillespie.h"
 #include "utils/stochastic/reaction.h"
 
+#include "definitions.h"
 #include "fusion.h"
 
 namespace mitosim {
@@ -55,7 +54,7 @@ class Fusion12
 
 public:
 
-    using Msgr = utils::Msgr;
+    using Msgr = Msgr;
 
     /// Constructor.
     /// @param msgr Output message processor.
