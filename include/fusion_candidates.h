@@ -36,8 +36,8 @@ namespace mitosim {
 
 /**
  * @brief Container for fusion candidate nodes.
- * @note Should be used only the reactions not intended
- * for fusion to a loop segment.
+ * @note Should be used only for the reactions not involving fusion to a
+ * disconnected cycle segment.
  */
 struct alignas(8) FusionCandidatesXX {
 
@@ -61,7 +61,7 @@ struct alignas(8) FusionCandidatesXX {
      * @param vc Segment and end indexes of the 2nd participant.
      */
     void add(const std::array<szt,2>& uc,
-             const std::array<szt,2>& vc )
+             const std::array<szt,2>& vc)
     {
         u.emplace_back(uc);
         v.emplace_back(vc);
@@ -79,7 +79,8 @@ struct alignas(8) FusionCandidatesXX {
 ////////////////////////////////////////////////////////////////////////////////
 /**
  * @brief Container for fusion candidate nodes.
- * @note Should be used only the reactions intended for fusion to a loop segment.
+ * @note Should be used only for fusion reactions between a cycle and a
+ * non-cycle segments.
  */
 struct alignas(8) FusionCandidatesXU {
 
@@ -87,8 +88,8 @@ struct alignas(8) FusionCandidatesXU {
 
     /// Segment and end indexes of the non-looped participant.
     alignas(MIN_ALIGNMENT) std::vector<std::array<szt,2>> u;
-    alignas(MIN_ALIGNMENT) /// Segment index of the looped participant.
-    std::vector<szt> v;
+    /// Segment indexes of the cycle participant.
+    alignas(MIN_ALIGNMENT) std::vector<szt> v;
 
     /// Empty the container.
     void clear() noexcept
@@ -99,10 +100,10 @@ struct alignas(8) FusionCandidatesXU {
 
     /**
      * @brief Add a node pair.
-     * @param uc Segment and end indexes of the non-looped participant.
-     * @param vc Segment index of the looped participant.
+     * @param uc Segment and end indexes of the non-cycle participant.
+     * @param vc Segment indexes of the cycle participant.
     */
-    void add(std::array<szt,2> uc, szt vc )
+    void add(std::array<szt,2> uc, szt vc)
     {
         u.emplace_back(uc);
         v.emplace_back(vc);

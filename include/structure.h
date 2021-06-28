@@ -65,7 +65,7 @@ public:
     Reticulum mt;
 
     /// Total number of nodes by node degree.
-    std::array<szt,Mt::maxDeg>  nn {{}};
+    std::array<szt,Mt::maxDegree> nn {{}};
 
     /// Actual number of segments.
     szt mtnum {};
@@ -158,7 +158,7 @@ public:
     void print_mitos(const std::string& tag) const;
 
     /**
-     * Print the network components to a text-foramtted stream.
+     * Print the network components to a text-formatted stream.
      * @param ofs Output stream.
      */
     void print(std::ostream& ofs) const;
@@ -321,7 +321,7 @@ populate_cluster_vectors() noexcept
     
     for (szt j=1; j<=mtnum; j++) {
         const auto& m = mt[j];
-        clmt[m.get_cl()].push_back(j);    // mitochondrial indexes clusterwise
+        clmt[m.get_cl()].push_back(j);    // mitochondria indexes clusterwise
         nn[1] += m.num_nodes(2);
 
         const auto e = m.has_one_free_end();
@@ -336,8 +336,8 @@ populate_cluster_vectors() noexcept
             }
         }
         else if (m.nn[1] == 0 && m.nn[2] == 0) {
-            mtc11[m.get_cl()] = j;    // it is a separate segment since it has two free ends
-            mt11.push_back(j);  // it is a separate segment since it has two free ends
+            mtc11[m.get_cl()] = j;  // having both ends free, it is a separate segment
+            mt11.push_back(j);
             nn[0] += 2;
         }
         else if (m.is_cycle()) {

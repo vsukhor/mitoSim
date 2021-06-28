@@ -68,6 +68,7 @@ public:
     using Structure<SegmentT>::nn;
 
     friend Fission<thisT>;
+    friend Fusion<1,0,thisT>;
     friend Fusion<1,1,thisT>;
     friend Fusion<1,2,thisT>;
     friend Fusion11<thisT>;
@@ -81,7 +82,7 @@ public:
 
     RandFactory&  rnd;   ///< Random number factory.
     double        time;  ///< Current time.
-    unsigned long         it;    ///< Iteration counter.
+    unsigned long it;    ///< Iteration counter.
     const Config<real>& cfg;   ///< Configuration.
 
     // Reaction slots:
@@ -230,7 +231,7 @@ save_mitos(
             mtnummax = mtnum;
     }
     for (szt q=1; q<=mtnum; q++) {
-        mt[q].write( ofs );
+        mt[q].write(ofs);
         if (!last) {
             if (mt[q].nn[1] > nn1max) nn1max = mt[q].nn[1];
             if (mt[q].nn[2] > nn2max) nn2max = mt[q].nn[2];
@@ -242,7 +243,7 @@ save_mitos(
 
     szt nst2save = last
                  ? szt{}
-                 : szt(itr/cfg.saveFrequency);
+                 : static_cast<szt>(itr / cfg.saveFrequency);
     ofs.write(reinterpret_cast<const char*>(&nst2save), sizeof(szt));
 }
 

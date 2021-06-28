@@ -82,7 +82,7 @@ private:
     Msgr& msgr;   ///< ref: Output message processor.
     RandFactory& rnd;    ///< ref: random number factory.
     double&      time;   ///< ref: current time.
-    unsigned long&       it;     ///< ref: iteration counter.
+    unsigned long& it;     ///< ref: iteration counter.
 
     // Output parameters
     szt logFrequency;   ///< Frequency of short output to a log line.

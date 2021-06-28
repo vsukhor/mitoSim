@@ -27,8 +27,8 @@
 /// @brief Contains base class for fusions reactions.
 /// @author Valerii Sukhorukov
 
-#ifndef MITOSIM_FUSION_h
-#define MITOSIM_FUSION_h
+#ifndef MITOSIM_FUSION_H
+#define MITOSIM_FUSION_H
 
 #include <string>
 #include <vector>
@@ -165,4 +165,4 @@ print( const bool le ) const
 
 }  // namespace mitosim
 
-#endif  // MITOSIM_FUSION_h
+#endif  // MITOSIM_FUSION_H

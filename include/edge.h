@@ -81,11 +81,25 @@ public:
         szt cl
     );
 
-    explicit Edge(std::ifstream& ifs) { read(ifs); };
+
+    /**
+     * @brief Constructor.
+     * @param ifs Input file stream supplying edge attributes.
+     */
+    explicit Edge(std::ifstream& ifs)
+    {
+        read(ifs);
+    };
 
     constexpr auto get_ind() const noexcept { return ind; }
+    void set_ind(const szt i) noexcept { ind = i; }
+
     constexpr auto get_indcl() const noexcept { return indcl; }
+    void set_indcl(const szt i) noexcept { indcl = i; }
+
     constexpr auto get_cl() const noexcept { return cl; }
+    void set_cl(const szt c) noexcept { cl = c; }
+
     constexpr auto get_fin(const szt i) const noexcept { return fin[i]; }
     void set_fin(const szt i,
                  const FinT f) noexcept {

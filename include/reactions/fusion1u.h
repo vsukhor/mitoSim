@@ -24,7 +24,7 @@
 */
 
 /// @file fusion1u.h
-/// @brief Contains class encapsulating tip-to-loop fusion reaction.
+/// @brief Contains class encapsulating tip-to-cycle fusion reaction.
 /// @author Valerii Sukhorukov
 
 #ifndef MITOSIM_FUSION1U_H
@@ -38,11 +38,11 @@
 
 namespace mitosim {
 
-/// Reaction slot for fusion of a degree 1 node with a loop segment.
+/// Reaction slot for fusion of a degree 1 node with a cycle segment.
 /// @tparam Ntw The network class.
 template<typename Ntw>
 class Fusion1U
-    : public Fusion<1,2,Ntw> {
+    : public Fusion<1,0,Ntw> {
 
     using Reaction = utils::stochastic::Reaction<RandFactory>;
 
@@ -61,7 +61,7 @@ public:
             Ntw& netw,
             const real rate
         )
-        : Fusion<1,2,Ntw> {msgr, ind, netw, rate, name}
+        : Fusion<1,0,Ntw> {msgr, ind, netw, rate, name}
     {}
 
     /// Sets the Gillespie score for this reaction.
@@ -81,10 +81,10 @@ public:
 
 private:
 
-    using Fusion<1,2,Ntw>::cc;
-    using Fusion<1,2,Ntw>::netw;
-    using Fusion<1,2,Ntw>::print;
-    using Fusion<1,2,Ntw>::update_netw_stats;
+    using Fusion<1,0,Ntw>::cc;
+    using Fusion<1,0,Ntw>::netw;
+    using Fusion<1,0,Ntw>::print;
+    using Fusion<1,0,Ntw>::update_netw_stats;
     using Reaction::eventCount;
     using Reaction::msgr;
     using Reaction::rate;
@@ -147,9 +147,7 @@ template<typename Ntw>
 void Fusion1U<Ntw>::
 print( const bool le ) const
 {
-    Reaction::print(false);
-    msgr.template print<false>(" score ", *score);
-    msgr.template print<false>(" eventCount ", eventCount);
+    Fusion<1,0,Ntw>::print(false);
     if (le) msgr.print("\n");
 }
 

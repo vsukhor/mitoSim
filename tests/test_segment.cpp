@@ -32,7 +32,7 @@ protected:
 //    void SetUp() override {
 //    }
 
-    static constexpr auto maxDeg = Segment::maxDeg;
+    static constexpr auto maxDegree = Segment::maxDegree;
 
     Msgr msgr;
     Config conf;
@@ -42,10 +42,10 @@ TEST_F(SegmentTest, Constructor1)
 {
     Segment sg {msgr};
 
-    EXPECT_EQ(sg.neig[1].size(), maxDeg);
-    EXPECT_EQ(sg.neig[2].size(), maxDeg);
-    EXPECT_EQ(sg.neen[1].size(), maxDeg);
-    EXPECT_EQ(sg.neen[2].size(), maxDeg);
+    EXPECT_EQ(sg.neig[1].size(), maxDegree);
+    EXPECT_EQ(sg.neig[2].size(), maxDegree);
+    EXPECT_EQ(sg.neen[1].size(), maxDegree);
+    EXPECT_EQ(sg.neen[2].size(), maxDegree);
     ASSERT_TRUE(sg.g.empty());
     EXPECT_EQ(sg.nn[0], 0);
     EXPECT_EQ(sg.nn[1], 0);
@@ -57,10 +57,10 @@ TEST_F(SegmentTest, Constructor2)
 {
     Segment sg {Config::segmass, Config::cl, conf.ei0, msgr};
 
-    EXPECT_EQ(sg.neig[1].size(), maxDeg);
-    EXPECT_EQ(sg.neig[2].size(), maxDeg);
-    EXPECT_EQ(sg.neen[1].size(), maxDeg);
-    EXPECT_EQ(sg.neen[2].size(), maxDeg);
+    EXPECT_EQ(sg.neig[1].size(), maxDegree);
+    EXPECT_EQ(sg.neig[2].size(), maxDegree);
+    EXPECT_EQ(sg.neen[1].size(), maxDegree);
+    EXPECT_EQ(sg.neen[2].size(), maxDegree);
     EXPECT_EQ(sg.g.size(), conf.segmass);
     EXPECT_EQ(sg.nn[0], 0);
     EXPECT_EQ(sg.nn[1], 0);

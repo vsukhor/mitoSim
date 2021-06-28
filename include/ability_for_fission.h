@@ -274,7 +274,7 @@ fiss2( const szt w,
 
     XASSERT(mt[w1].get_cl() == clini ||
             mt[w2].get_cl() == clini,
-            "Error in fiss3: mt[w1].cl != clini && mt[w2].cl != clini\n");
+            "Error in fiss2: mt[w1].cl != clini && mt[w2].cl != clini\n");
     if constexpr (verbose) {
         mt[w1].print(w1, "       producing ");
         if (isSelfLooped)
@@ -352,7 +352,7 @@ fiss3( const szt w,
             }
             else if (mt[n[0]].nn[e[0]] == 0 && 
                      mt[n[1]].nn[e[1]] == 1) {
-                mt[w].print( w, "       w ", -1 );
+                mt[w].print(w, "       w ", -1);
                 mt[n[0]].print(n[0], "       n[0] ", -1);
                 mt[n[1]].print(n[1], "       n[1] ", -1);
                 msgr.exit("mt[n[0]].nn[e[0]] == 0 && mt[n[1]].nn[e[1]] == 1");
@@ -367,8 +367,8 @@ fiss3( const szt w,
             else if (mt[n[0]].nn[e[0]] == 0 && 
                      mt[n[1]].nn[e[1]] == 0) {
                 mt[w].print(w, "       w ", -1);
-                mt[n[0]].print( n[0], "       n[0] ", -1 );
-                mt[n[1]].print( n[1], "       n[1] ", -1 );
+                mt[n[0]].print(n[0], "       n[0] ", -1);
+                mt[n[1]].print(n[1], "       n[1] ", -1);
                 msgr.exit("mt[n[0]].nn[e[0]] == 0 && mt[n[1]].nn[e[1]] == 0");
             }
         }

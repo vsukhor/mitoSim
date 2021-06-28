@@ -152,9 +152,7 @@ template<typename Ntw>
 void Fusion12<Ntw>::
 print( const bool le ) const
 {
-    Reaction::print(false);
-    msgr.template print<false>(" score ", *score);
-    msgr.template print<false>(" eventCount ", eventCount);
+    Fusion<1,2,Ntw>::print(false);
     if (le) msgr.print("\n");
 }
 

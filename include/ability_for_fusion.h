@@ -150,6 +150,7 @@ fuse12(
         mt[w1].print(w1, "     before s: ");
         mt[w2].print(w2, "     before s: ");
     }
+
     const auto cl1 = mt[w1].get_cl();
     const auto cl2 = mt[w2].get_cl();
 

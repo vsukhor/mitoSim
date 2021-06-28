@@ -72,24 +72,32 @@ class Segment<3> {
 public:
 
     static constexpr szt numEnds {2};  ///< A segment has two ends.
-    static constexpr szt maxDeg {3};   ///< Maximal node degree allowed.
+    static constexpr szt maxDegree {3};   ///< Maximal node degree allowed.
 
-    using EdgeT = Edge<maxDeg>;
-    using thisT = Segment<maxDeg>;
+    using EdgeT = Edge<maxDegree>;
+    using thisT = Segment<maxDegree>;
 
     std::vector<EdgeT> g;  ///< The edges.
 
     /// Number of neighbours (for each of the two ends, counting from 1).
     std::array<szt,numEnds+1> nn {{}};
 
-    std::array<std::vector<szt>,maxDeg> neig;  ///< Neighbour indexes.
-    std::array<std::vector<szt>,maxDeg> neen;  ///< Neighbour ends.
+    std::array<std::vector<szt>,maxDegree> neig;  ///< Neighbour indexes.
+    std::array<std::vector<szt>,maxDegree> neen;  ///< Neighbour ends.
 
     /**
      * @brief Constructor
      * @param msgr Output message processor.
      */
     explicit Segment(Msgr& msgr);
+
+    /**
+     * @brief Constructor.
+     * @param cl Index of subnetwork to which the sebment belongs.
+     * @param msgr Output message processor.
+     */
+    explicit Segment(Msgr& msgr,
+                     szt cl);
 
     /**
      * @brief Constructor.
@@ -243,6 +251,17 @@ Segment(Msgr& msgr)
     init_ends();
 }
 
+inline
+Segment<3>::
+Segment(
+    Msgr& msgr,
+    const szt cl
+)
+    : cl {cl}
+    , msgr {msgr}
+{
+    init_ends();
+}
 
 inline
 Segment<3>::
@@ -251,13 +270,9 @@ Segment(
       const szt cl,
       szt ei,
       Msgr& msgr     // var ref
-    )
-    : cl {cl}
-    , msgr {msgr}
-
+)
+    : Segment {msgr, cl}
 {
-    init_ends();
-
     for (szt a=0; a<segmass; a++)
         increment_length(static_cast<long>(a-1),
                          EdgeT{ei++, a, cl});
@@ -268,11 +283,11 @@ inline
 void Segment<3>::
 init_ends()
 {
-    neig[1].resize(maxDeg);
-    neig[2].resize(maxDeg);
+    neig[1].resize(maxDegree);
+    neig[2].resize(maxDegree);
 
-    neen[1].resize(maxDeg);
-    neen[2].resize(maxDeg);
+    neen[1].resize(maxDegree);
+    neen[2].resize(maxDegree);
 }
 
 

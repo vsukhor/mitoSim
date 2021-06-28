@@ -29,8 +29,8 @@
  * @author Valerii Sukhorukov
  */
 
-#ifndef MITOSIM_FUSION11_h
-#define MITOSIM_FUSION11_h
+#ifndef MITOSIM_FUSION11_H
+#define MITOSIM_FUSION11_H
 
 #include "utils/stochastic/gillespie.h"
 #include "utils/stochastic/reaction.h"
@@ -157,4 +157,4 @@ print( const bool le ) const
 }  // namespace mitosim
 
 
-#endif  // MITOSIM_FUSION11_h
+#endif  // MITOSIM_FUSION11_H
