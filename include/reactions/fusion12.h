@@ -54,8 +54,6 @@ class Fusion12
 
 public:
 
-    using Msgr = Msgr;
-
     /// Constructor.
     /// @param msgr Output message processor.
     /// @param ind Reaction id.
