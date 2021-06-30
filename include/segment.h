@@ -71,8 +71,8 @@ class Segment<3> {
 
 public:
 
-    static constexpr szt numEnds {2};  ///< A segment has two ends.
-    static constexpr szt maxDegree {3};   ///< Maximal node degree allowed.
+    static constexpr szt numEnds {2};    ///< A segment has two ends.
+    static constexpr szt maxDegree {3};  ///< Maximal node degree allowed.
 
     using EdgeT = Edge<maxDegree>;
     using thisT = Segment<maxDegree>;

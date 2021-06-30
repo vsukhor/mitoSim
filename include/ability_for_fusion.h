@@ -203,9 +203,9 @@ fuse12(
         mt[mi].neig[1][2] = w2;            mt[mi].neen[1][2] = 2;
     }
 
-    if(mt[w2].get_cl() != mt[mi].get_cl())
+    if (mt[w2].get_cl() != mt[mi].get_cl())
         update_cl_fuse(mt[w2].get_cl(), mt[mi].get_cl());
-    if(mt[w2].get_cl() != mt[w1].get_cl())
+    if (mt[w2].get_cl() != mt[w1].get_cl())
         update_cl_fuse(mt[w1].get_cl(), mt[w2].get_cl());
 
     if constexpr (verbose) {
@@ -214,8 +214,7 @@ fuse12(
             mt[w2].print(w2, "                 ");
         if (!mt[w2].is_cycle())
             mt[mi].print( mi, "             and " );
-        if(msgr.so) *msgr.so << std::endl;
-        if(msgr.sl) *msgr.sl << std::endl;
+        msgr.print("\n");
     }
     return {cl1, cl2};
 }

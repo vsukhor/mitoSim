@@ -167,7 +167,7 @@ template<typename SegmentT>
 void Network<SegmentT>::
 simulate()
 {
-    Simulation<thisT> sim {*this, rnd, time, it, msgr};
+    Simulation sim {*this, rnd, time, it, msgr};
     sim.initialize()();
 }
 
@@ -209,8 +209,8 @@ save_mitos(
     const auto file {last
         ? cfg.workingDirOut / (std::string("mitos_last_")+cfg.runName)
         : cfg.workingDirOut / (std::string("mitos_")     +cfg.runName)};
-    const auto flags = (startnew) ? std::ios::binary | std::ios::trunc
-                                  : std::ios::binary | std::ios::app;
+    const auto flags = startnew ? std::ios::binary | std::ios::trunc
+                                : std::ios::binary | std::ios::app;
     std::ofstream ofs {file, flags};
     if (ofs.fail())
         msgr.print("Cannot open file: ", file);

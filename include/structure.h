@@ -190,6 +190,9 @@ add_disconnected_segment( const szt segmass )
     mtnum++;
     clnum++;
     mtmass += segmass;
+
+    clagl.resize(clnum);
+    clvisited.resize(clnum);
 }
 
 
@@ -247,50 +250,58 @@ make_adjacency_list_edges(
     vec2<szt>& a
 ) noexcept
 {
+    XASSERT(clvisited.size() == clnum, "Size of 'clvisited' is incorrect.");
+    XASSERT(cls.size() == clnum,
+            std::string("'cls' should be set before calling this. ") +
+            "Consider calling 'make_indma()' before.");
+    XASSERT(clmt.size() == clnum,
+            std::string("'clmt' should be set before calling this. ") +
+            "Consider calling 'populate_cluster_vectors()' before.");
+
     clvisited[c].resize(cls[c]);
 
     a.resize(cls[c]);
     for (auto& o : a) o.clear();
-
+    
     for (const auto& j : clmt[c])
         for (szt k=0; k<mt[j].g.size(); k++) {
-            const auto ind = mt[j].g[k].indcl;
+            const auto ind = mt[j].g[k].get_indcl();
             if (k == 0) {
                 // Connection backwards: only other segments might be found.
                 for (szt e=1; e<=mt[j].nn[1]; e++) {
                     const auto w2 = mt[j].neig[1][e];
                     const auto a2 = mt[w2].end2a(mt[j].neen[1][e]);
-                    a[ind].push_back(mt[w2].g[a2].indcl);
+                    a[ind].push_back(mt[w2].g[a2].get_indcl());
                 }
                 if (mt[j].g.size() == 1)
                     // Connection forwards: to other segment.
                     for (szt e=1; e<=mt[j].nn[2]; e++) {
                         const auto w2 = mt[j].neig[2][e];
                         const auto a2 = mt[w2].end2a(mt[j].neen[2][e]);
-                        a[ind].push_back(mt[w2].g[a2].indcl);
+                        a[ind].push_back(mt[w2].g[a2].get_indcl());
                     }
                 else {
                     // Connection forwards: to the same segment.
-                    a[ind].push_back(mt[j].g[k+1].indcl);
+                    a[ind].push_back(mt[j].g[k+1].get_indcl());
                 }
             }
             else if (k == mt[j].g.size()-1) {
             // but not  a1 == 0  =>  mt[m1].g.size() > 1
                 // Connection backwards: to the same segment.
-                a[ind].push_back(mt[j].g[k-1].indcl);
+                a[ind].push_back(mt[j].g[k-1].get_indcl());
                 // Connection forwards: to other segment.
                 for (szt e=1; e<=mt[j].nn[2]; e++) {
                     const auto w2 = mt[j].neig[2][e];
                     const auto a2 = mt[w2].end2a(mt[j].neen[2][e]);
-                    a[ind].push_back(mt[w2].g[a2].indcl);
+                    a[ind].push_back(mt[w2].g[a2].get_indcl());
                 }
             }
             else {
             // edge in the bulk: a1 != 1 && a1 != mt[m1].g.size()
                 // Connection backwards: to the same segment.
-                a[ind].push_back(mt[j].g[k-1].indcl);
+                a[ind].push_back(mt[j].g[k-1].get_indcl());
                  // Connection forwards: to the same segment.
-                a[ind].push_back(mt[j].g[k+1].indcl);
+                a[ind].push_back(mt[j].g[k+1].get_indcl());
             }
         }
 }
@@ -301,11 +312,11 @@ populate_cluster_vectors() noexcept
 {
     mt11.clear();
     mtc11.resize(clnum);
-    std::fill(mtc11.begin(),  mtc11.end(),  huge<szt>);
+    std::fill(mtc11.begin(), mtc11.end(), huge<szt>);
 
     mt22.clear();
     mtc22.resize(clnum);
-    std::fill(mtc22.begin(),  mtc22.end(),  huge<szt>);
+    std::fill(mtc22.begin(), mtc22.end(), huge<szt>);
 
     mt33.clear();
     mtc33.resize(clnum);
@@ -326,7 +337,7 @@ populate_cluster_vectors() noexcept
 
         const auto e = m.has_one_free_end();
         if (e) {
-            const szt oe {e == 1 ? static_cast<szt>(2) : static_cast<szt>(1)};
+            const szt oe {e == 1 ? 2UL : 1UL};
             nn[0]++;
             if (m.nn[oe] == 2) {
                 const std::array<szt,2> je {j, e};

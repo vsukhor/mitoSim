@@ -168,11 +168,11 @@ dfs( const szt w1, const szt e1,
         const auto cn = mt[w1].neig[e1][i];
         const auto ce = mt[w1].neen[e1][i];
         if (cn == w2) {
-            if(ce == e2)
+            if (ce == e2)
                 return true;
         }
         else {
-            if(!vis[cn]) {
+            if (!vis[cn]) {
                 vis[cn] = 1;
                 const szt ne {(ce == 1) ? szt(2) : szt(1)};
                 if (dfs(cn, ne, w2, e2))
@@ -323,7 +323,7 @@ fiss3( const szt w,
         // If not a cycle, this increments clnum and forms a new cluster
         // from w's end 1 neigs and beyond (excluding w itself).
         inCycle = update_cl_fiss(w, 1);
-        if(!inCycle)
+        if (!inCycle)
             // Renumber Edge::indcl of the remaining part of the original cluster.
             update_gIndcl(clini);
 
@@ -386,13 +386,13 @@ fiss3( const szt w,
                 e[j] = mt[w].neen[2][ninds[j]];
             }
         }
-        else if(mt[w].nn[2] == 1)
+        else if (mt[w].nn[2] == 1)
             n[0] = mt[w].neig[2][1];
 
         // If not a cycle, this increments clnum and forms a new cluster
         // from w's end 2 neigs and beyond (excluding w itself).
         inCycle = update_cl_fiss(w, 2);
-        if(!inCycle)
+        if (!inCycle)
             // Renumber Edge::indcl of the remaining part of the original cluster.
             update_gIndcl(clini);
 

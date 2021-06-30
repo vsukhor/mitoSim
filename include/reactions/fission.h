@@ -186,7 +186,7 @@ template<typename Ntw>
 void Fission<Ntw>::
 update_netw_stats()
 {
-    for(auto& o : dependents) {
+    for (auto& o : dependents) {
         o->update_prop(cc[0], cc[1]);
         o->set_score();
     }

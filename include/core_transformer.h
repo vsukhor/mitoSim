@@ -123,7 +123,7 @@ protected:
      *          indexed as source will become target.
      * @param f Source segment index.
      * @param t Target segment index.
-    */
+     */
     void rename_mito(szt f, szt t);
 
     /**
@@ -132,7 +132,7 @@ protected:
      * @param ef Source segment end.
      * @param t Target segment index.
      * @param et Target segment end.
-    */
+     */
     void copy_neigs(szt f, szt ef, szt t, szt et) noexcept;
 
     /**
@@ -144,7 +144,7 @@ protected:
      * @param newn New neighbour segment index.
      * @param nend New neighbour segment end.
      * @param removefromneigs Flag if the neighbouring segments should be removed.
-    */
+     */
     void update_neigs(szt oldn, szt oend,
                       szt n1, szt n2,
                       szt newn, szt nend,
@@ -196,10 +196,15 @@ copy_neigs(
 
 template<typename Mt>
 void CoreTransformer<Mt>::
-update_neigs( const szt oldn, const szt oend,
-              const szt n1, const szt n2,
-              const szt newn, const szt nend,
-              const bool removefromneigs ) noexcept
+update_neigs(
+    const szt oldn,
+    const szt oend,
+    const szt n1,
+    const szt n2,
+    const szt newn,
+    const szt nend,
+    const bool removefromneigs
+) noexcept
 {
     for (szt j=n1; j<=n2; j++) {
         const auto cn = mt[oldn].neig[oend][j];  // our neig currently processed
@@ -253,7 +258,8 @@ fuse_antiparallel(
         mt[w2].print(w2, "     before a: ");
     }
     XASSERT(w1 != w2,
-            "Error during antiparallel fusion: w1 == w2: fuse_toLoop should be used instead.\n");
+            std::string("Error during antiparallel fusion: w1 == w2: ")+
+            "fuse_toLoop should be used instead.\n");
     XASSERT(!mt[w1].nn[end],
             "Error during antiparallel fusion: end of w1 is not free.\n");
     XASSERT(!mt[w2].nn[end],
@@ -378,8 +384,8 @@ update_mtcl_fuse(
             mt[i].set_cl(w1cl);
 
     if (w2cl != clnum-1)
-        for(szt i=1; i<=mtnum; i++)
-            if(mt[i].get_cl() == clnum-1)
+        for (szt i=1; i<=mtnum; i++)
+            if (mt[i].get_cl() == clnum-1)
                 mt[i].set_cl(w2cl);
     clnum--;
 }
