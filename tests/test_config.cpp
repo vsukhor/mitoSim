@@ -14,7 +14,8 @@ protected:
     using real = mitosim::real;
     using Config = mitosim::Config<real>;
 
-    const std::string workingDir {std::filesystem::current_path() / "tests" / "data/"};
+    const std::string workingDir {std::filesystem::current_path() /
+                                  "tests" / "data/"};
     const std::string fnameSuffix {"sample"};
     const std::string runName {"42"};
 
