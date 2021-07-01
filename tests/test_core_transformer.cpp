@@ -77,11 +77,4 @@ TEST_F(CoreTransformerTest, Constructor)
     ASSERT_TRUE(ct.mtc13.empty());
 }
 
-TEST_F(CoreTransformerTest, FuseAntiparE1)
-{
-    CT ct {msgr};
-    ct.add_disconnected_segment(3);
-    ct.add_disconnected_segment(6);
-}
-
 }  // namespace core_transformer_test
