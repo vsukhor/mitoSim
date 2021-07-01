@@ -17,29 +17,47 @@ include(GoogleTest)
 
 add_definitions(-DUSE_UTILS_XASSERT)
 
-add_executable(unittests_mitosim
+add_executable(unittest1
   test_config.cpp
   test_edge.cpp
   test_segment.cpp
   test_structure.cpp
+)
+add_executable(unittests2
   test_core_transformer.cpp
 )
-target_compile_features(unittests_mitosim PRIVATE cxx_std_20)
+target_compile_features(unittests1 PRIVATE cxx_std_20)
+target_compile_features(unittests2 PRIVATE cxx_std_20)
 
-include_directories(unittests_mitosim PUBLIC
+include_directories(unittests1 PUBLIC
+    ../include
+    ../include/reactions
+    ../external
+)
+include_directories(unittests2 PUBLIC
     ../include
     ../include/reactions
     ../external
 )
 
-target_link_libraries(unittests_mitosim PRIVATE $<TARGET_FILE:utils>)
-target_link_libraries(unittests_mitosim PRIVATE gtest gmock)
-target_link_libraries(unittests_mitosim PRIVATE gtest_main)
+target_link_libraries(unittests1 PRIVATE $<TARGET_FILE:utils>)
+target_link_libraries(unittests1 PRIVATE gtest gmock)
+target_link_libraries(unittests1 PRIVATE gtest_main)
+target_link_libraries(unittests2 PRIVATE $<TARGET_FILE:utils>)
+target_link_libraries(unittests2 PRIVATE gtest gmock)
+target_link_libraries(unittests2 PRIVATE gtest_main)
 
-gtest_discover_tests(unittests_mitosim)
+gtest_discover_tests(unittests1)
+gtest_discover_tests(unittests2)
 
 add_custom_command(
-    TARGET unittests_mitosim
+    TARGET unittests1
     POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:unittests_mitosim> ${CMAKE_CURRENT_SOURCE_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:unittests1> ${CMAKE_CURRENT_SOURCE_DIR}
 )
+add_custom_command(
+    TARGET unittests2
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:unittests2> ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
