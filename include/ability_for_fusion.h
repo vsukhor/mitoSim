@@ -60,6 +60,7 @@ protected:
     using CoreTransformer<Mt>::update_cl_fuse;
     using CoreTransformer<Mt>::fuse_antiparallel;
     using CoreTransformer<Mt>::fuse_parallel;
+    using CoreTransformer<Mt>::fuse_to_loop;
     using AbilityForFission<Mt>::fiss2;
 
 public:
@@ -99,12 +100,6 @@ public:
      * @param w2 Segment index of the loop segment.
      */
     auto fuse1L(szt w1, szt e1, szt w2) noexcept -> std::array<szt,2>;
-
-    /**
-     * @brief Fuse end nodes a disconnected segment having free ends to form a loop.
-     * @param w Segment index.
-     */
-    auto fuse_to_loop(szt w) noexcept -> std::array<szt,2>;
 
 };
 
@@ -265,32 +260,6 @@ fuse1L(
     return {cl1, cl2};
 }
 
-
-template<typename Mt>
-auto AbilityForFusion<Mt>::
-fuse_to_loop( const szt w ) noexcept -> std::array<szt,2>
-{
-    XASSERT(!mt[w].is_cycle(),
-            "Error: attempt to fuse_to_loop a separate cycle.\n");
-    XASSERT(!mt[w].nn[1] && !mt[w].nn[2],
-            "Error: attempt to fuse_toLoop a not separate segment.\n");
-
-    if constexpr (verbose) {
-        msgr.print("Fused to cycle: ",
-                   w, " of length ", mt[w].g.size());
-        mt[w].print(w, "Before ", 0);
-    }
-
-    mt[w].nn[1] = mt[w].nn[2] = 1;
-    mt[w].neig[1][1] = mt[w].neig[2][1] = w;
-    mt[w].neen[1][1] = 2; mt[w].neen[2][1] = 1; 
-
-    if constexpr (verbose) {
-        msgr.print("Producing ");
-        mt[w].print(w, "After ", 0);
-    }
-    return {mt[w].get_cl(), mt[w].get_cl()};
-}
 
 }  // namespace mitosim
 
