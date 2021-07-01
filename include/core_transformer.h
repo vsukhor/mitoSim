@@ -118,6 +118,12 @@ protected:
     auto fuse_parallel(szt w1, szt w2) noexcept -> std::array<szt,2>;
 
     /**
+     * @brief Fuse end nodes a disconnected segment having free ends to form a loop.
+     * @param w Segment index.
+     */
+    auto fuse_to_loop(szt w) noexcept -> std::array<szt,2>;
+
+    /**
      * @brief Update network segment indexes.
      * @details The network indexes are updatted such that segment
      *          indexed as source will become target.
@@ -265,12 +271,13 @@ fuse_antiparallel(
     XASSERT(!mt[w2].nn[end],
             "Error during antiparallel fusion: end of w2 is not free.\n");
 
-    const szt opend = (end==2) ? 1 : 2;
+    const szt opend = end==2 ? 1 : 2;
     if (end == 1)
         copy_neigs(w1, 2, w1, 1);    // copy w1's 1-end neigs to its 0-end
     copy_neigs(w2, opend, w1, 2);    // copy w2's 1-end neigs to w1's 1-end
 
-    if (mt[w2].get_cl() != mt[w1].get_cl())
+    if (mt[w2].get_cl() !=
+        mt[w1].get_cl())
         update_mtcl_fuse(w1, w2);
 
     if (end == 1)
@@ -282,7 +289,8 @@ fuse_antiparallel(
         // for w2 reflect positions if 2-ends are joined;
         mt[w2].reflect_g();
 
-    std::move(mt[w2].g.begin(), mt[w2].g.end(), std::back_inserter(mt[w1].g));
+    std::move(mt[w2].g.begin(),
+              mt[w2].g.end(), std::back_inserter(mt[w1].g));
     mt[w2].g.clear();
 
     if (w2 != mtnum)
@@ -330,17 +338,20 @@ fuse_parallel(
         mt[w2].print(w2, "     before p: ");
     }
     XASSERT(w1 != w2,
-            "Error during parallel fusion: w1 == w2: fuse_toLoop should be used instead.\n");
+            std::string("Error during parallel fusion: w1 == w2: ") +
+            "fuse_toLoop should be used instead.\n");
     XASSERT(!mt[w1].nn[1],
             "Error during parallel fusion: end 1 of w1 is not free.\n");
     XASSERT(!mt[w2].nn[2],
             "Error during parallel fusion: end 2 of w2 is not free.\n");
 
     copy_neigs(w2, 1, w1, 1);
-    if (mt[w2].get_cl() != mt[w1].get_cl())
+    if (mt[w2].get_cl() !=
+        mt[w1].get_cl())
         update_mtcl_fuse(w1, w2);
 
-    std::move(mt[w1].g.begin(), mt[w1].g.end(), std::back_inserter(mt[w2].g));
+    std::move(mt[w1].g.begin(),
+              mt[w1].g.end(), std::back_inserter(mt[w2].g));
     mt[w1].g = std::move(mt[w2].g);
 
     if (w2 != mtnum)
@@ -353,7 +364,7 @@ fuse_parallel(
         update_gIndcl(cl2);
 
     if constexpr (verbose) {
-        if (w1 == mtnum+1) {
+        if (w1 == mtnum + 1) {
             mt[w2].print(w2, "       producing ");
             if (msgr.so) *msgr.so << std::endl;
             if (msgr.sl) *msgr.sl << std::endl;
@@ -366,6 +377,39 @@ fuse_parallel(
     }
 
     return {cl1, cl2};
+}
+
+
+template<typename Mt>
+auto CoreTransformer<Mt>::
+fuse_to_loop( const szt w ) noexcept -> std::array<szt,2>
+{
+    XASSERT(!mt[w].is_cycle(),
+            "Error: attempt to fuse_to_loop a separate cycle.\n");
+    XASSERT(!mt[w].nn[1] && !mt[w].nn[2],
+            "Error: attempt to fuse_toLoop a not separate segment.\n");
+
+    if constexpr (verbose) {
+        msgr.print("Fused to cycle: ",
+                   w, " of length ", mt[w].g.size());
+        mt[w].print(w, "Before ", 0);
+    }
+
+    mt[w].nn[1] =
+    mt[w].nn[2] = 1;
+
+    mt[w].neig[1][1] =
+    mt[w].neig[2][1] = w;
+
+    mt[w].neen[1][1] = 2;
+    mt[w].neen[2][1] = 1;
+
+    if constexpr (verbose) {
+        msgr.print("Producing ");
+        mt[w].print(w, "After ", 0);
+    }
+
+    return {mt[w].get_cl(), mt[w].get_cl()};
 }
 
 
