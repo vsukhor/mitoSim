@@ -88,4 +88,4 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: mitosim-${{ matrix.config.os }}
-        path: ${{github.workspace}}/app/mitosim_CPU
+        path: ${{github.workspace}}/app/mitosim
