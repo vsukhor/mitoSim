@@ -5,8 +5,6 @@
 
 #include "gtest/gtest.h"
 
-#define PRINT_EDGES  // comment this to avoid printing detailed edge info.
-
 #include "../config.h"
 #include "../definitions.h"
 #include "../segment.h"
