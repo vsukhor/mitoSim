@@ -12,6 +12,30 @@
 
 namespace core_transformer_test {
 
+
+// Subclass to make protected members accessible for testing:
+class CT
+    : public mitosim::CoreTransformer<mitosim::Segment<3>> {
+
+public:
+
+    using CoreTransformer::clnum;
+    using CoreTransformer::copy_neigs;
+    using CoreTransformer::fuse_antiparallel;
+    using CoreTransformer::fuse_parallel;
+    using CoreTransformer::fuse_to_loop;
+    using CoreTransformer::mt;
+    using CoreTransformer::mtnum;
+    using CoreTransformer::rename_mito;
+    using CoreTransformer::update_neigs;
+    using Msgr = mitosim::Msgr;
+
+    CT(Msgr& msgr)
+        : CoreTransformer {msgr}
+    {}
+};
+
+
 class CoreTransformerTest
     : public testing::Test {
 
@@ -19,24 +43,7 @@ protected:
 
     using Msgr = mitosim::Msgr;
     using Mt = mitosim::Segment<3>;
-    using CoreTransformer = mitosim::CoreTransformer<Mt>;
     using szt = mitosim::szt;
-
-    // Subclass to make protected members accessible for testing:
-    class CT : public CoreTransformer {
-    public:
-        using CoreTransformer::clnum;
-        using CoreTransformer::copy_neigs;
-        using CoreTransformer::fuse_antiparallel;
-        using CoreTransformer::fuse_parallel;
-        using CoreTransformer::fuse_to_loop;
-        using CoreTransformer::mt;
-        using CoreTransformer::mtnum;
-        using CoreTransformer::rename_mito;
-        using CoreTransformer::update_neigs;
-
-        CT(Msgr& msgr) : CoreTransformer {msgr} {}
-    };
 
     CoreTransformerTest()
         : msgr {}
