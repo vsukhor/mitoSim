@@ -88,7 +88,7 @@ TEST_F(CoreTransformerTest, FuseAntiparE1)
                 for (szt c0=0, i=1; i<=ct.mtnum; i++)
                     for (const auto& g : ct.mt[i].g)
                         ASSERT_EQ(g.get_ind(), c0++);
-
+                std::cout << "w1 " << w1 << " " << " w2 " << w2 << " pass 1" << std::endl;
                 decltype(ct.mt[w1].g) g1;
                 std::copy(ct.mt[w1].g.begin(),
                           ct.mt[w1].g.end(), std::back_inserter(g1));
@@ -96,8 +96,10 @@ TEST_F(CoreTransformerTest, FuseAntiparE1)
                 std::copy(ct.mt[w2].g.begin(),
                           ct.mt[w2].g.end(), std::back_inserter(g2));
 
+                std::cout << "w1 " << w1 << " " << " w2 " << w2 << " pass 2" << std::endl;
                 ct.fuse_antiparallel(1, w1, w2);
 
+                std::cout << "w1 " << w1 << " " << " w2 " << w2 << " pass 3" << std::endl;
                 ASSERT_EQ(ct.mtmass, lensum);
                 ASSERT_EQ(ct.mtnum, len.size()-1);
                 ASSERT_EQ(ct.clnum, len.size()-1);
@@ -114,11 +116,14 @@ TEST_F(CoreTransformerTest, FuseAntiparE1)
                     else    // the rest is not affected
                         ASSERT_EQ(ct.mt[i].g.size(), len[i-1]);
 
+                std::cout << "w1 " << w1 << " " << " w2 " << w2 << " pass 4" << std::endl;
                 for (szt c=0, i=len[w1-1]-1; c<g1.size(); c++, i--)
                     ASSERT_EQ(ct.mt[res].g[i].get_ind(), g1[c].get_ind());
                 for (szt c=0, i=len[w1-1]; i<ct.mt[res].g.size(); c++, i++)
                     ASSERT_EQ(ct.mt[res].g[i].get_ind(), g2[c].get_ind());
             }
+                std::cout << "w1 " << w1 << " " << " w2 " << w2 << " pass 5" << std::endl;
+                std::cout << std::endl;
 }
 
 TEST_F(CoreTransformerTest, FuseAntiparE2)
@@ -280,7 +285,7 @@ TEST_F(CoreTransformerTest, FuseToLoop)
             ASSERT_EQ(m[i].g.size(), len[i-1]);
             ASSERT_EQ(m[i].get_cl(), i-1);
         }
-        for (int i=0; i<len[w-1]; i++) {
+        for (szt i=0; i<len[w-1]; i++) {
             ASSERT_EQ(m[w].g[i].get_ind(), g[i].get_ind());
             ASSERT_EQ(m[w].g[i].get_cl(), m[w].get_cl());
         }
