@@ -78,7 +78,7 @@ TEST_F(CoreTransformerTest, FuseAntiparE1)
     const auto lensum = std::accumulate(len.begin(), len.end(), 0);
 
     szt w1=2;
-    szt w3=3;
+    szt w2=3;
 //    for (szt w1=1; w1<=len.size(); w1++)
 //        for (szt w2=1; w2<=len.size(); w2++)
             if (w1 != w2) {
@@ -135,7 +135,7 @@ TEST_F(CoreTransformerTest, FuseAntiparE2)
     const auto lensum = std::accumulate(len.begin(), len.end(), 0);
 
     szt w1=2;
-    szt w3=3;
+    szt w2=3;
 //    for (szt w1=1; w1<=len.size(); w1++)
 //        for (szt w2=1; w2<=len.size(); w2++)
             if (w1 != w2) {
@@ -203,7 +203,7 @@ TEST_F(CoreTransformerTest, FuseParallel)
     const auto lensum = std::accumulate(len.begin(), len.end(), 0);
 
     szt w1=2;
-    szt w3=3;
+    szt w2=3;
 //    for (szt w1=1; w1<=len.size(); w1++)
 //        for (szt w2=1; w2<=len.size(); w2++)
             if (w1 != w2) {
