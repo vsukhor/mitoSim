@@ -114,9 +114,9 @@ TEST_F(CoreTransformerTest, FuseAntiparE1)
                     else    // the rest is not affected
                         ASSERT_EQ(ct.mt[i].g.size(), len[i-1]);
 
-                for (int c=0, i=len[w1-1]-1; i>=0; c++, i--)
+                for (szt c=0, i=len[w1-1]-1; c<g1.size(); c++, i--)
                     ASSERT_EQ(ct.mt[res].g[i].get_ind(), g1[c].get_ind());
-                for (int c=0, i=len[w1-1]; i<ct.mt[res].g.size(); c++, i++)
+                for (szt c=0, i=len[w1-1]; i<ct.mt[res].g.size(); c++, i++)
                     ASSERT_EQ(ct.mt[res].g[i].get_ind(), g2[c].get_ind());
             }
 }
@@ -169,9 +169,11 @@ TEST_F(CoreTransformerTest, FuseAntiparE2)
                         ASSERT_EQ(gg.get_cl(), ct.mt[i].get_cl());
                 }
 
-                for (int c=0, i=0; i<len[w1-1]; c++, i++)
+                int c {};
+                for (szt i=0; i<len[w1-1]; c++, i++)
                     ASSERT_EQ(ct.mt[res].g[i].get_ind(), g1[c].get_ind());
-                for (int c=len[w2-1]-1, i=len[w1-1]; c>=0; c--, i++)
+                c = len[w2-1] - 1;
+                for (szt i=len[w1-1]; c>=0; c--, i++)
                     ASSERT_EQ(ct.mt[res].g[i].get_ind(), g2[c].get_ind());
 
                 for (const auto i : {1, 2}) {
@@ -233,9 +235,9 @@ TEST_F(CoreTransformerTest, FuseParallel)
                         ASSERT_EQ(gg.get_cl(), ct.mt[i].get_cl());
                 }
 
-                for (int c=0, i=0; i<len[w2-1]; c++, i++)
+                for (szt c=0, i=0; i<len[w2-1]; c++, i++)
                     ASSERT_EQ(ct.mt[res].g[i].get_ind(), g2[c].get_ind());
-                for (int c=0, i=len[w2-1]; i<ct.mt[res].g.size(); c++, i++)
+                for (szt c=0, i=len[w2-1]; i<ct.mt[res].g.size(); c++, i++)
                     ASSERT_EQ(ct.mt[res].g[i].get_ind(), g1[c].get_ind());
 
                 for (const auto i : {1, 2}) {
