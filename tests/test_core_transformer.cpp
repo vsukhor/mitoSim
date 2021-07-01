@@ -119,11 +119,12 @@ TEST_F(CoreTransformerTest, FuseAntiparE1)
                 std::cout << "w1 " << w1 << " " << " w2 " << w2 << " pass 4" << std::endl;
                 for (szt c=0, i=len[w1-1]-1; c<g1.size(); c++, i--)
                     ASSERT_EQ(ct.mt[res].g[i].get_ind(), g1[c].get_ind());
+                std::cout << "w1 " << w1 << " " << " w2 " << w2 << " pass 5" << std::endl;
                 for (szt c=0, i=len[w1-1]; i<ct.mt[res].g.size(); c++, i++)
                     ASSERT_EQ(ct.mt[res].g[i].get_ind(), g2[c].get_ind());
-            }
-                std::cout << "w1 " << w1 << " " << " w2 " << w2 << " pass 5" << std::endl;
+                std::cout << "w1 " << w1 << " " << " w2 " << w2 << " pass 6" << std::endl;
                 std::cout << std::endl;
+            }
 }
 
 TEST_F(CoreTransformerTest, FuseAntiparE2)
