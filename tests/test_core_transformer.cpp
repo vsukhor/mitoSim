@@ -28,6 +28,7 @@ public:
     using CoreTransformer::mtnum;
     using CoreTransformer::rename_mito;
     using CoreTransformer::update_neigs;
+    using mitosim::Structure<mitosim::Segment<3>>::add_disconnected_segment;
     using Msgr = mitosim::Msgr;
 
     CT(Msgr& msgr)
@@ -75,6 +76,13 @@ TEST_F(CoreTransformerTest, Constructor)
     ASSERT_TRUE(ct.mtc33.empty());
     ASSERT_TRUE(ct.mt13.empty());
     ASSERT_TRUE(ct.mtc13.empty());
+}
+
+TEST_F(CoreTransformerTest, FuseAntiparE1)
+{
+    CT ct {msgr};
+    ct.add_disconnected_segment(3);
+    ct.add_disconnected_segment(6);
 }
 
 }  // namespace core_transformer_test
