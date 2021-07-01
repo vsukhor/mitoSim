@@ -18,16 +18,10 @@ protected:
 
     StructureTest()
         : msgr {}
-        , stc {msgr}
     {}
 
-    void SetUp() override {
-        stc.add_disconnected_segment(4);
-        stc.add_disconnected_segment(3);
-    }
 
     Msgr msgr;
-    Structure stc;
 };
 
 TEST_F(StructureTest, Constructor)
@@ -82,34 +76,50 @@ TEST_F(StructureTest, AddDisconnectedSegment)
 
 TEST_F(StructureTest, UpdateNn1)
 {
-    stc.update_nn<1>();
-    EXPECT_EQ(stc.nn[0], 2 * stc.mtnum);
-    EXPECT_EQ(stc.nn[1], 0);
-    EXPECT_EQ(stc.nn[2], 0);
+    Structure s {msgr};
+    s.add_disconnected_segment(4);
+    s.add_disconnected_segment(3);
+
+    s.update_nn<1>();
+    EXPECT_EQ(s.nn[0], 2 * s.mtnum);
+    EXPECT_EQ(s.nn[1], 0);
+    EXPECT_EQ(s.nn[2], 0);
 }
 
 TEST_F(StructureTest, UpdateNn2)
 {
-    stc.update_nn<2>();
-    EXPECT_EQ(stc.nn[0], 0);
-    EXPECT_EQ(stc.nn[1], stc.mt[1].g.size() + stc.mt[2].g.size() - 2);
-    EXPECT_EQ(stc.nn[2], 0);
+    Structure s {msgr};
+    s.add_disconnected_segment(4);
+    s.add_disconnected_segment(3);
+
+    s.update_nn<2>();
+    EXPECT_EQ(s.nn[0], 0);
+    EXPECT_EQ(s.nn[1], s.mt[1].g.size() + s.mt[2].g.size() - 2);
+    EXPECT_EQ(s.nn[2], 0);
 }
 
 TEST_F(StructureTest, UpdateNn3)
 {
-    stc.update_nn<3>();
-    EXPECT_EQ(stc.nn[0], 0);
-    EXPECT_EQ(stc.nn[1], 0);
-    EXPECT_EQ(stc.nn[2], 0);
+    Structure s {msgr};
+    s.add_disconnected_segment(4);
+    s.add_disconnected_segment(3);
+
+    s.update_nn<3>();
+    EXPECT_EQ(s.nn[0], 0);
+    EXPECT_EQ(s.nn[1], 0);
+    EXPECT_EQ(s.nn[2], 0);
 }
 
 TEST_F(StructureTest, UpdateNodeNumbers)
 {
-    stc.update_node_numbers();
-    EXPECT_EQ(stc.nn[0], 2 * stc.mtnum);
-    EXPECT_EQ(stc.nn[1], stc.mt[1].g.size() + stc.mt[2].g.size() - 2);
-    EXPECT_EQ(stc.nn[2], 0);
+    Structure s {msgr};
+    s.add_disconnected_segment(4);
+    s.add_disconnected_segment(3);
+
+    s.update_node_numbers();
+    EXPECT_EQ(s.nn[0], 2 * s.mtnum);
+    EXPECT_EQ(s.nn[1], s.mt[1].g.size() + s.mt[2].g.size() - 2);
+    EXPECT_EQ(s.nn[2], 0);
 }
 
 TEST_F(StructureTest, MakeIndma)
@@ -118,7 +128,7 @@ TEST_F(StructureTest, MakeIndma)
     const auto lensum = std::accumulate(len.begin(), len.end(), 0);
 
     Structure s {msgr};
-    
+
     for (const auto u : len)
         s.add_disconnected_segment(u);
 
