@@ -18,11 +18,11 @@ include(GoogleTest)
 add_definitions(-DUSE_UTILS_XASSERT)
 
 add_executable(unittests_mitosim
+  test_config.cpp
   test_edge.cpp
   test_segment.cpp
   test_structure.cpp
   test_core_transformer.cpp
-  test_config.cpp
 )
 target_compile_features(unittests_mitosim PRIVATE cxx_std_20)
 
