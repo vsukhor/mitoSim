@@ -226,7 +226,7 @@ fiss2( const szt w,
     mt[w].nn[2] ? (inCycle = update_cl_fiss(w, 2))
                 : clnum++;
 
-    mt.emplace_back(&msgr);
+    mt.emplace_back(msgr);
     ++mtnum;
 
     std::move(mt[w].g.begin() + static_cast<long>(a),
