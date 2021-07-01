@@ -84,46 +84,6 @@ TEST_F(CoreTransformerTest, FuseAntiparE1)
                 CT ct {msgr};
                 for (const auto u : len)
                     ct.add_disconnected_segment(u);
-
-                for (szt c0=0, i=1; i<=ct.mtnum; i++)
-                    for (const auto& g : ct.mt[i].g)
-                        ASSERT_EQ(g.get_ind(), c0++);
-                std::cout << "w1 " << w1 << " " << " w2 " << w2 << " pass 1" << std::endl;
-                decltype(ct.mt[w1].g) g1;
-                std::copy(ct.mt[w1].g.begin(),
-                          ct.mt[w1].g.end(), std::back_inserter(g1));
-                decltype(ct.mt[w2].g) g2;
-                std::copy(ct.mt[w2].g.begin(),
-                          ct.mt[w2].g.end(), std::back_inserter(g2));
-
-                std::cout << "w1 " << w1 << " " << " w2 " << w2 << " pass 2" << std::endl;
-                ct.fuse_antiparallel(1, w1, w2);
-
-                std::cout << "w1 " << w1 << " " << " w2 " << w2 << " pass 3" << std::endl;
-                ASSERT_EQ(ct.mtmass, lensum);
-                ASSERT_EQ(ct.mtnum, len.size()-1);
-                ASSERT_EQ(ct.clnum, len.size()-1);
-
-                // 'res' is the fused segment:
-                const auto res = w1 != len.size() ? w1 : w2;
-
-                for (szt i=1; i<=ct.mtnum; i++)
-                    if (i == res)
-                        ASSERT_EQ(ct.mt[i].g.size(), len[w1-1]+len[w2-1]);
-                    else if (w1 != len.size() && i == w2)
-                        // w2 is occupied by the previously last segment.
-                        ASSERT_EQ(ct.mt[i].g.size(), len[ct.mtnum]);
-                    else    // the rest is not affected
-                        ASSERT_EQ(ct.mt[i].g.size(), len[i-1]);
-
-                std::cout << "w1 " << w1 << " " << " w2 " << w2 << " pass 4" << std::endl;
-                for (szt c=0, i=len[w1-1]-1; c<g1.size(); c++, i--)
-                    ASSERT_EQ(ct.mt[res].g[i].get_ind(), g1[c].get_ind());
-                std::cout << "w1 " << w1 << " " << " w2 " << w2 << " pass 5" << std::endl;
-                for (szt c=0, i=len[w1-1]; i<ct.mt[res].g.size(); c++, i++)
-                    ASSERT_EQ(ct.mt[res].g[i].get_ind(), g2[c].get_ind());
-                std::cout << "w1 " << w1 << " " << " w2 " << w2 << " pass 6" << std::endl;
-                std::cout << std::endl;
             }
 }
 
