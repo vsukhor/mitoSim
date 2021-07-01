@@ -19,6 +19,9 @@ class CT
 
 public:
 
+    using Msgr = mitosim::Msgr;
+    using Mt = mitosim::Segment<3>;
+
     using CoreTransformer::clnum;
     using CoreTransformer::copy_neigs;
     using CoreTransformer::fuse_antiparallel;
@@ -28,8 +31,7 @@ public:
     using CoreTransformer::mtnum;
     using CoreTransformer::rename_mito;
     using CoreTransformer::update_neigs;
-    using mitosim::Structure<mitosim::Segment<3>>::add_disconnected_segment;
-    using Msgr = mitosim::Msgr;
+    using mitosim::Structure<Mt>::add_disconnected_segment;
 
     CT(Msgr& msgr)
         : CoreTransformer {msgr}
@@ -81,8 +83,8 @@ TEST_F(CoreTransformerTest, Constructor)
 TEST_F(CoreTransformerTest, FuseAntiparE1)
 {
     CT ct {msgr};
-    ct.add_disconnected_segment(3);
-    ct.add_disconnected_segment(6);
+//    ct.add_disconnected_segment(3);
+//    ct.add_disconnected_segment(6);
 }
 
 }  // namespace core_transformer_test
