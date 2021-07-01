@@ -40,7 +40,7 @@ protected:
 
 TEST_F(SegmentTest, Constructor1)
 {
-    const Segment sg {msgr};
+    const Segment sg {&msgr};
 
     EXPECT_EQ(sg.neig[1].size(), maxDegree);
     EXPECT_EQ(sg.neig[2].size(), maxDegree);
@@ -55,7 +55,7 @@ TEST_F(SegmentTest, Constructor1)
 
 TEST_F(SegmentTest, Constructor2)
 {
-    const Segment sg {Config::segmass, Config::cl, conf.ei0, msgr};
+    const Segment sg {Config::segmass, Config::cl, conf.ei0, &msgr};
 
     EXPECT_EQ(sg.neig[1].size(), maxDegree);
     EXPECT_EQ(sg.neig[2].size(), maxDegree);
@@ -77,7 +77,7 @@ TEST_F(SegmentTest, Constructor2)
 
 TEST_F(SegmentTest, reflectG)
 {
-    Segment sg {Config::segmass, Config::cl, conf.ei0, msgr};
+    Segment sg {Config::segmass, Config::cl, conf.ei0, &msgr};
     sg.reflect_g();
 
     for (szt i = 0; i < sg.g.size(); i++) {
@@ -89,7 +89,7 @@ TEST_F(SegmentTest, reflectG)
 
 TEST_F(SegmentTest, setGCl)
 {
-    Segment sg {Config::segmass, Config::cl, conf.ei0, msgr};
+    Segment sg {Config::segmass, Config::cl, conf.ei0, &msgr};
     const auto newCl = Config::cl + 100;
     const auto newIndcl = conf.ei0 + 100;
 
@@ -107,7 +107,7 @@ TEST_F(SegmentTest, setGCl)
 
 TEST_F(SegmentTest, setCl)
 {
-    Segment sg {Config::segmass, Config::cl, conf.ei0, msgr};
+    Segment sg {Config::segmass, Config::cl, conf.ei0, &msgr};
     const auto newCl = Config::cl + 100;
     const auto newIndcl = conf.ei0 + 100;
 
@@ -119,7 +119,7 @@ TEST_F(SegmentTest, setCl)
 
 TEST_F(SegmentTest, End2A)
 {
-    const Segment sg {Config::segmass, Config::cl, conf.ei0, msgr};
+    const Segment sg {Config::segmass, Config::cl, conf.ei0, &msgr};
 
     EXPECT_EQ(sg.end2a(1), 0);
     EXPECT_EQ(sg.end2a(2), sg.g.size() - 1);
@@ -128,14 +128,14 @@ TEST_F(SegmentTest, End2A)
 
 TEST_F(SegmentTest, HasOneFreeEnd)
 {
-    const Segment sg {Config::segmass, Config::cl, conf.ei0, msgr};
+    const Segment sg {Config::segmass, Config::cl, conf.ei0, &msgr};
 
     EXPECT_FALSE(sg.has_one_free_end());
 }
 
 TEST_F(SegmentTest, SingleNeigIndex)
 {
-    const Segment sg {Config::segmass, Config::cl, conf.ei0, msgr};
+    const Segment sg {Config::segmass, Config::cl, conf.ei0, &msgr};
 
     EXPECT_EQ(sg.single_neig_index(1), mitosim::huge<szt>);
     EXPECT_EQ(sg.single_neig_index(2), mitosim::huge<szt>);
@@ -143,7 +143,7 @@ TEST_F(SegmentTest, SingleNeigIndex)
 
 TEST_F(SegmentTest, DoubleNeigIndexes)
 {
-    const Segment sg {Config::segmass, Config::cl, conf.ei0, msgr};
+    const Segment sg {Config::segmass, Config::cl, conf.ei0, &msgr};
 
     ASSERT_EXIT(sg.double_neig_indexes(1),
                 testing::ExitedWithCode(EXIT_FAILURE), "");
@@ -151,14 +151,14 @@ TEST_F(SegmentTest, DoubleNeigIndexes)
 
 TEST_F(SegmentTest, IsCycle)
 {
-    Segment sg {Config::segmass, Config::cl, conf.ei0, msgr};
+    Segment sg {Config::segmass, Config::cl, conf.ei0, &msgr};
 
     EXPECT_FALSE(sg.is_cycle());
 }
 
 TEST_F(SegmentTest, NumNodes)
 {
-    Segment sg {Config::segmass, Config::cl, conf.ei0, msgr};
+    Segment sg {Config::segmass, Config::cl, conf.ei0, &msgr};
 
     EXPECT_EQ(sg.num_nodes(1), 2);
     EXPECT_EQ(sg.num_nodes(2), Config::segmass - 1);
@@ -168,7 +168,7 @@ TEST_F(SegmentTest, NumNodes)
 
 TEST_F(SegmentTest, SetEndFin1)
 {
-    Segment sg {Config::segmass, Config::cl, conf.ei0, msgr};
+    Segment sg {Config::segmass, Config::cl, conf.ei0, &msgr};
     sg.template set_end_fin<1>();
 
     for (const auto& g : sg.g) {
@@ -179,7 +179,7 @@ TEST_F(SegmentTest, SetEndFin1)
 
 TEST_F(SegmentTest, SetEndFin2)
 {
-    Segment sg {Config::segmass, Config::cl, conf.ei0, msgr};
+    Segment sg {Config::segmass, Config::cl, conf.ei0, &msgr};
     sg.template set_end_fin<2>();
 
     for (const auto& g : sg.g) {
@@ -190,7 +190,7 @@ TEST_F(SegmentTest, SetEndFin2)
 
 TEST_F(SegmentTest, SetBulkFin)
 {
-    Segment sg {Config::segmass, Config::cl, conf.ei0, msgr};
+    Segment sg {Config::segmass, Config::cl, conf.ei0, &msgr};
     const szt a = 100;
     sg.set_bulk_fin(a);
 

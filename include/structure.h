@@ -57,7 +57,7 @@ public:
     vec3<szt> clagl;
 
     /// Mapping of the edge indexes to segment indexes.
-    std::vector<szt>  glm;
+    std::vector<szt> glm;
     /// Mapping of the edge indexes to element index inside segments.
     std::vector<szt> gla;
 
@@ -184,9 +184,9 @@ void Structure<Mt>::
 add_disconnected_segment( const szt segmass )
 {
     if (mt.empty())
-        mt.emplace_back(msgr);  // Mock segment necessary for 1-based counting.
+        mt.emplace_back(&msgr);  // Mock segment necessary for 1-based counting.
 
-    mt.emplace_back(segmass, clnum, mtmass, msgr);
+    mt.emplace_back(segmass, clnum, mtmass, &msgr);
     mtnum++;
     clnum++;
     mtmass += segmass;

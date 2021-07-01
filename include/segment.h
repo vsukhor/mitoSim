@@ -89,14 +89,14 @@ public:
      * @brief Constructor
      * @param msgr Output message processor.
      */
-    explicit Segment(Msgr& msgr);
+    explicit Segment(Msgr* msgr);
 
     /**
      * @brief Constructor.
      * @param cl Index of subnetwork to which the sebment belongs.
      * @param msgr Output message processor.
      */
-    explicit Segment(Msgr& msgr,
+    explicit Segment(Msgr* msgr,
                      szt cl);
 
     /**
@@ -110,7 +110,7 @@ public:
         szt segmass,
         szt cl,
         szt ei,
-        Msgr& msgr );
+        Msgr* msgr );
 
     constexpr auto get_cl() const noexcept { return cl; }
     void set_cl( szt newcl ) noexcept { cl = newcl; }
@@ -225,7 +225,7 @@ protected:
 
     szt cl {};   ///< cluster index.
     
-    Msgr& msgr;  ///< Output message processor.
+    Msgr* msgr;  ///< Output message processor.
 
     /**
      * @brief Insert an edge imediately after g[a] making it g[a+1].
@@ -245,7 +245,7 @@ protected:
 
 inline
 Segment<3>::
-Segment(Msgr& msgr)
+Segment(Msgr* msgr)
     : msgr {msgr}
 {
     init_ends();
@@ -254,7 +254,7 @@ Segment(Msgr& msgr)
 inline
 Segment<3>::
 Segment(
-    Msgr& msgr,
+    Msgr* msgr,
     const szt cl
 )
     : cl {cl}
@@ -269,7 +269,7 @@ Segment(
       const szt segmass,
       const szt cl,
       szt ei,
-      Msgr& msgr     // var ref
+      Msgr* msgr     // var ref
 )
     : Segment {msgr, cl}
 {
@@ -422,7 +422,7 @@ num_nodes( const szt deg ) const noexcept -> szt // deg = 1, 2, 3
         if (nn[1] != 2 && nn[2] != 2) return 0;
     }
 
-    msgr.exit("Error in Segment::num_nodes(). Not implemented for degree ", deg);
+    msgr->exit("Error in Segment::num_nodes(). Not implemented for degree ", deg);
     return huge<szt>;
 }
 
@@ -460,8 +460,8 @@ print( const szt w,
        const std::string& tag, 
        const szt at ) const
 {
-    if (msgr.so) print(*msgr.so, w, tag, at);
-    if (msgr.sl) print(*msgr.sl, w, tag, at);
+    if (msgr->so) print(*msgr->so, w, tag, at);
+    if (msgr->sl) print(*msgr->sl, w, tag, at);
 }
 
 
