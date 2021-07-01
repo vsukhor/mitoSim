@@ -17,7 +17,7 @@ include(GoogleTest)
 
 add_definitions(-DUSE_UTILS_XASSERT)
 
-add_executable(unittest1
+add_executable(unittests1
   test_config.cpp
   test_edge.cpp
   test_segment.cpp
