@@ -145,7 +145,7 @@ update_cl_fiss( const szt w,
               vis.begin() + static_cast<long>(mtnum) + 1,
               0);
 
-    const szt oe {(e == 1) ? szt(2) : szt(1)};
+    const auto oe = e == 1 ? 2UL : 1UL;
 
     const bool is_cycle = dfs(w, e, w, oe);
     if (!is_cycle) {
@@ -174,7 +174,7 @@ dfs( const szt w1, const szt e1,
         else {
             if (!vis[cn]) {
                 vis[cn] = 1;
-                const szt ne {(ce == 1) ? szt(2) : szt(1)};
+                const auto ne = ce == 1 ? 2UL : 1UL;
                 if (dfs(cn, ne, w2, e2))
                     return true;
             }
