@@ -82,7 +82,7 @@ TEST_F(CoreTransformerTest, Constructor)
 
 TEST_F(CoreTransformerTest, FuseAntiparE1)
 {
-    CoreTransformer<Mt> ct {msgr};
+    mitosim::CoreTransformer<Mt> ct {msgr};
     ct.add_disconnected_segment(3);
 //    ct.add_disconnected_segment(6);
 }
