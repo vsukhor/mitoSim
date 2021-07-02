@@ -260,8 +260,8 @@ fiss2( const szt w,
         // Before fission 'w' was looped into itself.
         isSelfLooped = true;
         if constexpr (verbose) {
-            mt[w].print(w, "       transiently producing ", -1);
-            mt[mtnum].print(mtnum, "             and ", -1);
+            mt[w].print(w, "transiently producing ", -1);
+            mt[mtnum].print(mtnum, "      and ", -1);
             std::cout << std::endl;
         }
         update_neigs(w, 1, 1, 1, -1, -1, true);
@@ -276,10 +276,10 @@ fiss2( const szt w,
             mt[w2].get_cl() == clini,
             "Error in fiss2: mt[w1].cl != clini && mt[w2].cl != clini\n");
     if constexpr (verbose) {
-        mt[w1].print(w1, "       producing ");
+        mt[w1].print(w1, "producing ");
         if (isSelfLooped)
             msgr.print("from a segment looped into itself");
-        else mt[w2].print(w2, "             and ");
+        else mt[w2].print(w2, "      and ");
         std::cout << std::endl;
     }
 
@@ -352,23 +352,23 @@ fiss3( const szt w,
             }
             else if (mt[n[0]].nn[e[0]] == 0 && 
                      mt[n[1]].nn[e[1]] == 1) {
-                mt[w].print(w, "       w ", -1);
-                mt[n[0]].print(n[0], "       n[0] ", -1);
-                mt[n[1]].print(n[1], "       n[1] ", -1);
+                mt[w].print(w, "w ");
+                mt[n[0]].print(n[0], "n[0] ");
+                mt[n[1]].print(n[1], "n[1] ");
                 msgr.exit("mt[n[0]].nn[e[0]] == 0 && mt[n[1]].nn[e[1]] == 1");
             }
             else if (mt[n[0]].nn[e[0]] == 1 && 
                      mt[n[1]].nn[e[1]] == 0) {
-                mt[w].print(w, "       w ", -1);
-                mt[n[0]].print(n[0], "       n[0] ", -1);
-                mt[n[1]].print(n[1], "       n[1] ", -1);
+                mt[w].print(w, "w ");
+                mt[n[0]].print(n[0], "n[0] ");
+                mt[n[1]].print(n[1], "n[1] ");
                 msgr.exit("mt[n[0]].nn[e[0]] == 1 && mt[n[1]].nn[e[1]] == 0");
             }
             else if (mt[n[0]].nn[e[0]] == 0 && 
                      mt[n[1]].nn[e[1]] == 0) {
-                mt[w].print(w, "       w ", -1);
-                mt[n[0]].print(n[0], "       n[0] ", -1);
-                mt[n[1]].print(n[1], "       n[1] ", -1);
+                mt[w].print(w, "w ");
+                mt[n[0]].print(n[0], "n[0] ");
+                mt[n[1]].print(n[1], "n[1] ");
                 msgr.exit("mt[n[0]].nn[e[0]] == 0 && mt[n[1]].nn[e[1]] == 0");
             }
         }
@@ -417,23 +417,23 @@ fiss3( const szt w,
             }
             else if (mt[n[0]].nn[e[0]] == 0 && 
                      mt[n[1]].nn[e[1]] == 1) {
-                mt[w].print(w, "       w ", -1);
-                mt[n[0]].print(n[0], "       n[0] ", -1);
-                mt[n[1]].print(n[1], "       n[1] ", -1);
+                mt[w].print(w, "w ");
+                mt[n[0]].print(n[0], "n[0] ");
+                mt[n[1]].print(n[1], "n[1] ");
                 msgr.exit("mt[n[0]].nn[e[0]] == 0 && mt[n[1]].nn[e[1]] == 1");
             }
             else if (mt[n[0]].nn[e[0]] == 1 && 
                      mt[n[1]].nn[e[1]] == 0) {
-                mt[w].print(w, "       w ", -1);
-                mt[n[0]].print(n[0], "       n[0] ", -1);
-                mt[n[1]].print(n[1], "       n[1] ", -1);
+                mt[w].print(w, "w ");
+                mt[n[0]].print(n[0], "n[0] ");
+                mt[n[1]].print(n[1], "n[1] ");
                 msgr.exit("mt[n[0]].nn[e[0]] == 1 && mt[n[1]].nn[e[1]] == 0");
             }
             else if (mt[n[0]].nn[e[0]] == 0 && 
                      mt[n[1]].nn[e[1]] == 0) {
-                mt[w].print( w, "       w ", -1 );
-                mt[n[0]].print(n[0], "       n[0] ", -1);
-                mt[n[1]].print(n[1], "       n[1] ", -1);
+                mt[w].print( w, "w ");
+                mt[n[0]].print(n[0], "n[0] ");
+                mt[n[1]].print(n[1], "n[1] ");
                 msgr.exit("mt[n[0]].nn[e[0]] == 0 && mt[n[1]].nn[e[1]] == 0");
             }
         }
@@ -445,9 +445,9 @@ fiss3( const szt w,
             mt[w2].get_cl() == clini,
             "Error in fiss3: mt[w1].cl != clini && mt[w2].cl != clini\n");
     if constexpr (verbose) {
-        mt[w1].print(w1, "       producing ");
+        mt[w1].print(w1, "producing ");
         if (w1 != w2)
-            mt[w2].print(w2, "             and ");
+            mt[w2].print(w2, "      and ");
         std::cout << std::endl;
     }
     return {mt[w1].get_cl(), mt[w2].get_cl()};

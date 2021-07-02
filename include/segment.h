@@ -470,11 +470,13 @@ void Segment<3>::
 print( std::ostream& os, 
        const szt w,
        const std::string& tag, 
-       const szt at ) const
+       const szt at) const
 {
-    os << "\t" << tag << w;
-    if (at == huge<szt>) os << "(of ";
-    else os << "(at " << at << " of ";
+    os << "        " << tag << w;
+    if (at == huge<szt>)
+        os << "(of ";
+    else
+        os << "(at " << at << " of ";
     os << g.size() << ") [ ";    
     for (szt i=1; i<=nn[1]; i++) os << neig[1][i] << " ";
     os << "] { ";        
@@ -484,13 +486,15 @@ print( std::ostream& os,
     os << "] { ";    
     for (szt i=1; i<=nn[2]; i++) os << neen[2][i] << " ";    
     os << "} " << cl;    
-#ifdef PRINT_EDGES
-    os << std::endl;
-    for (szt i=0; i<g.size(); i++) 
-        g[i].print(os, i);
-#else
-    os << " len " << g.size();
-#endif
+
+    if constexpr (print_edges) {
+        os << std::endl;
+        for (szt i=0; i<g.size(); i++)
+            g[i].print(os, i);
+    }
+    else
+        os << " len " << g.size();
+
     os << std::endl;
 }
 

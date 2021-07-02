@@ -142,8 +142,8 @@ fuse12(
         msgr.print("Fusion12:  ",
                    w1, "(of ", mt[w1].g.size(), " e ", end, ") with ",
                    w2, "(of ", mt[w2].g.size(), " at ", a2, ")\n");
-        mt[w1].print(w1, "     before s: ");
-        mt[w2].print(w2, "     before s: ");
+        mt[w1].print(w1, "before s: ");
+        mt[w2].print(w2, "before s: ");
     }
 
     const auto cl1 = mt[w1].get_cl();
@@ -204,11 +204,11 @@ fuse12(
         update_cl_fuse(mt[w1].get_cl(), mt[w2].get_cl());
 
     if constexpr (verbose) {
-        mt[w1].print(w1, "       producing ");
+        mt[w1].print(w1, "producing ");
         if (w2 != w1)
-            mt[w2].print(w2, "                 ");
+            mt[w2].print(w2, "         ");
         if (!mt[w2].is_cycle())
-            mt[mi].print( mi, "             and " );
+            mt[mi].print( mi, "     and " );
         msgr.print("\n");
     }
     return {cl1, cl2};
@@ -227,8 +227,8 @@ fuse1L(
         msgr.print("Fusion1U:  ",
                    w1, "(of ", mt[w1].g.size(), " e ", e1,
                    ") with a CYCLE ", w2, "(of ", mt[w2].g.size(), ")\n");
-        mt[w1].print( w1, "     before s: " );
-        mt[w2].print( w2, "     before s: " );
+        mt[w1].print( w1, "before s: " );
+        mt[w2].print( w2, "before s: " );
     }
     const auto cl1 = mt[w1].get_cl();
     const auto cl2 = mt[w2].get_cl();
@@ -252,8 +252,8 @@ fuse1L(
         update_cl_fuse(mt[w1].get_cl(), mt[w2].get_cl());
 
     if constexpr (verbose) {
-        mt[w1].print(w1, "       producing ");
-        mt[w2].print(w2, "             and ");
+        mt[w1].print(w1, "producing ");
+        mt[w2].print(w2, "      and ");
         if (msgr.so) *msgr.so << std::endl;
         if (msgr.sl) *msgr.sl << std::endl;
     }

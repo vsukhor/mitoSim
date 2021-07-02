@@ -40,7 +40,6 @@
 #include "utils/random/with_boost.h"
 
 // #define USE_UTILS_XASSERT  // toggles XASSERTs.
-// #define PRINT_EDGES  // comment this to avoid printing detailed edge info.
 
 namespace mitosim {
 
@@ -61,7 +60,9 @@ using Msgr = utils::Msgr;
 
 using real = float;
 using RandFactory = utils::random::Boost<real>;
+
 constexpr bool verbose {};   ///< Work in verbose mode.
+constexpr bool print_edges {};   ///< Print detailed data on edges.
 
 }  // namespace mitosim
 

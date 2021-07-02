@@ -260,8 +260,8 @@ fuse_antiparallel(
         msgr.print("Fusion11a:  ",
                    w1, "(of ", len1, ") with ",
                    w2, "(of ", len2, ") at end ", end);
-        mt[w1].print(w1, "     before a: ");
-        mt[w2].print(w2, "     before a: ");
+        mt[w1].print(w1, "before a: ");
+        mt[w2].print(w2, "before a: ");
     }
     XASSERT(w1 != w2,
             std::string("Error during antiparallel fusion: w1 == w2: ")+
@@ -304,12 +304,12 @@ fuse_antiparallel(
 
     if constexpr (verbose) {
         if (w1 == mtnum+1) {
-            mt[w2].print(w2, "       producing ");
+            mt[w2].print(w2, "producing ");
             if (msgr.so) *msgr.so << std::endl;
             if (msgr.sl) *msgr.sl << std::endl;
         }
         else {
-            mt[w1].print(w1, "       producing ");
+            mt[w1].print(w1, "producing ");
             if (msgr.so) *msgr.so << std::endl;
             if (msgr.sl) *msgr.sl << std::endl;
         }
@@ -334,8 +334,8 @@ fuse_parallel(
         msgr.print("Fusion11p:  ",
                    w1, "(of ", len1, ") with ",
                    w2, "(of ", len2, ")");
-        mt[w1].print(w1, "     before p: ");
-        mt[w2].print(w2, "     before p: ");
+        mt[w1].print(w1, "before p: ");
+        mt[w2].print(w2, "before p: ");
     }
     XASSERT(w1 != w2,
             std::string("Error during parallel fusion: w1 == w2: ") +
@@ -365,12 +365,12 @@ fuse_parallel(
 
     if constexpr (verbose) {
         if (w1 == mtnum + 1) {
-            mt[w2].print(w2, "       producing ");
+            mt[w2].print(w2, "producing ");
             if (msgr.so) *msgr.so << std::endl;
             if (msgr.sl) *msgr.sl << std::endl;
         }
         else {
-            mt[w1].print(w1, "       producing ");
+            mt[w1].print(w1, "producing ");
             if (msgr.so) *msgr.so << std::endl;
             if (msgr.sl) *msgr.sl << std::endl;
         }
