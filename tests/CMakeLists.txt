@@ -25,6 +25,7 @@ add_executable(unittests1
 )
 add_executable(unittests2
   test_core_transformer.cpp
+  test_ability_for_fusion.cpp
 )
 target_compile_features(unittests1 PRIVATE cxx_std_20)
 target_compile_features(unittests2 PRIVATE cxx_std_20)
@@ -41,10 +42,10 @@ include_directories(unittests2 PUBLIC
 )
 
 target_link_libraries(unittests1 PRIVATE $<TARGET_FILE:utils>)
-target_link_libraries(unittests1 PRIVATE gtest gmock)
+target_link_libraries(unittests1 PRIVATE gtest)
 target_link_libraries(unittests1 PRIVATE gtest_main)
 target_link_libraries(unittests2 PRIVATE $<TARGET_FILE:utils>)
-target_link_libraries(unittests2 PRIVATE gtest gmock)
+target_link_libraries(unittests2 PRIVATE gtest)
 target_link_libraries(unittests2 PRIVATE gtest_main)
 
 gtest_discover_tests(unittests1)
