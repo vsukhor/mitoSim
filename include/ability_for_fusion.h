@@ -146,8 +146,7 @@ fuse12(
         mt[w2].print(w2, "before s: ");
     }
 
-    XASSERT((!mt[w2].is_cycle() && a2 && a2 < mt[w2].g.size()) || mt[w2].is_cycle(),
-            "fuse12 at the very end of w2");
+    XASSERT(a2 && a2 < mt[w2].g.size(), "fuse12 at the very end of w2");
 
     const auto cl1 = mt[w1].get_cl();
     const auto cl2 = mt[w2].get_cl();
