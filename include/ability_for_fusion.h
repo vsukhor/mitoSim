@@ -146,6 +146,9 @@ fuse12(
         mt[w2].print(w2, "before s: ");
     }
 
+    XASSERT((!mt[w2].is_cycle() && a2 && a2 < mt[w2].g.size()) || mt[w2].is_cycle(),
+            "fuse12 at the very end of w2");
+
     const auto cl1 = mt[w1].get_cl();
     const auto cl2 = mt[w2].get_cl();
 
@@ -254,8 +257,7 @@ fuse1L(
     if constexpr (verbose) {
         mt[w1].print(w1, "producing ");
         mt[w2].print(w2, "      and ");
-        if (msgr.so) *msgr.so << std::endl;
-        if (msgr.sl) *msgr.sl << std::endl;
+        msgr.print("\n");
     }
     return {cl1, cl2};
 }
