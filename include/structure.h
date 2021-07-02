@@ -398,7 +398,7 @@ void Structure<Mt>::
 print_mitos( const std::string& tag ) const
 {
     for (szt j=1; j<=mtnum; j++)
-        mt[j].print(j, tag, -1);
+        mt[j].print(j, tag);
     msgr.print("");
 }
 template<typename Mt>

@@ -260,8 +260,8 @@ fiss2( const szt w,
         // Before fission 'w' was looped into itself.
         isSelfLooped = true;
         if constexpr (verbose) {
-            mt[w].print(w, "transiently producing ", -1);
-            mt[mtnum].print(mtnum, "      and ", -1);
+            mt[w].print(w, "transiently producing ");
+            mt[mtnum].print(mtnum, "      and ");
             std::cout << std::endl;
         }
         update_neigs(w, 1, 1, 1);
