@@ -35,14 +35,18 @@ protected:
         using CoreTransformer::rename_mito;
         using CoreTransformer::update_neigs;
 
-        CT(Msgr& msgr) : CoreTransformer {msgr} {}
+        CT(Msgr* msgr) : CoreTransformer {*msgr} {}
     };
 
-    CoreTransformerTest()
-        : msgr {}
-    {}
+    void SetUp() override {
+        msgr = new Msgr {&std::cout, nullptr, 6};
+    }
 
-    mitosim::Msgr msgr;
+    void TearDown() override {
+        delete msgr;
+    }
+
+    mitosim::Msgr* msgr;
 
 };
 
