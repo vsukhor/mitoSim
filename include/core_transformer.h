@@ -151,10 +151,13 @@ protected:
      * @param nend New neighbour segment end.
      * @param removefromneigs Flag if the neighbouring segments should be removed.
      */
-    void update_neigs(szt oldn, szt oend,
-                      szt n1, szt n2,
-                      szt newn, szt nend,
-                      bool removefromneigs
+    void update_neigs(szt oldn,
+                      szt oend,
+                      szt n1,
+                      szt n2,
+                      szt newn=huge<szt>,
+                      szt nend=huge<szt>,
+                      bool removefromneigs=true
     ) noexcept;
 
 };

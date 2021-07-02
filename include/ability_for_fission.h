@@ -264,7 +264,7 @@ fiss2( const szt w,
             mt[mtnum].print(mtnum, "      and ", -1);
             std::cout << std::endl;
         }
-        update_neigs(w, 1, 1, 1, -1, -1, true);
+        update_neigs(w, 1, 1, 1);
         fuse_parallel(w, mtnum);
     }
 
@@ -301,7 +301,8 @@ fiss3( const szt w,
     const auto clini = mt[w].get_cl();
     bool inCycle {};
     bool f {};
-    szt n[2], e[2];
+    std::array<szt,2> n;
+    std::array<szt,2> e;
     auto ind1 = huge<szt>;
     auto ind2 = huge<szt>;
     if (!a) {  // at end 1
@@ -312,7 +313,7 @@ fiss3( const szt w,
         if (mt[w].nn[1] == 2) {
             const auto ninds = mt[w].double_neig_indexes(1);
             f = true;
-            for (int j=0; j<2; j++) {
+            for (szt j=0; j<2; j++) {
                 n[j] = mt[w].neig[1][ninds[j]];
                 e[j] = mt[w].neen[1][ninds[j]];
             }
@@ -327,7 +328,7 @@ fiss3( const szt w,
             // Renumber Edge::indcl of the remaining part of the original cluster.
             update_gIndcl(clini);
 
-        update_neigs(w, 1, 1, mt[w].nn[1], -1, -1, true);
+        update_neigs(w, 1, 1, mt[w].nn[1]);
 
         if (f && n[0] != n[1]) {
             if (mt[n[0]].nn[e[0]] == 1 && 
@@ -341,7 +342,7 @@ fiss3( const szt w,
                     mt[n[1]].neig[e[1]][indneig1] == n[0] && 
                     mt[n[1]].neen[e[1]][indneig1] == e[0]) {
 
-                    update_neigs(n[0], e[0], 1, 1, -1, -1, true);
+                    update_neigs(n[0], e[0], 1, 1);
 
                     if (e[0] == e[1])
                         fuse_antiparallel(e[0], n[0], n[1]);
@@ -381,7 +382,7 @@ fiss3( const szt w,
         if (mt[w].nn[2] == 2) {
             const auto ninds = mt[w].double_neig_indexes(2);
             f = true;
-            for (int j=0; j<2; j++) {
+            for (szt j=0; j<2; j++) {
                 n[j] = mt[w].neig[2][ninds[j]];
                 e[j] = mt[w].neen[2][ninds[j]];
             }
@@ -396,7 +397,7 @@ fiss3( const szt w,
             // Renumber Edge::indcl of the remaining part of the original cluster.
             update_gIndcl(clini);
 
-        update_neigs(w, 2, 1, mt[w].nn[2], -1, -1, true);
+        update_neigs(w, 2, 1, mt[w].nn[2]);
 
         if (f && n[0] != n[1]) {
             if (mt[n[0]].nn[e[0]] == 1 && 
@@ -407,7 +408,7 @@ fiss3( const szt w,
                     mt[n[0]].neen[e[0]][indneig0] == e[1] && 
                     mt[n[1]].neig[e[1]][indneig1] == n[0] && 
                     mt[n[1]].neen[e[1]][indneig1] == e[0]) {
-                    update_neigs(n[0], e[0], 1, 1, -1, -1, true);
+                    update_neigs(n[0], e[0], 1, 1);
                     if (e[0] == e[1])
                         fuse_antiparallel(e[0], n[0], n[1]);
                     else
