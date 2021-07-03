@@ -117,9 +117,6 @@ populate() noexcept
 
             for (const auto& we2 : mt13)    // ... free ends of 13
                 cnd.add({w1, e1}, we2);
-
-            for (const auto& we2 : mt13)    // ... free ends of 14
-                cnd.add({w1, e1}, we2);
         }
     }
     const auto mtn13 = mt13.size();
