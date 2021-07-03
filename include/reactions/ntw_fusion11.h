@@ -58,6 +58,8 @@ public:
     /// Sets this reaction propensity for the whole network.
     auto set_prop() noexcept -> szt;
 
+    const FusionCandidatesXX& get_cnd() { return cnd; }
+
 private:
 
     Ntw& host;  ///< ref: the host network for this reaction.
