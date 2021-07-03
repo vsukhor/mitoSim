@@ -49,13 +49,13 @@ template<typename> class Fusion1U;
  * @tparam Ntw Type of the network.
  */
 template<typename Ntw>
-class NtwFusion1L {
+class NtwFusion1U {
 
     friend Fusion1U<Ntw>;
 
 public:
 
-    explicit NtwFusion1L(Ntw&);  ///< The only constructor.
+    explicit NtwFusion1U(Ntw&);  ///< The only constructor.
 
     /// Sets this reaction propensity for the whole network.
     auto set_prop() noexcept -> szt;
@@ -82,8 +82,8 @@ private:
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename Ntw>
-NtwFusion1L<Ntw>::
-NtwFusion1L( Ntw& host )
+NtwFusion1U<Ntw>::
+NtwFusion1U( Ntw& host )
     : host {host}
     , rnd {host.rnd}
     , mt11 {host.mt11}
@@ -92,7 +92,7 @@ NtwFusion1L( Ntw& host )
 {}
 
 template<typename Ntw>
-auto NtwFusion1L<Ntw>::
+auto NtwFusion1U<Ntw>::
 set_prop() noexcept -> szt
 {
      populate();
@@ -100,7 +100,7 @@ set_prop() noexcept -> szt
 }
 
 template<typename Ntw>
-void NtwFusion1L<Ntw>::
+void NtwFusion1U<Ntw>::
 populate() noexcept
 {
     cnd.clear();
@@ -115,7 +115,7 @@ populate() noexcept
 }
 
 template<typename Ntw>
-auto NtwFusion1L<Ntw>::
+auto NtwFusion1U<Ntw>::
 fire() noexcept
 {
     const auto r = rnd.uniform0(cnd.size());
