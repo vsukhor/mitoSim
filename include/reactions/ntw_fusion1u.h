@@ -103,10 +103,12 @@ template<typename Ntw>
 void NtwFusion1U<Ntw>::
 populate() noexcept
 {
+    constexpr std::array<szt,2> a12 {1UL, 2UL};
+
     cnd.clear();
     for (const auto w2 : mt22) {
         for (const auto w1 : mt11)
-            for (const auto e1 : {szt(1),szt(2)})
+            for (const auto e1 : a12)
                 cnd.add({w1,e1}, w2);        // e2 is 1 by convention
 
         for (const auto& we1 : mt13)
