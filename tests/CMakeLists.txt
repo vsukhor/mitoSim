@@ -25,6 +25,8 @@ add_executable(unittests
   test_core_transformer.cpp
   test_ability_for_fusion.cpp
   test_ability_for_fission.cpp
+  test_network.cpp
+  test_ntw_fusion_12.cpp
 )
 
 target_compile_features(unittests PRIVATE cxx_std_20)
