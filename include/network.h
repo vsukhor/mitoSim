@@ -77,7 +77,7 @@ public:
     friend NtwFission<thisT>;
     friend NtwFusion11<thisT>;
     friend NtwFusion12<thisT>;
-    friend NtwFusion1L<thisT>;
+    friend NtwFusion1U<thisT>;
     friend Simulation<thisT>;
 
     RandFactory&  rnd;   ///< Random number factory.
@@ -89,7 +89,7 @@ public:
     NtwFission<thisT>  fis;   ///< Slot for fission reaction.
     NtwFusion11<thisT> fu11;  ///< Slot for fusion raction of nodes degrees 1 + 1.
     NtwFusion12<thisT> fu12;  ///< Slot for fusion reaction of nodes degrees 1 + 2.
-    NtwFusion1L<thisT> fu1L;  ///< Slot for fusion raction of nodes degrees 1 and a loop.
+    NtwFusion1U<thisT> fu1L;  ///< Slot for fusion raction of nodes degrees 1 and a loop.
 
     /**
      * @brief Constructor.
