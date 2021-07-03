@@ -17,48 +17,32 @@ include(GoogleTest)
 
 add_definitions(-DUSE_UTILS_XASSERT)
 
-add_executable(unittests1
+add_executable(unittests
   test_config.cpp
   test_edge.cpp
   test_segment.cpp
   test_structure.cpp
-)
-add_executable(unittests2
   test_core_transformer.cpp
   test_ability_for_fusion.cpp
 )
-target_compile_features(unittests1 PRIVATE cxx_std_20)
-target_compile_features(unittests2 PRIVATE cxx_std_20)
 
-include_directories(unittests1 PUBLIC
-    ../include
-    ../include/reactions
-    ../external
-)
-include_directories(unittests2 PUBLIC
+target_compile_features(unittests PRIVATE cxx_std_20)
+
+include_directories(unittests PUBLIC
     ../include
     ../include/reactions
     ../external
 )
 
-target_link_libraries(unittests1 PRIVATE $<TARGET_FILE:utils>)
-target_link_libraries(unittests1 PRIVATE gtest)
-target_link_libraries(unittests1 PRIVATE gtest_main)
-target_link_libraries(unittests2 PRIVATE $<TARGET_FILE:utils>)
-target_link_libraries(unittests2 PRIVATE gtest)
-target_link_libraries(unittests2 PRIVATE gtest_main)
+target_link_libraries(unittests PRIVATE $<TARGET_FILE:utils>)
+target_link_libraries(unittests PRIVATE gtest)
+target_link_libraries(unittests PRIVATE gtest_main)
 
-gtest_discover_tests(unittests1)
-gtest_discover_tests(unittests2)
+gtest_discover_tests(unittests)
 
 add_custom_command(
-    TARGET unittests1
+    TARGET unittests
     POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:unittests1> ${CMAKE_CURRENT_SOURCE_DIR}
-)
-add_custom_command(
-    TARGET unittests2
-    POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:unittests2> ${CMAKE_CURRENT_SOURCE_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:unittests> ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
