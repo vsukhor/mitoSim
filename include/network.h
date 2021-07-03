@@ -87,9 +87,9 @@ public:
 
     // Reaction slots:
     NtwFission<thisT>  fis;   ///< Slot for fission reaction.
-    NtwFusion11<thisT> fu11;  ///< Slot for fusion raction of nodes degrees 1 + 1.
-    NtwFusion12<thisT> fu12;  ///< Slot for fusion reaction of nodes degrees 1 + 2.
-    NtwFusion1U<thisT> fu1L;  ///< Slot for fusion raction of nodes degrees 1 and a loop.
+    NtwFusion11<thisT> fu11;  ///< Slot for fusion raction of nodes degr. 1+1.
+    NtwFusion12<thisT> fu12;  ///< Slot for fusion reaction of nodes degr. 1+2.
+    NtwFusion1U<thisT> fu1L;  ///< Slot for fusion raction of nodes degr. 1 and a cycle.
 
     /**
      * @brief Constructor.
