@@ -65,7 +65,7 @@ private:
     szt cl {huge<szt>};     ///< Current cluster index.
 
     /// Contribution to fission propensity at each end.
-    std::array<FinT,2> fin {{}};
+    std::array<FinT,2> fin {};
 
 public:
 

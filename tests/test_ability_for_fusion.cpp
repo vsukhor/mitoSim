@@ -86,7 +86,7 @@ TEST_F(AbilityFusionTest, Constructor)
 TEST_F(AbilityFusionTest, Fuse12a)
 {
     // Tests fusion to a separate linear segment.
-    constexpr std::array<szt,2> len {{4, 4}};
+    constexpr std::array<szt,2> len {4, 4};
 
     constexpr szt w1 = 2;
     constexpr szt w2 = 1;
@@ -246,7 +246,7 @@ TEST_F(AbilityFusionTest, Fuse12b)
 TEST_F(AbilityFusionTest, Fuse12c)
 {
     // Fusion to a cycle segment.
-    constexpr std::array<szt,2> len {{4, 4}};
+    constexpr std::array<szt,2> len {4, 4};
 
     constexpr szt w1 = 2;
     constexpr szt w2 = 1;
@@ -312,7 +312,7 @@ TEST_F(AbilityFusionTest, Fuse12c)
 TEST_F(AbilityFusionTest, Fuse1L)
 {
     // Fusion to a cycle segment.
-    constexpr std::array<szt,2> len {{4, 4}};
+    constexpr std::array<szt,2> len {4, 4};
 
     constexpr szt w1 = 2;
     constexpr szt w2 = 1;

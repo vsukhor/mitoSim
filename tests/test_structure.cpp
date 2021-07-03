@@ -124,7 +124,7 @@ TEST_F(StructureTest, UpdateNodeNumbers)
 
 TEST_F(StructureTest, MakeIndma)
 {
-    constexpr std::array<szt,2> len {{4, 3}};
+    constexpr std::array<szt,2> len {4, 3};
     const auto lensum = std::accumulate(len.begin(), len.end(), 0);
 
     Structure s {msgr};
@@ -157,7 +157,7 @@ TEST_F(StructureTest, MakeIndma)
 
 TEST_F(StructureTest, PopulateClusterVectors)
 {
-    constexpr std::array<szt,2> len {{4, 3}};
+    constexpr std::array<szt,2> len {4, 3};
     const auto lensum = std::accumulate(len.begin(), len.end(), 0);
 
     Structure s {msgr};
@@ -191,7 +191,7 @@ TEST_F(StructureTest, PopulateClusterVectors)
 
 TEST_F(StructureTest, MakeAJL)
 {
-    constexpr std::array<szt,2> len {{4, 5}};
+    constexpr std::array<szt,2> len {4, 5};
 
     Structure s {msgr};
     for (const auto u : len)

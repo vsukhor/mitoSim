@@ -65,7 +65,7 @@ public:
     Reticulum mt;
 
     /// Total number of nodes by node degree.
-    std::array<szt,Mt::maxDegree> nn {{}};
+    std::array<szt,Mt::maxDegree> nn {};
 
     /// Actual number of segments.
     szt mtnum {};

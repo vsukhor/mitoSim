@@ -80,7 +80,7 @@ public:
     std::vector<EdgeT> g;  ///< The edges.
 
     /// Number of neighbours (for each of the two ends, counting from 1).
-    std::array<szt,numEnds+1> nn {{}};
+    std::array<szt,numEnds+1> nn {};
 
     std::array<std::vector<szt>,numEnds+1> neig;  ///< Neighbour indexes.
     std::array<std::vector<szt>,numEnds+1> neen;  ///< Neighbour ends.

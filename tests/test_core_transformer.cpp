@@ -76,7 +76,7 @@ TEST_F(CoreTransformerTest, Constructor)
 
 TEST_F(CoreTransformerTest, FuseAntiparE1)
 {
-    constexpr std::array<szt,6> len {{4, 3, 6, 5, 2, 7}};
+    constexpr std::array<szt,6> len {4, 3, 6, 5, 2, 7};
     const auto lensum = std::accumulate(len.begin(), len.end(), 0);
 
     for (szt w1=1; w1<=len.size(); w1++)
@@ -125,7 +125,7 @@ TEST_F(CoreTransformerTest, FuseAntiparE1)
 
 TEST_F(CoreTransformerTest, FuseAntiparE2)
 {
-    constexpr std::array<szt,6> len {{4, 3, 6, 5, 2, 7}};
+    constexpr std::array<szt,6> len {4, 3, 6, 5, 2, 7};
     const auto lensum = std::accumulate(len.begin(), len.end(), 0);
 
     for (szt w1=1; w1<=len.size(); w1++)
@@ -191,7 +191,7 @@ TEST_F(CoreTransformerTest, FuseAntiparE2)
 
 TEST_F(CoreTransformerTest, FuseParallel)
 {
-    constexpr std::array<szt,6> len {{4, 3, 6, 5, 2, 7}};
+    constexpr std::array<szt,6> len {4, 3, 6, 5, 2, 7};
     const auto lensum = std::accumulate(len.begin(), len.end(), 0);
 
     for (szt w1=1; w1<=len.size(); w1++)
@@ -255,7 +255,7 @@ TEST_F(CoreTransformerTest, FuseParallel)
 
 TEST_F(CoreTransformerTest, FuseToLoop)
 {
-    constexpr std::array<szt,6> len {{4, 3, 6, 5, 2, 7}};
+    constexpr std::array<szt,6> len {4, 3, 6, 5, 2, 7};
     const auto lensum = std::accumulate(len.begin(), len.end(), 0);
 
     for (szt w=1; w<=len.size(); w++) {

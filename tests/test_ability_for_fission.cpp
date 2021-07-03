@@ -129,7 +129,7 @@ TEST_F(AbilityFissionTest, Fiss3a)
 {
     // fiss3 of a 13 segment at end 2.
 
-    constexpr std::array<szt,2> len {{4, 4}};
+    constexpr std::array<szt,2> len {4, 4};
     const auto lensum = std::accumulate(len.begin(), len.end(), 0);
 
     constexpr szt a = 2;
@@ -171,7 +171,7 @@ TEST_F(AbilityFissionTest, Fiss3b)
 {
     // fiss3 of a 13 segment at end 1.
 
-    constexpr std::array<szt,2> len {{4, 4}};
+    constexpr std::array<szt,2> len {4, 4};
     const auto lensum = std::accumulate(len.begin(), len.end(), 0);
 
     constexpr szt a = 2;
