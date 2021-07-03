@@ -218,6 +218,8 @@ fiss2( const szt w,
     if constexpr (verbose)
         mt[w].print(w, "fission2:  ", a);     // cuts between g[a-1] and g[a]
 
+    XASSERT(a && a < mt[w].g.size(), "Error: fiss2 at the segment border.");
+
     [[maybe_unused]] const auto clini = mt[w].get_cl();
 
     const auto ind1 = mt[w].g[a-1].get_ind();
