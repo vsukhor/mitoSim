@@ -111,19 +111,19 @@ void NtwFusion12<Ntw>::
 populate() noexcept
 {
     constexpr auto minLL = Structure<typename Ntw::ST>::minLoopLength;
+    constexpr std::array<szt,2> a12 {1UL, 2UL};
+
     cnd.clear();
     for (const auto w1 : mt11)                           // 11 ends to ...
-        for (const auto e1 : {szt(1),szt(2)}) {
+        for (const auto e1 : a12) {
             const std::array<szt,2> we1 {w1,e1};
             for (const auto w2 : mt11)                   // ... 11 bulk
                 for (szt i=1; i<mt[w2].g.size(); i++) {
                     const auto skip = w1 == w2 && (
                                     (e1 == 1 && i < minLL) ||
                                     (e1 == 2 && mt[w2].g.size()-i < minLL));
-                    if (!skip) {
+                    if (!skip)
                         cnd.add(we1, {w2,i});
-                        cnd.add(we1, {w2,i});
-                    }
                 }
             for (const auto& we2 : mt13)                 // ... 13 bulk
                 for (szt i=1; i<mt[we2[0]].g.size(); i++)
