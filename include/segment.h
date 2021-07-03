@@ -82,8 +82,8 @@ public:
     /// Number of neighbours (for each of the two ends, counting from 1).
     std::array<szt,numEnds+1> nn {{}};
 
-    std::array<std::vector<szt>,maxDegree> neig;  ///< Neighbour indexes.
-    std::array<std::vector<szt>,maxDegree> neen;  ///< Neighbour ends.
+    std::array<std::vector<szt>,numEnds+1> neig;  ///< Neighbour indexes.
+    std::array<std::vector<szt>,numEnds+1> neen;  ///< Neighbour ends.
 
     /**
      * @brief Constructor
@@ -431,7 +431,7 @@ template <unsigned E> constexpr
 auto Segment<3>::
 set_end_fin() noexcept -> EdgeT::FinT
 {
-    static_assert(E == 1 || E == 2, "Incorrectt segment end index");
+    static_assert(E == 1 || E == 2, "Incorrect segment end index");
 
     auto& f = g[end2a(E)].fin;
     f[E-1] = nn[E] ? one<EdgeT::FinT>
@@ -445,8 +445,8 @@ inline
 auto Segment<3>::
 set_bulk_fin( const szt a ) -> EdgeT::FinT
 {
-    XASSERT(a >= 0 || a <= g.size() - 1,
-            std::string("Incorrectt segment edge index: ") + std::to_string(a));
+    XASSERT(a >= 0 || a < g.size() - 1,
+            std::string("Incorrect segment edge index: ") + std::to_string(a));
 
     g[a].fin[1] = g[a+1].fin[0] = one<EdgeT::FinT>;
 
