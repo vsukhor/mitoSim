@@ -95,9 +95,9 @@ public:
     /**
      * @brief Divide the segment at a node of degree 3.
      * @param w Global segment index.
-     * @param a The node position inside the segment.
+     * @param end The the segment end index at which the cut is done.
      */
-    auto fiss3(szt w, szt a) -> std::array<szt,2>;
+    auto fiss3(szt w, szt end) -> std::array<szt,2>;
 
 private:
 
@@ -190,14 +190,15 @@ auto AbilityForFission<Mt>::
 fiss( const szt w,
       const szt a ) -> std::array<szt,2>
 {
-    // node 3 -> nodes 2+1 and node 2 -> nodes 1+1 in pure loops
+    // node 2 -> nodes 1+1; cuts between g[a-1] and g[a]
     if (a && a < mt[w].g.size())
         return fiss2(w, a);
 
-    // node 2 -> nodes 1+1; cuts between g[a-1] and g[a]
-    if ((!a && mt[w].nn[1] <= 2) ||
-             (a == mt[w].g.size() && mt[w].nn[2] <= 2))
-        return fiss3(w, a);
+    // node 3 -> nodes 2+1 and node 2 -> nodes 1+1 in pure loops
+    if (!a && mt[w].nn[1] <= 2)
+        return fiss3(w, 1);
+    if (a == mt[w].g.size() && mt[w].nn[2] <= 2)
+        return fiss3(w, 2);
 
     msgr.exit("ERROR: Attempt of an unpropriate fission!");
 
@@ -275,6 +276,7 @@ fiss2( const szt w,
     XASSERT(mt[w1].get_cl() == clini ||
             mt[w2].get_cl() == clini,
             "Error in fiss2: mt[w1].cl != clini && mt[w2].cl != clini\n");
+
     if constexpr (verbose) {
         mt[w1].print(w1, "producing ");
         if (isSelfLooped)
@@ -293,23 +295,24 @@ fiss2( const szt w,
 template<typename Mt>
 auto AbilityForFission<Mt>::
 fiss3( const szt w,
-       const szt a ) -> std::array<szt,2>
+       const szt end ) -> std::array<szt,2>
 {
     if constexpr (verbose)
-        mt[w].print(w, "fission3:  ", a);
+        mt[w].print(w, "fission3:  ", end);
 
     const auto clini = mt[w].get_cl();
-    bool inCycle {};
     bool f {};
     std::array<szt,2> n;
     std::array<szt,2> e;
     auto ind1 = huge<szt>;
     auto ind2 = huge<szt>;
-    if (!a) {  // at end 1
+
+    if (end == 1) {
         ind1 = mt[w].g.front().get_ind();
         ind2 = mt[mt[w].neig[1][1]]
                 .g[mt[mt[w].neig[1][1]].end2a(mt[w].neen[1][1])]
                 .get_ind();
+
         if (mt[w].nn[1] == 2) {
             const auto ninds = mt[w].double_neig_indexes(1);
             f = true;
@@ -323,7 +326,7 @@ fiss3( const szt w,
 
         // If not a cycle, this increments clnum and forms a new cluster
         // from w's end 1 neigs and beyond (excluding w itself).
-        inCycle = update_cl_fiss(w, 1);
+        const auto inCycle = update_cl_fiss(w, 1);
         if (!inCycle)
             // Renumber Edge::indcl of the remaining part of the original cluster.
             update_gIndcl(clini);
@@ -374,7 +377,7 @@ fiss3( const szt w,
             }
         }
     }
-    else if (a == mt[w].g.size()) {    // at end 2
+    else if (end == 2) {
         ind1 = mt[w].g.back().get_ind();
         ind2 = mt[mt[w].neig[2][1]]
                 .g[mt[mt[w].neig[2][1]].end2a(mt[w].neen[2][1])]
@@ -392,7 +395,7 @@ fiss3( const szt w,
 
         // If not a cycle, this increments clnum and forms a new cluster
         // from w's end 2 neigs and beyond (excluding w itself).
-        inCycle = update_cl_fiss(w, 2);
+        const auto inCycle = update_cl_fiss(w, 2);
         if (!inCycle)
             // Renumber Edge::indcl of the remaining part of the original cluster.
             update_gIndcl(clini);
@@ -439,19 +442,24 @@ fiss3( const szt w,
             }
         }
     }
+
     basic_update();
+
     const auto w1 = glm[ind1];
     const auto w2 = glm[ind2];
     XASSERT(mt[w1].get_cl() == clini ||
             mt[w2].get_cl() == clini,
             "Error in fiss3: mt[w1].cl != clini && mt[w2].cl != clini\n");
+
     if constexpr (verbose) {
         mt[w1].print(w1, "producing ");
         if (w1 != w2)
             mt[w2].print(w2, "      and ");
         std::cout << std::endl;
     }
-    return {mt[w1].get_cl(), mt[w2].get_cl()};
+
+    return {mt[w1].get_cl(),
+            mt[w2].get_cl()};
 }
 
 }  // namespace mitosim
