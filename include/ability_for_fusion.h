@@ -210,7 +210,7 @@ fuse12(
         if (w2 != w1)
             mt[w2].print(w2, "         ");
         if (!mt[w2].is_cycle())
-            mt[mi].print( mi, "     and " );
+            mt[mi].print(mi, "     and ");
         msgr.print("\n");
     }
     return {cl1, cl2};
@@ -229,8 +229,8 @@ fuse1L(
         msgr.print("Fusion1U:  ",
                    w1, "(of ", mt[w1].g.size(), " e ", e1,
                    ") with a CYCLE ", w2, "(of ", mt[w2].g.size(), ")\n");
-        mt[w1].print( w1, "before s: " );
-        mt[w2].print( w2, "before s: " );
+        mt[w1].print(w1, "before s: ");
+        mt[w2].print(w2, "before s: ");
     }
     const auto cl1 = mt[w1].get_cl();
     const auto cl2 = mt[w2].get_cl();
