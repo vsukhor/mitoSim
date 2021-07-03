@@ -93,16 +93,10 @@ TEST_F(AbilityFusionTest, Fuse12a)
     constexpr szt e = 2;
     constexpr szt oe = e == 1 ? 2 : 1;
 
-    for (szt a=0; a<=len[w2-1]; a++) {
+    for (szt a=1; a<len[w2-1]; a++) {
         AF ct {msgr};
         for (const auto u : len)
             ct.add_disconnected_segment(u);
-
-        if (!a || a == len[w2-1]) {
-            ASSERT_EXIT(ct.fuse12(w1, e, w2, a),
-            testing::ExitedWithCode(EXIT_FAILURE), "");
-            continue;
-        }
 
         ct.fuse12(w1, e, w2, a);
 
@@ -173,15 +167,9 @@ TEST_F(AbilityFusionTest, Fuse12b)
     constexpr szt v = 2;    // segment resulting from the fusion.
     for (const szt e : {1, 2}) {
         const szt oe = e == 1 ? 2 : 1;
-        for (szt a=0; a<=len; a++) {
+        for (szt a=1; a<len; a++) {
             AF ct {msgr};
             ct.add_disconnected_segment(len);
-
-            if (!a || a == len) {
-                ASSERT_EXIT(ct.fuse12(w, e, w, a),
-                testing::ExitedWithCode(EXIT_FAILURE), "");
-                continue;
-            }
 
             ct.fuse12(w, e, w, a);
 
@@ -265,19 +253,12 @@ TEST_F(AbilityFusionTest, Fuse12c)
     constexpr szt e = 2;
     constexpr szt oe = e == 1 ? 2 : 1;
 
-    for (szt a=0; a<=len[w2-1]; a++) {
+    for (szt a=1; a<len[w2-1]; a++) {
         AF ct {msgr};
         for (const auto u : len)
             ct.add_disconnected_segment(u);
 
         ct.fuse_to_loop(w2);
-
-        if (!a || a == len[w2-1]) {
-            ASSERT_EXIT(ct.fuse12(w1, e, w2, a),
-            testing::ExitedWithCode(EXIT_FAILURE), "");
-            continue;
-        }
-
         ct.fuse12(w1, e, w2, a);
 
         const auto clmass = len[w1-1] + len[w2-1];
@@ -326,7 +307,6 @@ TEST_F(AbilityFusionTest, Fuse12c)
         ASSERT_EQ(ct.mt[w2].neig[2][2], w2);
         ASSERT_EQ(ct.mt[w2].neen[2][2], 1);
     }
-    std::cout << "end\n";
 }
 
 TEST_F(AbilityFusionTest, Fuse1L)

@@ -142,10 +142,14 @@ TEST_F(SegmentTest, SingleNeigIndex)
 
 TEST_F(SegmentTest, DoubleNeigIndexes)
 {
-    const Segment sg {Config::segmass, Config::cl, conf.ei0, msgr};
+    Segment sg {Config::segmass, Config::cl, conf.ei0, msgr};
 
-    ASSERT_EXIT(sg.double_neig_indexes(1),
-                testing::ExitedWithCode(EXIT_FAILURE), "");
+    for (const szt i : {1, 2}) {
+        sg.nn[i] = 2;
+        const auto u = sg.double_neig_indexes(i);
+        EXPECT_EQ(u[0], 0);
+        EXPECT_EQ(u[1], 0);
+    }
 }
 
 TEST_F(SegmentTest, IsCycle)
@@ -190,7 +194,7 @@ TEST_F(SegmentTest, SetEndFin2)
 TEST_F(SegmentTest, SetBulkFin)
 {
     Segment sg {Config::segmass, Config::cl, conf.ei0, msgr};
-    const szt a = 100;
+    const szt a = 2;
     sg.set_bulk_fin(a);
 
     EXPECT_EQ(sg.g[0].get_fin(0), 0.);
