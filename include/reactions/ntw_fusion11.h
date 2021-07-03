@@ -100,7 +100,7 @@ void NtwFusion11<Ntw>::
 populate() noexcept
 {
     constexpr auto minLL = Structure<typename Ntw::ST>::minLoopLength;
-
+    constexpr std::array<szt,2> a12 {1UL, 2UL};
     cnd.clear();
     const auto mtn11 = mt11.size();
     for (szt i1=0; i1<mtn11; i1++) {        // 11 ends to ...
@@ -108,9 +108,9 @@ populate() noexcept
         if (host.mt[w1].g.size() >= minLL)  // ... same segment opposite end
             cnd.add({w1,1}, {w1,2});
 
-        for (const auto e1 : {szt(1),szt(2)}) {
+        for (const auto e1 : a12) {
             for (szt i2=i1+1; i2<mtn11; i2++)  // ... other 11 segs. (both ends to both ens)
-                for (const auto e2 : {szt(1),szt(2)})
+                for (const auto e2 : a12)
                     cnd.add({w1,e1}, {mt11[i2],e2});
 
             for (const auto& we2 : mt13)    // ... free ends of 13
