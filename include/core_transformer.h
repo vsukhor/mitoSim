@@ -268,7 +268,7 @@ fuse_antiparallel(
     }
     XASSERT(w1 != w2,
             std::string("Error during antiparallel fusion: w1 == w2: ")+
-            "fuse_toLoop should be used instead.\n");
+            "fuse_to_loop should be used instead.\n");
     XASSERT(!mt[w1].nn[end],
             "Error during antiparallel fusion: end of w1 is not free.\n");
     XASSERT(!mt[w2].nn[end],
@@ -342,7 +342,7 @@ fuse_parallel(
     }
     XASSERT(w1 != w2,
             std::string("Error during parallel fusion: w1 == w2: ") +
-            "fuse_toLoop should be used instead.\n");
+            "fuse_to_loop should be used instead.\n");
     XASSERT(!mt[w1].nn[1],
             "Error during parallel fusion: end 1 of w1 is not free.\n");
     XASSERT(!mt[w2].nn[2],
@@ -390,7 +390,7 @@ fuse_to_loop( const szt w ) noexcept -> std::array<szt,2>
     XASSERT(!mt[w].is_cycle(),
             "Error: attempt to fuse_to_loop a separate cycle.\n");
     XASSERT(!mt[w].nn[1] && !mt[w].nn[2],
-            "Error: attempt to fuse_toLoop a not separate segment.\n");
+            "Error: attempt to fuse_to_loop a not separate segment.\n");
 
     if constexpr (verbose) {
         msgr.print("Fused to cycle: ",
