@@ -68,7 +68,7 @@ protected:
     using CoreTransformer<Mt>::fuse_parallel;
     using CoreTransformer<Mt>::update_gIndcl;
 
-    using Structure<Mt>::basic_update;
+    using Structure<Mt>::update_structure;
 
 public:
 
@@ -271,7 +271,7 @@ fiss2( const szt w,
         fuse_parallel(w, mtnum);
     }
 
-    basic_update();
+    update_structure();
     const auto w1 = glm[ind1];
     const auto w2 = glm[ind2];
 
@@ -445,7 +445,7 @@ fiss3( const szt w,
         }
     }
 
-    basic_update();
+    update_structure();
 
     const auto w1 = glm[ind1];
     const auto w2 = glm[ind2];

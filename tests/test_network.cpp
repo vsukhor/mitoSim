@@ -41,7 +41,6 @@ TEST_F(NetworkTest, Constructor)
 {
     Network ntw {conf, *rnd, msgr};
 
-    ASSERT_TRUE(ntw.clagl.empty());
     ASSERT_TRUE(ntw.glm.empty());
     ASSERT_TRUE(ntw.gla.empty());
     ASSERT_TRUE(ntw.mt.empty());

@@ -28,7 +28,6 @@ TEST_F(StructureTest, Constructor)
 {
     Structure s {msgr};
 
-    ASSERT_TRUE(s.clagl.empty());
     ASSERT_TRUE(s.glm.empty());
     ASSERT_TRUE(s.gla.empty());
     ASSERT_TRUE(s.mt.empty());
@@ -54,7 +53,6 @@ TEST_F(StructureTest, AddDisconnectedSegment)
     Structure s {msgr};
     s.add_disconnected_segment(len);
 
-    ASSERT_EQ(s.clagl.size(), 1);
     ASSERT_TRUE(s.glm.empty());
     ASSERT_TRUE(s.gla.empty());
     for (const auto& n : s.nn)
@@ -187,33 +185,6 @@ TEST_F(StructureTest, PopulateClusterVectors)
     EXPECT_EQ(s.clmt[0][0], 1);
     ASSERT_EQ(s.clmt[1].size(), 1);
     EXPECT_EQ(s.clmt[1][0], 2);
-}
-
-TEST_F(StructureTest, MakeAJL)
-{
-    constexpr std::array<szt,2> len {4, 5};
-
-    Structure s {msgr};
-    for (const auto u : len)
-        s.add_disconnected_segment(u);
-
-    s.make_indma();                 // to initialize 'cls'
-    s.populate_cluster_vectors();   // to initialize 'clmt'
-    
-    utils::vec2<szt> ajl;
-    s.make_adjacency_list_edges(1, ajl);
-
-    EXPECT_EQ(ajl.size(), len[1]);
-    EXPECT_EQ(ajl[0].size(), 1);
-    EXPECT_EQ(ajl[0][0], 1);
-    for (szt i=1; i<ajl.size()-2; i++) {
-        EXPECT_EQ(ajl[i].size(), 2);
-        EXPECT_EQ(ajl[i][0], i-1);
-        EXPECT_EQ(ajl[i][1], i+1);
-    }
-    EXPECT_EQ(ajl.back().size(), 1);
-    EXPECT_EQ(ajl.back()[0], len[1]-2);
-
 }
 
 }  // namespace structure_test

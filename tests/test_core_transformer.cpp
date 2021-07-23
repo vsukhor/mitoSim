@@ -54,7 +54,6 @@ TEST_F(CoreTransformerTest, Constructor)
 {
     CT ct {msgr};
 
-    ASSERT_TRUE(ct.clagl.empty());
     ASSERT_TRUE(ct.glm.empty());
     ASSERT_TRUE(ct.gla.empty());
     ASSERT_TRUE(ct.mt.empty());

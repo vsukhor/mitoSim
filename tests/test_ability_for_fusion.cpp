@@ -23,7 +23,6 @@ public:
     using AbilityForFusion = mitosim::AbilityForFusion<Mt>;
 
     using AbilityForFusion::clnum;
-    using AbilityForFusion::clagl;
     using AbilityForFusion::copy_neigs;
     using AbilityForFusion::fuse_antiparallel;
     using AbilityForFusion::fuse_parallel;
@@ -63,7 +62,6 @@ TEST_F(AbilityFusionTest, Constructor)
 {
     AF ct {msgr};
 
-    ASSERT_TRUE(ct.clagl.empty());
     ASSERT_TRUE(ct.glm.empty());
     ASSERT_TRUE(ct.gla.empty());
     ASSERT_TRUE(ct.mt.empty());

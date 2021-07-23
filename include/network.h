@@ -193,7 +193,7 @@ template<typename SegmentT>
 void Network<SegmentT>::
 update_books() noexcept
 {
-    this->basic_update();
+    this->update_structure();
 }
 
 

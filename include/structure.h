@@ -53,9 +53,6 @@ public:
 
     using Reticulum = std::vector<Mt>;
 
-    /// Edge adjacency_lists per cluster.
-    vec3<szt> clagl;
-
     /// Mapping of the edge indexes to segment indexes.
     std::vector<szt> glm;
     /// Mapping of the edge indexes to element index inside segments.
@@ -116,27 +113,11 @@ public:
     /// Appends a disconnected segment to the reticulum.
     void add_disconnected_segment(szt segmass);
 
-    /// Updates internal data.
-    void basic_update() noexcept;
-
-    /// Updates internal data.
-    void update_adjacency() noexcept;
-
     /// Updates internal vectors.
     void update_structure() noexcept;
 
     /// Initializes or updates glm and gla vectors.
     void make_indma() noexcept;
-
-    /**
-     * @brief Initializes or update adjacency list.
-     * @param ic Disconnected network component index.
-     * @param a The adjacency list.
-     */
-    void make_adjacency_list_edges(
-        szt ic,
-        vec2<szt>& a
-    ) noexcept;
 
     /// Populates 'mt??', 'mtc??', 'nn' and 'clmt' vectors
     void populate_cluster_vectors() noexcept;
@@ -163,9 +144,6 @@ public:
      */
     void print(std::ostream& ofs) const;
 
-private:
-
-    vec2<bool> clvisited;  ///< Temporary auxiliary field.
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -190,38 +168,15 @@ add_disconnected_segment( const szt segmass )
     mtnum++;
     clnum++;
     mtmass += segmass;
-
-    clagl.resize(clnum);
-    clvisited.resize(clnum);
 }
 
-
-template<typename Mt> inline
-void Structure<Mt>::
-basic_update() noexcept
-{
-    make_indma();
-    populate_cluster_vectors();
-}
-
-template<typename Mt> inline
-void Structure<Mt>::
-update_adjacency() noexcept
-{
-    if (clagl.size() < clnum) {
-        clagl.resize(clnum);
-        clvisited.resize(clnum);
-    }
-    for (szt c=0; c<clnum; c++)
-        make_adjacency_list_edges(c, clagl[c]);
-}
 
 template<typename Mt> inline
 void Structure<Mt>::
 update_structure() noexcept
 {
-    basic_update();
-    update_adjacency();
+    make_indma();
+    populate_cluster_vectors();
 }
 
 template<typename Mt> inline
@@ -240,69 +195,6 @@ make_indma() noexcept
             const auto& g = mt[j].g[k];
             glm[g.get_ind()] = j;
             gla[g.get_ind()] = k;
-        }
-}
-
-template<typename Mt>
-void Structure<Mt>::
-make_adjacency_list_edges(
-    const szt c,
-    vec2<szt>& a
-) noexcept
-{
-    XASSERT(clvisited.size() == clnum, "Size of 'clvisited' is incorrect.");
-    XASSERT(cls.size() == clnum,
-            std::string("'cls' should be set before calling this. ") +
-            "Consider calling 'make_indma()' before.");
-    XASSERT(clmt.size() == clnum,
-            std::string("'clmt' should be set before calling this. ") +
-            "Consider calling 'populate_cluster_vectors()' before.");
-
-    clvisited[c].resize(cls[c]);
-
-    a.resize(cls[c]);
-    for (auto& o : a) o.clear();
-    
-    for (const auto& j : clmt[c])
-        for (szt k=0; k<mt[j].g.size(); k++) {
-            const auto ind = mt[j].g[k].get_indcl();
-            if (k == 0) {
-                // Connection backwards: only other segments might be found.
-                for (szt e=1; e<=mt[j].nn[1]; e++) {
-                    const auto w2 = mt[j].neig[1][e];
-                    const auto a2 = mt[w2].end2a(mt[j].neen[1][e]);
-                    a[ind].push_back(mt[w2].g[a2].get_indcl());
-                }
-                if (mt[j].g.size() == 1)
-                    // Connection forwards: to other segment.
-                    for (szt e=1; e<=mt[j].nn[2]; e++) {
-                        const auto w2 = mt[j].neig[2][e];
-                        const auto a2 = mt[w2].end2a(mt[j].neen[2][e]);
-                        a[ind].push_back(mt[w2].g[a2].get_indcl());
-                    }
-                else {
-                    // Connection forwards: to the same segment.
-                    a[ind].push_back(mt[j].g[k+1].get_indcl());
-                }
-            }
-            else if (k == mt[j].g.size()-1) {
-            // but not  a1 == 0  =>  mt[m1].g.size() > 1
-                // Connection backwards: to the same segment.
-                a[ind].push_back(mt[j].g[k-1].get_indcl());
-                // Connection forwards: to other segment.
-                for (szt e=1; e<=mt[j].nn[2]; e++) {
-                    const auto w2 = mt[j].neig[2][e];
-                    const auto a2 = mt[w2].end2a(mt[j].neen[2][e]);
-                    a[ind].push_back(mt[w2].g[a2].get_indcl());
-                }
-            }
-            else {
-            // edge in the bulk: a1 != 1 && a1 != mt[m1].g.size()
-                // Connection backwards: to the same segment.
-                a[ind].push_back(mt[j].g[k-1].get_indcl());
-                 // Connection forwards: to the same segment.
-                a[ind].push_back(mt[j].g[k+1].get_indcl());
-            }
         }
 }
 
