@@ -60,9 +60,9 @@ public:
 
 private:
 
-    szt ind {huge<szt>};    ///< Index network-wide: starts from 0.
-    szt indcl {huge<szt>};  ///< Index cluster-wide: starts from 0.
-    szt cl {huge<szt>};     ///< Current cluster index.
+    szt ind {undefined<szt>};    ///< Index network-wide: starts from 0.
+    szt indcl {undefined<szt>};  ///< Index cluster-wide: starts from 0.
+    szt cl {undefined<szt>};     ///< Current cluster index.
 
     /// Contribution to fission propensity at each end.
     std::array<FinT,2> fin {};

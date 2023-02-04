@@ -202,7 +202,7 @@ public:
     void print(
         szt w,
         const std::string& tag,
-        szt at=huge<szt>
+        szt at=undefined<szt>
     ) const;
 
 
@@ -211,7 +211,7 @@ public:
         std::ostream& os,
         szt w,
         const std::string& tag,
-        szt at=huge<szt>
+        szt at=undefined<szt>
     ) const;
 
 
@@ -370,7 +370,7 @@ single_neig_index( const szt e ) const noexcept -> szt
         if (neig[e][i])
             return i;
             
-    return huge<szt>;
+    return undefined<szt>;
 }
 
 
@@ -423,7 +423,7 @@ num_nodes( const szt deg ) const noexcept -> szt // deg = 1, 2, 3
     }
 
     msgr.exit("Error in Segment::num_nodes(). Not implemented for degree ", deg);
-    return huge<szt>;
+    return undefined<szt>;
 }
 
 
@@ -473,7 +473,7 @@ print( std::ostream& os,
        const szt at) const
 {
     os << "        " << tag << w;
-    if (at == huge<szt>)
+    if (is_defined(at))
         os << "(of ";
     else
         os << "(at " << at << " of ";

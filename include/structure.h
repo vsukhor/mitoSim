@@ -204,11 +204,11 @@ populate_cluster_vectors() noexcept
 {
     mt11.clear();
     mtc11.resize(clnum);
-    std::fill(mtc11.begin(), mtc11.end(), huge<szt>);
+    std::fill(mtc11.begin(), mtc11.end(), undefined<szt>);
 
     mt22.clear();
     mtc22.resize(clnum);
-    std::fill(mtc22.begin(), mtc22.end(), huge<szt>);
+    std::fill(mtc22.begin(), mtc22.end(), undefined<szt>);
 
     mt33.clear();
     mtc33.resize(clnum);

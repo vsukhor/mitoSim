@@ -155,8 +155,8 @@ protected:
                       szt oend,
                       szt n1,
                       szt n2,
-                      szt newn=huge<szt>,
-                      szt nend=huge<szt>,
+                      szt newn=undefined<szt>,
+                      szt nend=undefined<szt>,
                       bool removefromneigs=true
     ) noexcept;
 

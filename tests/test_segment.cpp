@@ -136,8 +136,8 @@ TEST_F(SegmentTest, SingleNeigIndex)
 {
     const Segment sg {Config::segmass, Config::cl, conf.ei0, msgr};
 
-    EXPECT_EQ(sg.single_neig_index(1), mitosim::huge<szt>);
-    EXPECT_EQ(sg.single_neig_index(2), mitosim::huge<szt>);
+    EXPECT_EQ(sg.single_neig_index(1), mitosim::undefined<szt>);
+    EXPECT_EQ(sg.single_neig_index(2), mitosim::undefined<szt>);
 }
 
 TEST_F(SegmentTest, DoubleNeigIndexes)

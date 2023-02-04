@@ -177,7 +177,7 @@ void Fission<Ntw>::
 update_prop( szt c0, szt c1 ) noexcept
 {
     netw.fis.update_prop(c0);
-    if (c1 != c0 && c1 != huge<szt>)
+    if (c1 != c0 && is_defined(c1))
         netw.fis.update_prop(c1);
 }
 

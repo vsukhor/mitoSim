@@ -154,8 +154,8 @@ template<typename Ntw>
 auto NtwFission<Ntw>::
 fire() noexcept
 {
-    szt w {huge<szt>};
-    szt a {huge<szt>};
+    auto w = undefined<szt>;
+    auto a = undefined<szt>;
 
     find_random_node(w, a);
 

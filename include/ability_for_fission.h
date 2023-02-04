@@ -202,7 +202,7 @@ fiss( const szt w,
 
     msgr.exit("ERROR: Attempt of an unpropriate fission!");
 
-    return {huge<szt>, huge<szt>};
+    return {undefined<szt>, undefined<szt>};
 }
 
 
@@ -306,8 +306,8 @@ fiss3( const szt w,
     bool f {};
     std::array<szt,2> n;
     std::array<szt,2> e;
-    auto ind1 = huge<szt>;
-    auto ind2 = huge<szt>;
+    auto ind1 = undefined<szt>;
+    auto ind2 = undefined<szt>;
 
     if (end == 1) {
         ind1 = mt[w].g.front().get_ind();

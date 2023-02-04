@@ -43,18 +43,8 @@
 
 namespace mitosim {
 
-using szt = utils::szt;
-template <typename T> constexpr auto zero  = static_cast<T>(0);
-template <typename T> constexpr auto one  = static_cast<T>(1);
-template <typename T> constexpr auto huge = utils::huge<T>;
+using namespace utils::constants;
 
-template <typename T> using vec2 = std::vector<std::vector<T>>;
-template <typename T> using vec3 = std::vector<vec2<T>>;
-template <typename T> using vup = std::vector<std::unique_ptr<T>>;
-
-using utils::bools;
-using utils::onehuge;
-using utils::zerohuge;
 using Msgr = utils::Msgr;
 
 
