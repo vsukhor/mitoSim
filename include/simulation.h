@@ -229,7 +229,7 @@ update_log( std::ostream &ofs )
     ofs << it << " t " << time;
     gsp.log_data(ofs);
     netw.print(ofs);
-    gsp.printScores(ofs);
+    gsp.print_scores(ofs);
     ofs << std::endl;
 }
 
