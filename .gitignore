@@ -3,8 +3,10 @@
 manual_make/.DS_Store
 manual_make/obj/
 manual_make/mitosim*
-build/**
+build*/**
 docs/html/**
 docs/latex/**
-app/mitosim_CPU
-tests/unittests_mitosim
+app/mitosim
+examples/log*
+examples/mitos*
+tests/unittests

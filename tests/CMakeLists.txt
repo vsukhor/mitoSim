@@ -2,7 +2,7 @@ include(FetchContent)
 set(FETCHCONTENT_QUIET off)
 FetchContent_Declare(
   googletest
-  URL https://github.com/google/googletest/archive/609281088cfefc76f9d0ce82e1ff6c30cc3591e5.zip
+  URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip
 )
 # For Windows: Prevent overriding the parent project's compiler/linker settings
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
@@ -36,7 +36,7 @@ target_compile_features(unittests PRIVATE cxx_std_20)
 include_directories(unittests PUBLIC
     ../include
     ../include/reactions
-    ../external
+    ../external/utils
 )
 
 target_link_libraries(unittests PRIVATE $<TARGET_FILE:utils>)

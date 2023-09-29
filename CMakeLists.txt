@@ -28,8 +28,9 @@ find_package(Boost REQUIRED)
 if(Boost_FOUND)
   include_directories(${Boost_INCLUDE_DIRS})
 endif()
-# Dependence on utils:
-add_subdirectory(external)
+
+# Dependency on utils:
+add_subdirectory(external/utils)
 
 # The executable code is here
 add_subdirectory(app)
