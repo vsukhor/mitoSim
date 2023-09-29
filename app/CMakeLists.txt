@@ -4,7 +4,7 @@ target_compile_features(mitosim PRIVATE cxx_std_20)
 target_include_directories(mitosim PUBLIC
                            ../include
                            ../include/reactions
-                           ../external/utils)
+                           ../external)
 
 target_link_libraries(mitosim PRIVATE Boost::boost)
 target_link_libraries(mitosim PRIVATE $<TARGET_FILE:utils>)

@@ -36,7 +36,7 @@ target_compile_features(unittests PRIVATE cxx_std_20)
 include_directories(unittests PUBLIC
     ../include
     ../include/reactions
-    ../external/utils
+    ../external
 )
 
 target_link_libraries(unittests PRIVATE $<TARGET_FILE:utils>)

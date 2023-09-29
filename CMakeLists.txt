@@ -30,7 +30,7 @@ if(Boost_FOUND)
 endif()
 
 # Dependency on utils:
-add_subdirectory(external/utils)
+add_subdirectory(external)
 
 # The executable code is here
 add_subdirectory(app)
