@@ -4,6 +4,7 @@ manual_make/.DS_Store
 manual_make/obj/
 manual_make/mitosim*
 build*/**
+.vscode/**
 docs/html/**
 docs/latex/**
 app/mitosim
